@@ -1,0 +1,95 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated(documentID){
+      return (request.auth.token.phone_number == resource.data.phone ||
+      request.auth.token.phone_number in resource.data.assistants )
+    }
+    function isRequestedAssistant(UsersId){
+    	return request.auth.token.phone_number in resource.data.assistantsRequest
+    }
+    function isAuthenticatedHistory(documentID){
+        return request.auth.token.phone_number == resource.data.doctorPhoneNumber ||
+          request.auth.token.phone_number == resource.data.patientMobile ||
+          request.auth.token.phone_number in resource.data.assistants
+    }
+    function isProfileOwner(doctorsId) {
+      return request.auth.uid == doctorsId
+    }
+    function isDoctorOrAssistant(documentID){
+        return (get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.role == "doctor") || (
+					(get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.role == "assistant") &&
+        	request.auth.token.phone_number in
+        				get(/databases/$(database)/documents/Users/$(request.resource.data.doctorUid)).data.assistantsPhones)
+    }
+    function isLoggedIn(){
+      return request.auth != null &&
+        request.auth.token.phone_number != null;
+    }
+    function isAssistantSizeValid(UsersId){
+      return resource.data.assistants.size() <= 5;
+    }
+    function isAssistantsRequestValid(UsersId){
+      return resource.data.assistantsRequest.size() <= 5;
+    }
+    //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
+    match /WebStructure/{webStructureId}{
+      allow read;
+      allow write: if false;
+    }
+    match /Users/{UsersId}{
+      allow read;
+      allow create: if isLoggedIn();
+      allow update: if true;
+      		//isLoggedIn() &&
+          //( isAuthenticated(UsersId) || isRequestedAssistant(UsersId));
+      allow delete: if true;// isLoggedIn() && isAuthenticated(UsersId);
+
+    }
+    match /Doctors/{doctorsId}{
+      allow read;
+      allow create, update: if true;
+        //isLoggedIn() &&
+        //isAuthenticated(doctorsId);
+    }
+    match /DoctorProfiles/{doctorsId} {
+      allow read;
+      allow create, update: if true;
+        //isLoggedIn() &&
+        //isProfileOwner(doctorsId);
+    }
+    match /DoctorSchedule/{doctorsId} {
+      allow read;
+      allow create, update: if
+        isLoggedIn() &&
+        isProfileOwner(doctorsId);
+    }
+    match /DoctorScheduleRequests/{doctorsId} {
+      allow read, create, update, delete: if
+        isLoggedIn() &&
+        isProfileOwner(doctorsId);
+      
+      match /request/{userId} {
+        allow read, create: if
+          isLoggedIn() &&
+          (isProfileOwner(userId) || isProfileOwner(doctorsId))
+        allow delete, update: if
+        	isLoggedIn() &&
+          isProfileOwner(doctorsId)
+      }
+    }
+
+    match /History/{historyID}{
+      allow read: if isLoggedIn();// && isAuthenticatedHistory(historyID);
+      allow create: if isLoggedIn() && isDoctorOrAssistant(historyID);
+      allow update, delete: if isLoggedIn() && isAuthenticatedHistory(historyID);
+    }
+
+    match /Ads/{adsID} {
+    	allow read: if true;
+      allow create, update, delete: if true;
+    }
+    
+    //Every thing else
+    match /{document=**} {allow read:if false; allow write:if false;}
+  }
+}
