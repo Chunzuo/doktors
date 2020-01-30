@@ -68,6 +68,20 @@
               <input type="text" class="form-control" v-model="doctor.location" />
             </div>
           </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label>Langitude</label>
+              <input type="text" class="form-control" v-model="doctorProfile.mapCenter.lng" />
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label>Latitude</label>
+              <input type="text" class="form-control" v-model="doctorProfile.mapCenter.lat" />
+            </div>
+          </div>
           <div class="col-md-12">
             <gmap-map
               :center="doctorProfile.mapCenter"
@@ -164,7 +178,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-2 col-lg-1" v-if="index > 0">
+            <div class="col-12 col-md-2 col-lg-1">
               <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
               <a href="#" class="btn btn-danger trash" @click.prevent="removeEducation(index)">
                 <i class="far fa-trash-alt"></i>
@@ -212,7 +226,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-2 col-lg-1" v-if="index > 0">
+            <div class="col-12 col-md-2 col-lg-1">
               <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
               <a href="#" class="btn btn-danger trash" @click.prevent="removeExperience(index)">
                 <i class="far fa-trash-alt"></i>
@@ -355,6 +369,7 @@ export default {
         .doc(this.userInfo.id)
         .get();
       this.doctorProfile = profile.data();
+      console.log(this.doctorProfile);
 
       this.$vs.loading.close();
     },

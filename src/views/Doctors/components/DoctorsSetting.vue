@@ -56,7 +56,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-2 col-lg-1" v-if="index > 0">
+            <div class="col-12 col-md-2 col-lg-1">
               <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
               <a href="#" class="btn btn-danger trash" @click.prevent="removeAssistant(index)">
                 <i class="far fa-trash-alt"></i>
@@ -75,13 +75,15 @@
     <div class="card" v-if="doctor">
       <div class="card-body">
         <div class="card-title">History of elements</div>
-        <div v-for="(element, index) in doctor.historyElements" :key="`element - ${index}`">
-          <label class="custom_check">
-            <input type="checkbox" name="select_specialist" v-model="element.active" />
-            <span class="checkmark"></span>
-            {{element.title}}
-          </label>
-        </div>
+        <draggable v-model="doctor.historyElements">
+          <div v-for="(element, index) in doctor.historyElements" :key="`element - ${index}`">
+            <label class="custom_check">
+              <input type="checkbox" name="select_specialist" v-model="element.active" />
+              <span class="checkmark"></span>
+              {{element.title}}
+            </label>
+          </div>
+        </draggable>
       </div>
     </div>
 
@@ -93,9 +95,11 @@
 
 <script>
 import { db } from "@/firebase";
+import draggable from "vuedraggable";
 export default {
   created() {
     this.$store.commit("updateDoctorSidebarItem", "Settings");
+    this.$store.commit("updateSelectItem", "Settings");
   },
   data() {
     return {
@@ -170,7 +174,8 @@ export default {
   },
   mounted() {
     this.getDoctorInfo();
-  }
+  },
+  components: { draggable }
 };
 </script>
 

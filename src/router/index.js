@@ -20,9 +20,9 @@ const routes = [
         component: () => import('../views/About.vue')
       },
       {
-        path: '/helper',
-        name: 'helper',
-        component: () => import('../views/Helper.vue')
+        path: '/help',
+        name: 'help',
+        component: () => import('../views/Help.vue')
       },
       {
         path: '/find-doctors',

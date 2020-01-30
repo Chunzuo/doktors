@@ -36,9 +36,9 @@
           <div class="card-body">
             <div class="pro-widget-content">
               <div class="profile-info-widget">
-                <a href="patient-profile.html" class="booking-doc-img">
+                <router-link :to="getPatientDetailLink(patient.id)" class="booking-doc-img">
                   <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
-                </a>
+                </router-link>
                 <div class="profile-det-info">
                   <h3>
                     <router-link :to="getPatientDetailLink(patient.id)">{{patient.name}}</router-link>
@@ -75,10 +75,7 @@
       icon="add"
       radius
       color="primary"
-      style="right: 5vw;
-    bottom: 4vh;
-    z-index: 999;
-    position: fixed;"
+      style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
     ></vs-button>
   </div>

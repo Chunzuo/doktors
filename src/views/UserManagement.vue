@@ -11,48 +11,6 @@
                 </div>
                 <div class="card card-table mb-0">
                   <div class="card-body">
-                    <!-- <div class="table-responsive">
-                      <table class="table table-hover table-center mb-0">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Phone number</th>
-                            <th>Role</th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="(user, index) in userList" :key="index">
-                            <td>{{user.name}}</td>
-                            <td>{{user.phone}}</td>
-                            <td>
-                              <span
-                                :class="['badge badge-pill', getRoleBackground(user.role)]"
-                              >{{user.role}}</span>
-                            </td>
-                            <td class="text-right">
-                              <div class="table-action">
-                                <a
-                                  href="javascript:void(0);"
-                                  class="btn btn-sm bg-success-light mr-2"
-                                  @click="openEditDialog(user)"
-                                >
-                                  <i class="far fa-edit"></i> Edit
-                                </a>
-                                <a
-                                  href="javascript:void(0);"
-                                  class="btn btn-sm bg-danger-light"
-                                  @click="openDeleteDialog(user.id)"
-                                >
-                                  <i class="far fa-trash-alt"></i> Delete
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>-->
-
                     <vs-table search pagination max-items="10" :data="userList">
                       <template slot="header">
                         <h3 class="p-3">Users</h3>
@@ -140,6 +98,11 @@ import { db } from "@/firebase";
 export default {
   created() {
     this.$store.commit("updateSelectItem", "UserManagement");
+    const role = localStorage.getItem("role");
+
+    if (role != "userManager") {
+      this.$router.push("/");
+    }
   },
   data() {
     return {
@@ -157,79 +120,7 @@ export default {
         { label: "Hospital", value: "hospital" }
       ],
       userIdToDelete: "",
-      dialogMode: 0, // 0: Add, 1: Edit
-      users: [
-        {
-          id: 1,
-          name: "Leanne Graham",
-          username: "Bret",
-          email: "Sincere@april.biz",
-          website: "hildegard.org"
-        },
-        {
-          id: 2,
-          name: "Ervin Howell",
-          username: "Antonette",
-          email: "Shanna@melissa.tv",
-          website: "anastasia.net"
-        },
-        {
-          id: 3,
-          name: "Clementine Bauch",
-          username: "Samantha",
-          email: "Nathan@yesenia.net",
-          website: "ramiro.info"
-        },
-        {
-          id: 4,
-          name: "Patricia Lebsack",
-          username: "Karianne",
-          email: "Julianne.OConner@kory.org",
-          website: "kale.biz"
-        },
-        {
-          id: 5,
-          name: "Chelsey Dietrich",
-          username: "Kamren",
-          email: "Lucio_Hettinger@annie.ca",
-          website: "demarco.info"
-        },
-        {
-          id: 6,
-          name: "Mrs. Dennis Schulist",
-          username: "Leopoldo_Corkery",
-          email: "Karley_Dach@jasper.info",
-          website: "ola.org"
-        },
-        {
-          id: 7,
-          name: "Kurtis Weissnat",
-          username: "Elwyn.Skiles",
-          email: "Telly.Hoeger@billy.biz",
-          website: "elvis.io"
-        },
-        {
-          id: 8,
-          name: "Nicholas Runolfsdottir V",
-          username: "Maxime_Nienow",
-          email: "Sherwood@rosamond.me",
-          website: "jacynthe.com"
-        },
-        {
-          id: 9,
-          name: "Glenna Reichert",
-          username: "Delphine",
-          email: "Chaim_McDermott@dana.io",
-          website: "conrad.com"
-        },
-        {
-          id: 10,
-          name: "Clementina DuBuque",
-          username: "Moriah.Stanton",
-          email: "Rey.Padberg@karina.biz",
-          website: "ambrose.net"
-        }
-      ]
+      dialogMode: 0 // 0: Add, 1: Edit
     };
   },
   mounted() {

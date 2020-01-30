@@ -163,10 +163,10 @@
               <div class="copyright-menu">
                 <ul class="policy-menu">
                   <li>
-                    <router-link to="/helper">Terms and Conditions</router-link>
+                    <router-link to="/help">Terms and Conditions</router-link>
                   </li>
                   <li>
-                    <router-link to="/helper">Policy</router-link>
+                    <router-link to="/help">Policy</router-link>
                   </li>
                 </ul>
               </div>

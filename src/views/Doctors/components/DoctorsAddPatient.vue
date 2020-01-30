@@ -33,14 +33,48 @@
           <tab-content title="Details" class="mb-5" :before-change="validateStep2">
             <form data-vv-scope="step-2">
               <div class="row">
-                <div class="col-md-4">
-                  <label for>Other relative disease history</label>
+                <div
+                  class="col-md-4"
+                  v-for="(element, index) in historyElements"
+                  :key="`element - ${index}`"
+                >
+                  <label>{{element.title}}</label>
                   <input
-                    v-model="detailInfo.other_relative_disease_history"
+                    v-model="detailInfo[element.id]"
                     class="w-full mb-4 form-control"
+                    type="text"
+                    v-if="element.type == 'text'"
                   />
+                  <input
+                    v-model="detailInfo[element.id]"
+                    class="w-full mb-4 form-control"
+                    type="number"
+                    v-if="element.type == 'number'"
+                  />
+                  <datepicker
+                    class="w-full mb-4 md:mb-0 datepicker"
+                    v-model="detailInfo[element.id]"
+                    v-if="element.type == 'date'"
+                  ></datepicker>
+                  <div v-if="element.type == 'radio'">
+                    <div
+                      class="form-check"
+                      v-for="(value, index) in element.values"
+                      :key="`value - ${index}`"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="exampleRadios"
+                        :id="`radio${index}`"
+                        :value="value"
+                        v-model="detailInfo[element.id]"
+                      />
+                      <label class="form-check-label" :for="`radio${index}`">{{value}}</label>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                   <label for>Allergies</label>
                   <input class="w-full mb-4 form-control" v-model="detailInfo.allergies" />
                 </div>
@@ -120,7 +154,7 @@
                 <div class="col-md-4">
                   <label for>Education</label>
                   <input v-model="detailInfo.education" class="w-full mb-4 form-control" />
-                </div>
+                </div>-->
               </div>
             </form>
           </tab-content>
@@ -151,25 +185,9 @@ export default {
       eventName: "",
       eventLocation: "san-francisco",
       status: "plannning",
-      cityOptions: [
-        { text: "New York", value: "new-york" },
-        { text: "Chicago", value: "chicago" },
-        { text: "San Francisco", value: "san-francisco" },
-        { text: "Boston", value: "boston" }
-      ],
-      statusOptions: [
-        { text: "Plannning", value: "plannning" },
-        { text: "In Progress", value: "in progress" },
-        { text: "Finished", value: "finished" }
-      ],
-      LocationOptions: [
-        { text: "New York", value: "new-york" },
-        { text: "Chicago", value: "chicago" },
-        { text: "San Francisco", value: "san-francisco" },
-        { text: "Boston", value: "boston" }
-      ],
       newPatientId: "",
-      detailInfo: {}
+      detailInfo: {},
+      historyElements: []
     };
   },
   computed: {
@@ -180,9 +198,9 @@ export default {
   methods: {
     async validateStep1() {
       this.$vs.loading();
-      // Check existing patient
+      // // Check existing patient
       const signInUser = firebase.auth().currentUser;
-
+      // console.log(signInUser);
       const patientInfo = await db
         .collection("History")
         .where("doctorPhoneNumber", "==", signInUser.phoneNumber)
@@ -226,6 +244,28 @@ export default {
       });
       this.$vs.loading.close();
       return true;
+    },
+    async getHistoryElement() {
+      this.$vs.loading();
+
+      const { uid } = firebase.auth().currentUser;
+      const doctor = await db
+        .collection("Doctors")
+        .doc(uid)
+        .get();
+      const { historyElements } = doctor.data();
+      this.historyElements = historyElements.filter(element => {
+        if (element.active) {
+          return element;
+        }
+      });
+
+      console.log("HistoryElements");
+      console.log(historyElements);
+
+      jQuery(".datepicker input").addClass("form-control");
+
+      this.$vs.loading.close();
     }
   },
   components: {
@@ -234,6 +274,7 @@ export default {
     Datepicker
   },
   mounted() {
+    this.getHistoryElement();
     jQuery(".datepicker input").addClass("form-control");
   }
 };

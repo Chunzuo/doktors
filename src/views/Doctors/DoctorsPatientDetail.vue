@@ -4,23 +4,6 @@
       <div class="container-fluid">
         <div class="row align-items-center">
           <div class="col-md-12 col-12">
-            <nav aria-label="breadcrumb" class="page-breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                  <router-link to="/">Home</router-link>
-                </li>
-
-                <li class="breadcrumb-item">
-                  <router-link to="/doctors-mypatients">My Patients</router-link>
-                </li>
-
-                <li
-                  class="breadcrumb-item active"
-                  aria-current="page"
-                  v-if="patientInfo"
-                >{{patientInfo.name}}</li>
-              </ol>
-            </nav>
             <h2 class="breadcrumb-title" v-if="patientInfo">{{patientInfo.name}}</h2>
           </div>
         </div>
@@ -47,6 +30,26 @@
                           <b>Last Visit :</b>
                           {{convertTimestampToString(patientInfo.accessTime)}}
                         </h5>
+                        <div class="row">
+                          <div class="col" v-if="!editable">
+                            <button class="btn bg-success-light" @click="editable = true">
+                              <i class="far fa-edit"></i>
+                              Edit
+                            </button>
+                          </div>
+                          <div class="col" v-if="editable">
+                            <button class="btn bg-info-light" @click="saveHistory">
+                              <i class="far fa-save"></i>
+                              Save
+                            </button>
+                          </div>
+                          <div class="col" v-if="editable" @click="editable = false">
+                            <button class="btn bg-danger-light">
+                              <i class="far"></i>
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
                         <!-- <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Newyork, United States</h5> -->
                       </div>
                     </div>
@@ -54,101 +57,192 @@
                 </div>
                 <div class="patient-info" v-if="patientInfo.history">
                   <ul>
-                    <li>
+                    <li v-for="(history, index) in historyElements" :key="`history-${index}`">
+                      {{history.title}}
+                      <div v-if="editable">
+                        <input
+                          v-model="patientInfo.history[history.id]"
+                          class="w-full mb-4 form-control"
+                          type="text"
+                          v-if="history.type == 'text'"
+                        />
+                        <input
+                          v-model="patientInfo.history[history.id]"
+                          class="w-full mb-4 form-control"
+                          type="number"
+                          v-if="history.type == 'number'"
+                        />
+                        <datepicker
+                          class="w-full mb-4 md:mb-0 datepicker"
+                          v-model="patientInfo.history[history.id]"
+                          v-if="history.type == 'date'"
+                        ></datepicker>
+                        <div v-if="history.type == 'radio'">
+                          <div
+                            class="form-check"
+                            v-for="(value, index) in history.values"
+                            :key="`value - ${index}`"
+                          >
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="exampleRadios"
+                              :id="`radio${index}`"
+                              :value="value"
+                              v-model="patientInfo.history[history.id]"
+                            />
+                            <label class="form-check-label" :for="`radio${index}`">{{value}}</label>
+                          </div>
+                        </div>
+                      </div>
+                      <span v-else>{{patientInfo.history[history.id]}}</span>
+                    </li>
+                    <!-- <li>
                       Phone
-                      <span>{{patientInfo.patientMobile}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.patientMobile"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.patientMobile}}</span>
                     </li>
                     <li>
                       Age of Menarche
-                      <span>{{patientInfo.history.age_of_menarche}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.age_of_menarche"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.age_of_menarche}}</span>
                     </li>
                     <li>
                       Allergies
-                      <span>{{patientInfo.history.allergies}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.allergies"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.allergies}}</span>
                     </li>
                     <li>
                       Appetite
-                      <span>{{patientInfo.history.appetite}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.appetite"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.appetite}}</span>
                     </li>
                     <li>
                       Current Medicines Taking
-                      <span>{{patientInfo.history.current_medicines_taking}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.current_medicines_taking"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.current_medicines_taking}}</span>
                     </li>
                     <li>
                       Cycle Flow&Pain
-                      <span>{{patientInfo.history.cycle_flow_and_pain}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.cycle_flow_and_pain"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.cycle_flow_and_pain}}</span>
                     </li>
                     <li>
                       Duration of Cycle
-                      <span>{{patientInfo.history.duration_of_cycle}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.duration_of_cycle"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.duration_of_cycle}}</span>
                     </li>
                     <li>
                       Education
-                      <span>{{patientInfo.history.education}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.education"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.education}}</span>
                     </li>
                     <li>
                       Last Menstrual Period
-                      <span>{{convertTimestampToString(patientInfo.history.last_menstrual_period)}}</span>
+                      <datepicker
+                        class="w-full mb-4 md:mb-0 datepicker"
+                        v-model="patientInfo.history.last_menstrual_period"
+                        v-if="editable"
+                      ></datepicker>
+                      <span
+                        v-else
+                      >{{convertTimestampToString(patientInfo.history.last_menstrual_period)}}</span>
                     </li>
                     <li>
                       Other Relative Diease History
-                      <span>{{patientInfo.history.other_relative_disease_history}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.other_relative_disease_history"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.other_relative_disease_history}}</span>
                     </li>
                     <li>
                       Past Medicines Used
-                      <span>{{patientInfo.history.past_medicines_used}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.past_medicines_used"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.past_medicines_used}}</span>
                     </li>
                     <li>
                       Regularity Of Cycle
-                      <span>{{patientInfo.history.regularity_of_cycle}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.regularity_of_cycle"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.regularity_of_cycle}}</span>
                     </li>
                     <li>
                       Sleep Duration
-                      <span>{{patientInfo.history.sleep_duration}}</span>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.sleep_duration"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.sleep_duration}}</span>
                     </li>
                     <li>
                       Smoking or Other Addiction
-                      <span>{{patientInfo.history.smoking_or_other_addiction}}</span>
-                    </li>
+                      <input
+                        class="form-control"
+                        type="text"
+                        v-model="patientInfo.history.smoking_or_other_addiction"
+                        v-if="editable"
+                      />
+                      <span v-else>{{patientInfo.history.smoking_or_other_addiction}}</span>
+                    </li>-->
                   </ul>
                 </div>
               </div>
             </div>
             <!-- /Profile Widget -->
-
-            <!-- Last Booking -->
-            <!-- <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Last Booking</h4>
-              </div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                  <div class="media align-items-center">
-                    <div class="mr-3">
-                      <img alt="Image placeholder" src="assets/img/doctors/doctor-thumb-02.jpg" class="avatar  rounded-circle">
-                    </div>
-                    <div class="media-body">
-                      <h5 class="d-block mb-0">Dr. Darren Elder </h5>
-                      <span class="d-block text-sm text-muted">Dentist</span>
-                      <span class="d-block text-sm text-muted">14 Nov 2019 5.00 PM</span>
-                    </div>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  <div class="media align-items-center">
-                    <div class="mr-3">
-                      <img alt="Image placeholder" src="assets/img/doctors/doctor-thumb-02.jpg" class="avatar  rounded-circle">
-                    </div>
-                    <div class="media-body">
-                      <h5 class="d-block mb-0">Dr. Darren Elder </h5>
-                      <span class="d-block text-sm text-muted">Dentist</span>
-                      <span class="d-block text-sm text-muted">12 Nov 2019 11.00 AM</span>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>-->
-            <!-- /Last Booking -->
           </div>
 
           <div class="col-md-7 col-lg-8 col-xl-9 dct-appoinment">
@@ -165,27 +259,6 @@
                     </div>
                     <div class="card card-table mb-0">
                       <div class="card-body">
-                        <!-- <div class="table-responsive">
-                          <table class="table table-hover table-center table-wrap mb-0">
-                            <thead>
-                              <tr>
-                                <th>Date</th>
-                                <th>Diagnosis</th>
-                                <th>Symptems</th>
-                                <th>Treatment</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr v-for="(visit, idx) in patientInfo.visits" :key="idx">
-                                <td>{{convertTimestampToString(visit.time)}}</td>
-                                <td>{{visit.diagnosis}}</td>
-                                <td>{{visit.symptems}}</td>
-                                <td>{{visit.treatment}}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>-->
-
                         <vs-collapse type="border">
                           <vs-collapse-item
                             v-for="(data, index) in patientInfo.visits"
@@ -193,11 +266,47 @@
                           >
                             <div slot="header">{{convertTimestampToString(data.time)}}</div>
                             <h5>Diagnosis</h5>
-                            {{data.diagnosis}}
+                            <textarea
+                              v-if="editable"
+                              class="form-control"
+                              rows="5"
+                              v-model="data.diagnosis"
+                            ></textarea>
+                            <span v-else>{{data.diagnosis}}</span>
+
                             <h5>Symptems</h5>
-                            {{data.symptems}}
+                            <textarea
+                              v-if="editable"
+                              class="form-control"
+                              rows="5"
+                              v-model="data.symptems"
+                            ></textarea>
+                            <span v-else>{{data.symptems}}</span>
+
                             <h5>Treatment</h5>
-                            {{data.treatment}}
+                            <textarea
+                              v-if="editable"
+                              class="form-control"
+                              rows="5"
+                              v-model="data.treatment"
+                            ></textarea>
+                            <span v-else>{{data.treatment}}</span>
+
+                            <h5>Files</h5>
+                            <div class="row">
+                              <div
+                                class="col-4"
+                                v-for="(file, index) in data.files"
+                                :key="`file - ${index}`"
+                              >
+                                <img
+                                  :src="getFileUrl(file)"
+                                  alt="visit file"
+                                  style="max-width: 200px; cursor: pointer;"
+                                  @click="downloadFile(file)"
+                                />
+                              </div>
+                            </div>
                           </vs-collapse-item>
                         </vs-collapse>
                       </div>
@@ -230,6 +339,16 @@
             <label>Treatment</label>
             <textarea class="form-control" v-model="visitInfo.treatment"></textarea>
           </div>
+          <div class="form-group">
+            <div class="upload-img">
+              <div class="change-photo-btn vs-con-loading__container" id="button-with-loading">
+                <span>
+                  <i class="fa fa-upload"></i> Upload File
+                </span>
+                <input type="file" class="upload" @change="uploadFile" />
+              </div>
+            </div>
+          </div>
         </div>
       </vs-prompt>
     </div>
@@ -237,18 +356,24 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
+import { db, storage } from "@/firebase";
 import firebase from "firebase";
+import Datepicker from "vuejs-datepicker";
+
 export default {
   data() {
     return {
       patientInfo: null,
       showAddModal: false,
-      visitInfo: {}
+      visitInfo: { files: [] },
+      editable: false,
+      doctor: null,
+      taskUploadFile: null
     };
   },
   mounted() {
     this.loadPatientInfo();
+    this.getDoctorInfo();
   },
   methods: {
     async loadPatientInfo() {
@@ -260,6 +385,7 @@ export default {
         .get();
 
       this.patientInfo = patientInfo.data();
+      console.log(this.patientInfo);
       this.$vs.loading.close();
     },
     convertTimestampToString(accessTime) {
@@ -267,13 +393,18 @@ export default {
         return "";
       }
       var timestamp = accessTime.value ? accessTime.value : accessTime;
-      return (
-        timestamp.toDate().getDate() +
-        "/" +
-        (timestamp.toDate().getMonth() + 1) +
-        "/" +
-        timestamp.toDate().getFullYear()
-      );
+      try {
+        const tDate = timestamp.toDate();
+        return (
+          tDate.getDate() +
+          "/" +
+          (tDate.getMonth() + 1) +
+          "/" +
+          tDate.getFullYear()
+        );
+      } catch {
+        return "";
+      }
     },
     async saveVisit() {
       this.visitInfo["time"] = new Date();
@@ -288,6 +419,90 @@ export default {
         });
       this.$vs.loading.close();
       this.loadPatientInfo();
+    },
+    async saveHistory() {
+      const pId = this.$route.params.id;
+      this.$vs.loading();
+      await db
+        .collection("History")
+        .doc(pId)
+        .update(this.patientInfo);
+      this.editable = false;
+      this.$vs.loading.close();
+    },
+    async getDoctorInfo() {
+      if (!this.userInfo.id) {
+        return;
+      }
+      this.$vs.loading();
+
+      const doctorInfo = await db
+        .collection("Doctors")
+        .doc(this.userInfo.id)
+        .get();
+      this.doctor = doctorInfo.data();
+      this.$vs.loading.close();
+    },
+    uploadFile(e) {
+      const fileList = e.target.files || e.dataTransfer.files;
+      const file = fileList[0];
+      const today = new Date();
+      const fileName =
+        file.name +
+        "-" +
+        today.getHours() +
+        today.getMinutes() +
+        today.getSeconds();
+      this.$vs.loading();
+      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file);
+    },
+    getFileUrl(url) {
+      if (url.includes(".pdf")) {
+        const images = require.context("../../assets/img", false, /\.png$/);
+        return images("./pdf.png");
+      }
+      return url;
+    },
+    downloadFile(url) {
+      window.open(url);
+    }
+  },
+  components: {
+    Datepicker
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.user;
+    },
+    historyElements() {
+      if (this.doctor == null) {
+        return [];
+      }
+      return this.doctor.historyElements.filter(element => {
+        if (element.active) {
+          return element;
+        }
+      });
+    }
+  },
+  watch: {
+    userInfo() {
+      this.getDoctorInfo();
+    },
+    taskUploadFile: function() {
+      this.taskUploadFile.on(
+        "state_changed",
+        () => {},
+        null,
+        () => {
+          this.taskUploadFile.snapshot.ref
+            .getDownloadURL()
+            .then(downloadURL => {
+              this.visitInfo.files.push(downloadURL);
+              this.$vs.loading.close();
+            });
+        }
+      );
     }
   }
 };

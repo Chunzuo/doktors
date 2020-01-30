@@ -4,9 +4,6 @@
       <div class="container-fluid">
         <div class="row align-items-center">
           <div class="col-md-12 col-12">
-            <nav aria-label="breadcrumb" class="page-breadcrumb">
-              <ol class="breadcrumb"></ol>
-            </nav>
             <h2 class="breadcrumb-title">{{sidebarItem}}</h2>
           </div>
         </div>
@@ -39,7 +36,13 @@ export default {
       return this.$store.state.doctor.sidebarItem;
     }
   },
-  directives: { Sticky }
+  directives: { Sticky },
+  mounted() {
+    const role = localStorage.getItem("role");
+    if (role != "doctor") {
+      this.$router.push("/");
+    }
+  }
 };
 </script>
 

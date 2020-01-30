@@ -9,9 +9,9 @@
             <span></span>
           </span>
         </a>
-        <a href="/" class="navbar-brand logo">
+        <router-link to="/" class="navbar-brand logo">
           <img src="@/assets/img/logo.png" class="img-fluid" alt="Logo" />
-        </a>
+        </router-link>
       </div>
       <div class="main-menu-wrapper">
         <div class="menu-header">
@@ -32,8 +32,11 @@
           >
             <router-link to="/doctors-mypatients">Patients</router-link>
           </li>
-          <li :class="{'active': selectedItem == 'Helper'}">
-            <router-link to="/helper">Help</router-link>
+          <li :class="{'active': selectedItem == 'Settings'}" v-if="loginStatus && !isUserManager">
+            <router-link to="/doctors-setting">Settings</router-link>
+          </li>
+          <li :class="{'active': selectedItem == 'Help'}">
+            <router-link to="/help">Help</router-link>
           </li>
           <li :class="{'active': selectedItem == 'About'}">
             <router-link to="/about">About</router-link>
@@ -72,7 +75,7 @@
         <!-- User Menu -->
         <li class="nav-item" v-else>
           <!-- <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"> -->
-          <router-link to="/doctors-profile" class="nav-link">
+          <a href="javascript:;" @click.prevent="gotoProfileSetting" class="nav-link">
             <div class="row" style="align-items:center">
               <div class="ml-2">
                 <h6>Dr. {{user.name}}</h6>
@@ -85,7 +88,7 @@
                 />
               </span>
             </div>
-          </router-link>
+          </a>
           <!-- </a> -->
         </li>
         <!-- /User Menu -->
@@ -119,7 +122,13 @@ export default {
         .signOut()
         .then(() => {});
       localStorage.removeItem("role");
+      this.$store.commit("setUserInfo", {});
       this.$router.push("/");
+    },
+    gotoProfileSetting() {
+      if (this.user.role == "doctor") {
+        this.$router.push("/doctors-profile");
+      }
     }
   }
 };

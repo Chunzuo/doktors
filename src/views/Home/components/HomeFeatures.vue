@@ -11,47 +11,40 @@
             <!-- <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p> -->
           </div>
           <slick :options="slickOptions" class="features-slider slider">
-            <!-- Slider Item -->
             <div class="feature-item text-center">
               <img src="@/assets/img/features/feature-01.jpg" class="img-fluid" alt="Feature" />
               <p>Hospital</p>
             </div>
-            <!-- /Slider Item -->
 
-            <!-- Slider Item -->
             <div class="feature-item text-center">
               <img src="@/assets/img/features/feature-02.jpg" class="img-fluid" alt="Feature" />
-              <p>X-Ray</p>
+              <p>Clinics</p>
             </div>
-            <!-- /Slider Item -->
 
-            <!-- Slider Item -->
             <div class="feature-item text-center">
               <img src="@/assets/img/features/feature-03.jpg" class="img-fluid" alt="Feature" />
               <p>Pharmacy</p>
             </div>
-            <!-- /Slider Item -->
 
-            <!-- Slider Item -->
             <div class="feature-item text-center">
               <img src="@/assets/img/features/feature-04.jpg" class="img-fluid" alt="Feature" />
               <p>Labs</p>
             </div>
-            <!-- /Slider Item -->
 
-            <!-- Slider Item -->
             <div class="feature-item text-center">
               <img src="@/assets/img/features/feature-05.jpg" class="img-fluid" alt="Feature" />
-              <p>Clinics</p>
+              <p>X-Ray</p>
             </div>
-            <!-- /Slider Item -->
 
-            <!-- Slider Item -->
             <div class="feature-item text-center">
               <img src="@/assets/img/features/feature-06.jpg" class="img-fluid" alt="Feature" />
               <p>Cosmetics</p>
             </div>
-            <!-- /Slider Item -->
+
+            <div class="feature-item text-center">
+              <img src="@/assets/img/features/feature-04.jpg" class="img-fluid" alt="Feature" />
+              <p>Sonar</p>
+            </div>
           </slick>
         </div>
       </div>
