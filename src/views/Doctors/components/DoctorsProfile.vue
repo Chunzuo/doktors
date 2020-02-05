@@ -16,16 +16,13 @@
                   />
                 </div>
                 <div class="upload-img">
-                  <div
-                    class="change-photo-btn vs-con-loading__container"
-                    id="button-with-loading"
-                  >
-                    <span> <i class="fa fa-upload"></i> Upload Photo </span>
+                  <div class="change-photo-btn vs-con-loading__container" id="button-with-loading">
+                    <span>
+                      <i class="fa fa-upload"></i> Upload Photo
+                    </span>
                     <input type="file" class="upload" @change="uploadAvatar" />
                   </div>
-                  <small class="form-text text-muted"
-                    >Allowed JPG, GIF or PNG. Max size of 2MB</small
-                  >
+                  <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
                 </div>
               </div>
             </div>
@@ -46,36 +43,26 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>City</label>
-              <select
-                class="form-control"
-                id="city_select"
-                v-model="doctor.city"
-              >
+              <select class="form-control" id="city_select" v-model="doctor.city">
                 <option value>All</option>
                 <option
                   v-for="(city, index) in cityList"
                   :key="`city - ${index}`"
                   :value="city"
-                  >{{ city }}</option
-                >
+                >{{ city }}</option>
               </select>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label>Speciality</label>
-              <select
-                class="form-control"
-                id="speciality_select"
-                v-model="doctor.speciality"
-              >
+              <select class="form-control" id="speciality_select" v-model="doctor.speciality">
                 <option value>All</option>
                 <option
                   v-for="(speciality, index) in specialityList"
                   :key="`speciality - ${index}`"
                   :value="speciality"
-                  >{{ speciality }}</option
-                >
+                >{{ speciality }}</option>
               </select>
             </div>
           </div>
@@ -90,11 +77,7 @@
         <h4 class="card-title">About Me</h4>
         <div class="form-group mb-0">
           <label>Biography</label>
-          <textarea
-            class="form-control"
-            rows="5"
-            v-model="doctorProfile.bio"
-          ></textarea>
+          <textarea class="form-control" rows="5" v-model="doctorProfile.bio"></textarea>
         </div>
       </div>
     </div>
@@ -108,33 +91,21 @@
           <div class="col-md-12">
             <div class="form-group">
               <label>Location</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="doctor.location"
-              />
+              <input type="text" class="form-control" v-model="doctor.location" />
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="doctorProfile.mapCenter">
           <div class="col-6">
             <div class="form-group">
               <label>Langitude</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="doctorProfile.mapCenter.lng"
-              />
+              <input type="text" class="form-control" v-model="doctorProfile.mapCenter.lng" />
             </div>
           </div>
           <div class="col-6">
             <div class="form-group">
               <label>Latitude</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="doctorProfile.mapCenter.lat"
-              />
+              <input type="text" class="form-control" v-model="doctorProfile.mapCenter.lat" />
             </div>
           </div>
           <div class="col-md-12">
@@ -144,10 +115,7 @@
               style="width: 100%; height: 500px"
               v-if="doctorProfile.mapCenter"
             >
-              <gmap-marker
-                :position="doctorProfile.mapCenter"
-                :clickable="true"
-              ></gmap-marker>
+              <gmap-marker :position="doctorProfile.mapCenter" :clickable="true"></gmap-marker>
             </gmap-map>
           </div>
         </div>
@@ -168,16 +136,12 @@
                 <div class="change-avatar">
                   <div class="upload-img">
                     <div class="change-photo-btn">
-                      <span> <i class="fa fa-upload"></i> Upload Photo </span>
-                      <input
-                        type="file"
-                        class="upload"
-                        @change="uploadCertificate"
-                      />
+                      <span>
+                        <i class="fa fa-upload"></i> Upload Photo
+                      </span>
+                      <input type="file" class="upload" @change="uploadCertificate" />
                     </div>
-                    <small class="form-text text-muted"
-                      >Allowed JPG, GIF or PNG. Max size of 2MB</small
-                    >
+                    <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
                   </div>
                 </div>
               </div>
@@ -223,56 +187,33 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Degree</label>
-                    <input
-                      type="text"
-                      v-model="education.degree"
-                      class="form-control"
-                    />
+                    <input type="text" v-model="education.degree" class="form-control" />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>College/Institute</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="education.college"
-                    />
+                    <input type="text" class="form-control" v-model="education.college" />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Year of Completion</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="education.year"
-                    />
+                    <input type="text" class="form-control" v-model="education.year" />
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-2 col-lg-1">
-              <label
-                class="d-md-block d-sm-none d-none"
-                v-html="'&nbsp;'"
-              ></label>
-              <a
-                href="#"
-                class="btn btn-danger trash"
-                @click.prevent="removeEducation(index)"
-              >
+              <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
+              <a href="#" class="btn btn-danger trash" @click.prevent="removeEducation(index)">
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="add-more">
-          <a
-            href="javascript:void(0);"
-            class="add-education"
-            @click="addEmptyEducation"
-          >
+          <a href="javascript:void(0);" class="add-education" @click="addEmptyEducation">
             <i class="fa fa-plus-circle"></i> Add More
           </a>
         </div>
@@ -294,56 +235,33 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Hospital Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="experience.hospital"
-                    />
+                    <input type="text" class="form-control" v-model="experience.hospital" />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Designation</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="experience.designation"
-                    />
+                    <input type="text" class="form-control" v-model="experience.designation" />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Year of period</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="experience.year"
-                    />
+                    <input type="text" class="form-control" v-model="experience.year" />
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-2 col-lg-1">
-              <label
-                class="d-md-block d-sm-none d-none"
-                v-html="'&nbsp;'"
-              ></label>
-              <a
-                href="#"
-                class="btn btn-danger trash"
-                @click.prevent="removeExperience(index)"
-              >
+              <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
+              <a href="#" class="btn btn-danger trash" @click.prevent="removeExperience(index)">
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="add-more">
-          <a
-            href="javascript:void(0);"
-            class="add-experience"
-            @click="addEmptyExperience"
-          >
+          <a href="javascript:void(0);" class="add-experience" @click="addEmptyExperience">
             <i class="fa fa-plus-circle"></i> Add More
           </a>
         </div>
@@ -357,29 +275,19 @@
         <div class="form-group">
           <label>Services</label>
           <input-tag v-model="services"></input-tag>
-          <small class="form-text text-muted"
-            >Note : Type & Press enter to add new services</small
-          >
+          <small class="form-text text-muted">Note : Type & Press enter to add new services</small>
         </div>
         <div class="form-group mb-0">
           <label>Specialization</label>
           <input-tag v-model="specializations"></input-tag>
-          <small class="form-text text-muted"
-            >Note : Type & Press enter to add new specialization</small
-          >
+          <small class="form-text text-muted">Note : Type & Press enter to add new specialization</small>
         </div>
       </div>
     </div>
     <!-- /Services and Specialization -->
 
     <div class="submit-section submit-btn-bottom">
-      <button
-        type="submit"
-        class="btn btn-primary submit-btn"
-        @click="updateProfile"
-      >
-        Save Changes
-      </button>
+      <button type="submit" class="btn btn-primary submit-btn" @click="updateProfile">Save Changes</button>
     </div>
   </div>
 </template>
@@ -430,6 +338,9 @@ export default {
           this.taskUploadCert.snapshot.ref
             .getDownloadURL()
             .then(downloadURL => {
+              if (!this.doctorProfile.certifications) {
+                this.doctorProfile.certifications = [];
+              }
               this.doctorProfile.certifications.push(downloadURL);
             });
         }

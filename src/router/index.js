@@ -97,7 +97,7 @@ const routes = [
       {
         path: "/doctors-patient-detail/:id",
         name: "doctors-patient-detail",
-        component: () => import("../views/Doctors/DoctorsPatientDetail.vue")
+        component: () => import("../views/Doctors/patientDetail/Index.vue")
       },
       {
         path: "/doctor-detail/:id",
