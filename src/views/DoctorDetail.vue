@@ -15,13 +15,13 @@
                   />
                 </div>
                 <div class="doc-info-cont">
-                  <h4 class="doc-name">Dr. {{doctor.name}}</h4>
-                  <p class="doc-speciality">{{doctor.speciality}}</p>
+                  <h4 class="doc-name">Dr. {{ doctor.name }}</h4>
+                  <p class="doc-speciality">{{ doctor.speciality }}</p>
 
                   <div class="clinic-details">
                     <p class="doc-location">
                       <i class="fas fa-map-marker-alt"></i>
-                      {{doctor.location}}
+                      {{ doctor.location }}
                     </p>
                   </div>
                 </div>
@@ -49,7 +49,7 @@
                           </div>
                           <h4 class="widget-title mt-2 ml-2">About Me</h4>
                         </div>
-                        <p class="mt-2">{{doctorProfile.bio}}</p>
+                        <p class="mt-2">{{ doctorProfile.bio }}</p>
                       </div>
                       <!-- /About Details -->
 
@@ -67,9 +67,11 @@
                               </div>
                               <div class="experience-content">
                                 <div class="timeline-content">
-                                  <a href="#/" class="name">{{education.college}}</a>
-                                  <div>{{education.degree}}</div>
-                                  <span class="time">{{education.year}}</span>
+                                  <a href="#/" class="name">{{
+                                    education.college
+                                  }}</a>
+                                  <div>{{ education.degree }}</div>
+                                  <span class="time">{{ education.year }}</span>
                                 </div>
                               </div>
                             </li>
@@ -92,11 +94,13 @@
                               </div>
                               <div class="experience-content">
                                 <div class="timeline-content">
-                                  <a
-                                    href="#/"
-                                    class="name"
-                                  >{{experience.designation}} {{experience.hospital}}</a>
-                                  <span class="time">{{experience.year}}</span>
+                                  <a href="#/" class="name"
+                                    >{{ experience.designation }}
+                                    {{ experience.hospital }}</a
+                                  >
+                                  <span class="time">{{
+                                    experience.year
+                                  }}</span>
                                 </div>
                               </div>
                             </li>
@@ -111,7 +115,8 @@
                         <div class="experience-box">
                           <slick :options="slickOptions">
                             <img
-                              v-for="(cert, index) in doctorProfile.certifications"
+                              v-for="(cert,
+                              index) in doctorProfile.certifications"
                               :key="`cert - ${index}`"
                               :src="cert"
                             />
@@ -127,7 +132,9 @@
                           <li
                             v-for="(service, index) in doctor.services"
                             :key="`service - ${index}`"
-                          >{{service}}</li>
+                          >
+                            {{ service }}
+                          </li>
                         </ul>
                       </div>
                       <!-- /Services List -->
@@ -139,7 +146,9 @@
                           <li
                             v-for="(spec, index) in doctor.specializations"
                             :key="`spec - ${index}`"
-                          >{{spec}}</li>
+                          >
+                            {{ spec }}
+                          </li>
                         </ul>
                       </div>
                       <!-- /Specializations List -->
@@ -156,19 +165,28 @@
               <div class="widget-content">
                 <div class="listing-hours" v-if="doctorProfile.openingHours">
                   <div
-                    :class="['listing-day', {'closed': doctorProfile.openingHours[day.value].closed == true}]"
+                    :class="[
+                      'listing-day',
+                      {
+                        closed:
+                          doctorProfile.openingHours[day.value].closed == true
+                      }
+                    ]"
                     v-for="(day, index) in days"
                     :key="`day - ${index}`"
                   >
-                    <div class="day">{{day.text}}</div>
+                    <div class="day">{{ day.text }}</div>
                     <div class="time-items">
-                      <span class="time" v-if="doctorProfile.openingHours[day.value].closed">
-                        <span class="badge bg-danger-light">Closed</span>
-                      </span>
                       <span
                         class="time"
-                        v-else
-                      >{{doctorProfile.openingHours[day.value].from}} ~ {{doctorProfile.openingHours[day.value].until}}</span>
+                        v-if="doctorProfile.openingHours[day.value].closed"
+                      >
+                        <span class="badge bg-danger-light">Closed</span>
+                      </span>
+                      <span class="time" v-else
+                        >{{ doctorProfile.openingHours[day.value].from }} ~
+                        {{ doctorProfile.openingHours[day.value].until }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -179,7 +197,7 @@
               <h4 class="widget-title">Locations</h4>
               <p class="doc-location">
                 <i class="fas fa-map-marker-alt"></i>
-                {{doctor.location}}
+                {{ doctor.location }}
               </p>
               <gmap-map
                 :center="doctorProfile.mapCenter"
@@ -187,7 +205,10 @@
                 style="width: 100%; height: 300px"
                 v-if="doctorProfile.mapCenter"
               >
-                <gmap-marker :position="doctorProfile.mapCenter" :clickable="true"></gmap-marker>
+                <gmap-marker
+                  :position="doctorProfile.mapCenter"
+                  :clickable="true"
+                ></gmap-marker>
               </gmap-map>
             </div>
           </div>
@@ -254,5 +275,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

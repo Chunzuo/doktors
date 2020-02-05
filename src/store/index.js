@@ -1,13 +1,13 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 // Modules
-import headerModule from './modules/headerModule'
-import userModule from './modules/userModule'
-import doctorModule from './modules/doctorModule'
-import webStructureModule from './modules/webStructureModule'
+import headerModule from "./modules/headerModule";
+import userModule from "./modules/userModule";
+import doctorModule from "./modules/doctorModule";
+import webStructureModule from "./modules/webStructureModule";
 
 export default new Vuex.Store({
   state: {
@@ -15,15 +15,14 @@ export default new Vuex.Store({
   },
   mutations: {
     updateHomeSearchKeyword(state, value) {
-      state.homeSearchKeyword = value
+      state.homeSearchKeyword = value;
     }
   },
-  actions: {
-  },
+  actions: {},
   modules: {
-    'header': headerModule,
-    'user': userModule,
-    'doctor': doctorModule,
-    'webStructure': webStructureModule
+    header: headerModule,
+    user: userModule,
+    doctor: doctorModule,
+    webStructure: webStructureModule
   }
-})
+});

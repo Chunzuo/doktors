@@ -1,9 +1,7 @@
 module.exports = {
-  "transpileDependencies": [
-
-  ],
+  transpileDependencies: [],
 
   pwa: {
-    name: 'Doktors'
+    name: "Doktors"
   }
-}
+};

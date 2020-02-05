@@ -7,7 +7,12 @@
             <div class="tab-content">
               <div>
                 <div class="text-right">
-                  <a href="javascript:;" class="add-new-btn" @click="openAddDialog()">Add User</a>
+                  <a
+                    href="javascript:;"
+                    class="add-new-btn"
+                    @click="openAddDialog()"
+                    >Add User</a
+                  >
                 </div>
                 <div class="card card-table mb-0">
                   <div class="card-body">
@@ -22,16 +27,20 @@
                         <vs-th></vs-th>
                       </template>
 
-                      <template slot-scope="{data}">
+                      <template slot-scope="{ data }">
                         <vs-tr :key="indextr" v-for="(user, indextr) in data">
-                          <vs-td>{{user.name}}</vs-td>
+                          <vs-td>{{ user.name }}</vs-td>
 
-                          <vs-td>{{user.phone}}</vs-td>
+                          <vs-td>{{ user.phone }}</vs-td>
 
                           <vs-td>
                             <span
-                              :class="['badge badge-pill', getRoleBackground(user.role)]"
-                            >{{user.role}}</span>
+                              :class="[
+                                'badge badge-pill',
+                                getRoleBackground(user.role)
+                              ]"
+                              >{{ user.role }}</span
+                            >
                           </vs-td>
                           <vs-td>
                             <a
@@ -64,7 +73,7 @@
       <vs-prompt
         @cancel="showModal = false"
         @accept="addUser"
-        @close="showModal=false"
+        @close="showModal = false"
         :active.sync="showModal"
         :title="dialogMode == 0 ? 'Add User' : 'Edit User'"
       >
@@ -84,7 +93,8 @@
                 v-for="(role, index) in roleOptions"
                 :key="`role - ${index}`"
                 :value="role.value"
-              >{{role.value}}</option>
+                >{{ role.value }}</option
+              >
             </select>
           </div>
         </div>
@@ -161,6 +171,10 @@ export default {
           .collection("Users")
           .doc(this.newUser.id)
           .update(this.newUser);
+        await db
+          .collection("Doctors")
+          .doc(this.newUser.id)
+          .update({ phone: this.newUser.phone, name: this.newUser.name });
       }
 
       this.newUser = {};
@@ -212,5 +226,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

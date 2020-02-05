@@ -8,7 +8,11 @@
           <div class="col-md-12 col-lg-8">
             <div class="form-group">
               <label>Facebook URL</label>
-              <input type="text" class="form-control" v-model="profile.facebook" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="profile.facebook"
+              />
             </div>
           </div>
         </div>
@@ -16,7 +20,11 @@
           <div class="col-md-12 col-lg-8">
             <div class="form-group">
               <label>Twitter URL</label>
-              <input type="text" class="form-control" v-model="profile.twitter" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="profile.twitter"
+              />
             </div>
           </div>
         </div>
@@ -24,12 +32,18 @@
           <div class="col-md-12 col-lg-8">
             <div class="form-group">
               <label>Instagram URL</label>
-              <input type="text" class="form-control" v-model="profile.instagram" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="profile.instagram"
+              />
             </div>
           </div>
         </div>
         <div class="submit-section">
-          <button class="btn btn-primary submit-btn" @click.prevent="save">Save Changes</button>
+          <button class="btn btn-primary submit-btn" @click.prevent="save">
+            Save Changes
+          </button>
         </div>
 
         <!-- /Social Form -->
@@ -98,5 +112,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

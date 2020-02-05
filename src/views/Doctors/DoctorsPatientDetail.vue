@@ -4,7 +4,9 @@
       <div class="container-fluid">
         <div class="row align-items-center">
           <div class="col-md-12 col-12">
-            <h2 class="breadcrumb-title" v-if="patientInfo">{{patientInfo.name}}</h2>
+            <h2 class="breadcrumb-title" v-if="patientInfo">
+              {{ patientInfo.name }}
+            </h2>
           </div>
         </div>
       </div>
@@ -13,37 +15,52 @@
     <div class="content">
       <div class="container-fluid" v-if="patientInfo">
         <div class="row">
-          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+          <div
+            class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft"
+          >
             <!-- Profile Widget -->
             <div class="card widget-profile pat-widget-profile">
               <div class="card-body">
                 <div class="pro-widget-content">
                   <div class="profile-info-widget">
                     <a href="#" class="booking-doc-img">
-                      <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
+                      <img
+                        src="@/assets/img/patients/patient-default.png"
+                        alt="User Image"
+                      />
                     </a>
                     <div class="profile-det-info">
-                      <h3>{{patientInfo.name}}</h3>
+                      <h3>{{ patientInfo.name }}</h3>
 
                       <div class="patient-details">
                         <h5>
                           <b>Last Visit :</b>
-                          {{convertTimestampToString(patientInfo.accessTime)}}
+                          {{ convertTimestampToString(patientInfo.accessTime) }}
                         </h5>
-                        <div class="row">
+                        <div class="row" v-if="isDoctor">
                           <div class="col" v-if="!editable">
-                            <button class="btn bg-success-light" @click="editable = true">
+                            <button
+                              class="btn bg-success-light"
+                              @click="editable = true"
+                            >
                               <i class="far fa-edit"></i>
                               Edit
                             </button>
                           </div>
                           <div class="col" v-if="editable">
-                            <button class="btn bg-info-light" @click="saveHistory">
+                            <button
+                              class="btn bg-info-light"
+                              @click="saveHistory"
+                            >
                               <i class="far fa-save"></i>
                               Save
                             </button>
                           </div>
-                          <div class="col" v-if="editable" @click="editable = false">
+                          <div
+                            class="col"
+                            v-if="editable"
+                            @click="editable = false"
+                          >
                             <button class="btn bg-danger-light">
                               <i class="far"></i>
                               Cancel
@@ -57,8 +74,11 @@
                 </div>
                 <div class="patient-info" v-if="patientInfo.history">
                   <ul>
-                    <li v-for="(history, index) in historyElements" :key="`history-${index}`">
-                      {{history.title}}
+                    <li
+                      v-for="(history, index) in historyElements"
+                      :key="`history-${index}`"
+                    >
+                      {{ history.title }}
                       <div v-if="editable">
                         <input
                           v-model="patientInfo.history[history.id]"
@@ -91,11 +111,24 @@
                               :value="value"
                               v-model="patientInfo.history[history.id]"
                             />
-                            <label class="form-check-label" :for="`radio${index}`">{{value}}</label>
+                            <label
+                              class="form-check-label"
+                              :for="`radio${index}`"
+                              >{{ value }}</label
+                            >
                           </div>
                         </div>
                       </div>
-                      <span v-else>{{patientInfo.history[history.id]}}</span>
+                      <span v-else>
+                        <span v-if="history.type == 'date'">{{
+                          convertTimestampToString(
+                            patientInfo.history[history.id]
+                          )
+                        }}</span>
+                        <span v-else>{{
+                          patientInfo.history[history.id]
+                        }}</span>
+                      </span>
                     </li>
                     <!-- <li>
                       Phone
@@ -250,12 +283,13 @@
               <div class="card-body pt-0">
                 <div class="tab-content">
                   <div>
-                    <div class="text-right">
+                    <div class="text-right" v-if="isDoctor">
                       <a
                         href="javascript:;"
                         class="add-new-btn"
                         @click="showAddModal = true"
-                      >Add Visit</a>
+                        >Add Visit</a
+                      >
                     </div>
                     <div class="card card-table mb-0">
                       <div class="card-body">
@@ -264,7 +298,9 @@
                             v-for="(data, index) in patientInfo.visits"
                             :key="index"
                           >
-                            <div slot="header">{{convertTimestampToString(data.time)}}</div>
+                            <div slot="header">
+                              {{ convertTimestampToString(data.time) }}
+                            </div>
                             <h5>Diagnosis</h5>
                             <textarea
                               v-if="editable"
@@ -272,7 +308,7 @@
                               rows="5"
                               v-model="data.diagnosis"
                             ></textarea>
-                            <span v-else>{{data.diagnosis}}</span>
+                            <span v-else>{{ data.diagnosis }}</span>
 
                             <h5>Symptems</h5>
                             <textarea
@@ -281,7 +317,7 @@
                               rows="5"
                               v-model="data.symptems"
                             ></textarea>
-                            <span v-else>{{data.symptems}}</span>
+                            <span v-else>{{ data.symptems }}</span>
 
                             <h5>Treatment</h5>
                             <textarea
@@ -290,7 +326,7 @@
                               rows="5"
                               v-model="data.treatment"
                             ></textarea>
-                            <span v-else>{{data.treatment}}</span>
+                            <span v-else>{{ data.treatment }}</span>
 
                             <h5>Files</h5>
                             <div class="row">
@@ -322,29 +358,39 @@
       <vs-prompt
         @cancel="showAddModal = false"
         @accept="saveVisit"
-        @close="showAddModal=false"
+        @close="showAddModal = false"
         :active.sync="showAddModal"
         title="Add visit"
       >
         <div class="modal-body">
           <div class="form-group">
             <label>Diagnosis</label>
-            <textarea class="form-control" v-model="visitInfo.diagnosis"></textarea>
+            <textarea
+              class="form-control"
+              v-model="visitInfo.diagnosis"
+            ></textarea>
           </div>
           <div class="form-group">
             <label>Symptems</label>
-            <textarea class="form-control" v-model="visitInfo.symptems"></textarea>
+            <textarea
+              class="form-control"
+              v-model="visitInfo.symptems"
+            ></textarea>
           </div>
           <div class="form-group">
             <label>Treatment</label>
-            <textarea class="form-control" v-model="visitInfo.treatment"></textarea>
+            <textarea
+              class="form-control"
+              v-model="visitInfo.treatment"
+            ></textarea>
           </div>
           <div class="form-group">
             <div class="upload-img">
-              <div class="change-photo-btn vs-con-loading__container" id="button-with-loading">
-                <span>
-                  <i class="fa fa-upload"></i> Upload File
-                </span>
+              <div
+                class="change-photo-btn vs-con-loading__container"
+                id="button-with-loading"
+              >
+                <span> <i class="fa fa-upload"></i> Upload File </span>
                 <input type="file" class="upload" @change="uploadFile" />
               </div>
             </div>
@@ -385,7 +431,6 @@ export default {
         .get();
 
       this.patientInfo = patientInfo.data();
-      console.log(this.patientInfo);
       this.$vs.loading.close();
     },
     convertTimestampToString(accessTime) {
@@ -435,11 +480,19 @@ export default {
         return;
       }
       this.$vs.loading();
+      let doctorInfo = null;
+      if (this.userInfo.role == "doctor") {
+        doctorInfo = await db
+          .collection("Doctors")
+          .doc(this.userInfo.id)
+          .get();
+      } else if (this.userInfo.role == "assistant") {
+        doctorInfo = await db
+          .collection("Doctors")
+          .doc(this.userInfo.doctorId)
+          .get();
+      }
 
-      const doctorInfo = await db
-        .collection("Doctors")
-        .doc(this.userInfo.id)
-        .get();
       this.doctor = doctorInfo.data();
       this.$vs.loading.close();
     },
@@ -483,6 +536,9 @@ export default {
           return element;
         }
       });
+    },
+    isDoctor() {
+      return this.userInfo.role == "doctor";
     }
   },
   watch: {
@@ -508,5 +564,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

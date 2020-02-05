@@ -45,27 +45,46 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Phone number</label>
-                    <input type="text" v-model="assistant.phone" class="form-control" />
+                    <input
+                      type="text"
+                      v-model="assistant.phone"
+                      class="form-control"
+                    />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Name</label>
-                    <input type="text" v-model="assistant.name" class="form-control" />
+                    <input
+                      type="text"
+                      v-model="assistant.name"
+                      class="form-control"
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-2 col-lg-1">
-              <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
-              <a href="#" class="btn btn-danger trash" @click.prevent="removeAssistant(index)">
+              <label
+                class="d-md-block d-sm-none d-none"
+                v-html="'&nbsp;'"
+              ></label>
+              <a
+                href="#"
+                class="btn btn-danger trash"
+                @click.prevent="removeAssistant(index)"
+              >
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="add-more">
-          <a href="javascript:void(0);" class="add-assistant" @click="addEmptyAssistant">
+          <a
+            href="javascript:void(0);"
+            class="add-assistant"
+            @click="addEmptyAssistant"
+          >
             <i class="fa fa-plus-circle"></i> Add More
           </a>
         </div>
@@ -76,11 +95,18 @@
       <div class="card-body">
         <div class="card-title">History of elements</div>
         <draggable v-model="doctor.historyElements">
-          <div v-for="(element, index) in doctor.historyElements" :key="`element - ${index}`">
+          <div
+            v-for="(element, index) in doctor.historyElements"
+            :key="`element - ${index}`"
+          >
             <label class="custom_check">
-              <input type="checkbox" name="select_specialist" v-model="element.active" />
+              <input
+                type="checkbox"
+                name="select_specialist"
+                v-model="element.active"
+              />
               <span class="checkmark"></span>
-              {{element.title}}
+              {{ element.title }}
             </label>
           </div>
         </draggable>
@@ -88,7 +114,9 @@
     </div>
 
     <div class="submit-section submit-btn-bottom">
-      <button type="submit" class="btn btn-primary submit-btn" @click="save">Save Changes</button>
+      <button type="submit" class="btn btn-primary submit-btn" @click="save">
+        Save Changes
+      </button>
     </div>
   </div>
 </template>
@@ -96,6 +124,7 @@
 <script>
 import { db } from "@/firebase";
 import draggable from "vuedraggable";
+
 export default {
   created() {
     this.$store.commit("updateDoctorSidebarItem", "Settings");
@@ -133,6 +162,8 @@ export default {
 
       this.doctor["assistants"] = this.assistants;
 
+      this.saveAssistant();
+
       await db
         .collection("Doctors")
         .doc(this.userInfo.id)
@@ -160,6 +191,28 @@ export default {
       }
 
       this.$vs.loading.close();
+    },
+    async saveAssistant() {
+      var query = db
+        .collection("Users")
+        .where("doctorId", "==", this.userInfo.id);
+      const querySnapshot = await query.get();
+      querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+      });
+
+      var batch = db.batch();
+      this.assistants.forEach(assistant => {
+        const docRef = db.collection("Users").doc();
+        const doc = {
+          name: assistant.name,
+          phone: assistant.phone,
+          role: "assistant",
+          doctorId: this.userInfo.id
+        };
+        batch.set(docRef, doc);
+      });
+      batch.commit().then(function() {});
     }
   },
   computed: {
@@ -179,5 +232,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

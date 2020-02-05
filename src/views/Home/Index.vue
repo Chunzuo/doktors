@@ -1,6 +1,6 @@
 <template>
   <div>
-    <home-search></home-search>
+    <home-search v-if="!isManager"></home-search>
 
     <home-doctors></home-doctors>
 
@@ -28,6 +28,17 @@ export default {
   },
   created() {
     this.$store.commit("updateSelectItem", "Home");
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.user;
+    },
+    isManager() {
+      return (
+        this.userInfo.role == "userManager" ||
+        this.userInfo.role == "adsManager"
+      );
+    }
   }
 };
 </script>

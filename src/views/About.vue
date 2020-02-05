@@ -19,9 +19,11 @@
             </a>
 
             <h5>
-              This App is for improving doctors experience.
-              It facilitates the task of keeping the history of the patients, recording their medications and appointments.
-              This app can bring doctors talents to the right patients as they can search for the right one near the area.
+              This App is for improving doctors experience. It facilitates the
+              task of keeping the history of the patients, recording their
+              medications and appointments. This app can bring doctors talents
+              to the right patients as they can search for the right one near
+              the area.
             </h5>
           </div>
         </div>
@@ -39,5 +41,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -18,8 +18,10 @@
                     </thead>
                     <tbody>
                       <tr v-for="(day, idx) in days" :key="idx">
-                        <td>{{day.text}}</td>
-                        <td>{{formstOpeningHours(openingHours[day.value])}}</td>
+                        <td>{{ day.text }}</td>
+                        <td>
+                          {{ formstOpeningHours(openingHours[day.value]) }}
+                        </td>
                         <td>
                           <a
                             href="javascript:void(0);"
@@ -37,7 +39,13 @@
             </div>
 
             <div class="card-actions mt-3">
-              <button type="submit" class="btn btn-primary submit-btn" @click="save">Save Changes</button>
+              <button
+                type="submit"
+                class="btn btn-primary submit-btn"
+                @click="save"
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
@@ -47,7 +55,7 @@
     <vs-prompt
       @cancel="showEditModal = false"
       @accept="updateHours"
-      @close="showEditModal=false"
+      @close="showEditModal = false"
       :active.sync="showEditModal"
       title="Edit Opening Hours"
     >
@@ -178,5 +186,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -1,4 +1,4 @@
-import { db } from "@/firebase"
+import { db } from "@/firebase";
 
 export default {
   state: {
@@ -8,13 +8,13 @@ export default {
   },
   mutations: {
     updateCityList(state, value) {
-      state.cityList = value
+      state.cityList = value;
     },
     updateSpecialityList(state, value) {
-      state.specialityList = value
+      state.specialityList = value;
     },
     updateHelpList(state, value) {
-      state.helpList = value
+      state.helpList = value;
     }
   },
   actions: {
@@ -27,7 +27,7 @@ export default {
 
       let cityList = [];
       let specialityList = [];
-      let helpers = []
+      let helpers = [];
       const help = data.help;
       const keys = Object.keys(help);
       const values = Object.values(help);
@@ -46,9 +46,9 @@ export default {
         specialityList.push(item.text);
       });
 
-      commit('updateCityList', cityList)
-      commit('updateSpecialityList', specialityList)
-      commit('updateHelpList', helpers)
+      commit("updateCityList", cityList);
+      commit("updateSpecialityList", specialityList);
+      commit("updateHelpList", helpers);
     }
   }
-}
+};

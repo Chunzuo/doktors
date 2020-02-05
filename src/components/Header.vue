@@ -23,35 +23,53 @@
           </a>
         </div>
         <ul class="main-nav">
-          <li :class="{'active': selectedItem == 'Home'}">
+          <li :class="{ active: selectedItem == 'Home' }">
             <router-link to="/">Home</router-link>
           </li>
           <li
-            :class="{'active': selectedItem == 'MyPatients'}"
-            v-if="loginStatus && !isUserManager"
+            :class="{ active: selectedItem == 'MyPatients' }"
+            v-if="isDoctor || isAssistant"
           >
             <router-link to="/doctors-mypatients">Patients</router-link>
           </li>
-          <li :class="{'active': selectedItem == 'Settings'}" v-if="loginStatus && !isUserManager">
+          <li :class="{ active: selectedItem == 'Settings' }" v-if="isDoctor">
             <router-link to="/doctors-setting">Settings</router-link>
           </li>
-          <li :class="{'active': selectedItem == 'Help'}">
+          <li :class="{ active: selectedItem == 'Help' }">
             <router-link to="/help">Help</router-link>
           </li>
-          <li :class="{'active': selectedItem == 'About'}">
+          <li :class="{ active: selectedItem == 'About' }">
             <router-link to="/about">About</router-link>
           </li>
+          <li
+            v-if="isUserManager"
+            :class="{ active: selectedItem == 'UserManagement' }"
+          >
+            <router-link to="/user-management">User Management</router-link>
+          </li>
+          <li
+            v-if="isAdsManager"
+            :class="{ active: selectedItem == 'AdsManagement' }"
+          >
+            <router-link to="/ads-management">Ads Management</router-link>
+          </li>
+          <li
+            v-if="isPatient"
+            :class="{ active: selectedItem == 'PatientDashboard' }"
+          >
+            <router-link to="/patient-dashboard">Dashboard</router-link>
+          </li>
+
           <li v-if="loginStatus">
             <a
               class="nav-link header-login"
               style="color: red;"
               href="javascript:;"
               @click="logout"
-            >Logout</a>
+              >Logout</a
+            >
           </li>
-          <li v-if="isUserManager" :class="{'active': selectedItem == 'UserManagement'}">
-            <router-link to="/user-management">User Management</router-link>
-          </li>
+
           <!-- <li class="login-link">
             <router-link to="/login">Login / Signup</router-link>
           </li>-->
@@ -68,17 +86,23 @@
           </div>
         </li>-->
         <li class="nav-item" v-if="!loginStatus">
-          <router-link class="nav-link header-login" to="/login">Login / Signup</router-link>
+          <router-link class="nav-link header-login" to="/login"
+            >Login / Signup</router-link
+          >
           <!-- <a class="nav-link header-login" href="login.html">login / Signup</a> -->
         </li>
 
         <!-- User Menu -->
         <li class="nav-item" v-else>
           <!-- <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"> -->
-          <a href="javascript:;" @click.prevent="gotoProfileSetting" class="nav-link">
+          <a
+            href="javascript:;"
+            @click.prevent="gotoProfileSetting"
+            class="nav-link"
+          >
             <div class="row" style="align-items:center">
               <div class="ml-2">
-                <h6>Dr. {{user.name}}</h6>
+                <h6>{{ userName }}</h6>
               </div>
               <span class="user-img ml-2">
                 <img
@@ -111,8 +135,26 @@ export default {
     user() {
       return this.$store.state.user.user;
     },
+    userName() {
+      if (this.user.role == "doctor") {
+        return `Dr. ${this.user.name}`;
+      }
+      return this.user.name;
+    },
     isUserManager() {
       return this.user.role == "userManager";
+    },
+    isAdsManager() {
+      return this.user.role == "adsManager";
+    },
+    isDoctor() {
+      return this.user.role == "doctor";
+    },
+    isAssistant() {
+      return this.user.role == "assistant";
+    },
+    isPatient() {
+      return this.user.role == "patient";
     }
   },
   methods: {
@@ -134,5 +176,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

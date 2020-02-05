@@ -80,13 +80,17 @@ service cloud.firestore {
 
     match /History/{historyID}{
       allow read: if isLoggedIn();// && isAuthenticatedHistory(historyID);
-      allow create: if isLoggedIn() && isDoctorOrAssistant(historyID);
+      allow create: if true; //isLoggedIn() && isDoctorOrAssistant(historyID);
       allow update, delete: if isLoggedIn() && isAuthenticatedHistory(historyID);
     }
 
     match /Ads/{adsID} {
     	allow read: if true;
       allow create, update, delete: if true;
+    }
+
+    match /Appointments/{apptID} {
+    	allow read, create, update, delete: if true;
     }
     
     //Every thing else

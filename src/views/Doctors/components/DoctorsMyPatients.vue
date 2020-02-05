@@ -25,30 +25,44 @@
         </div>
 
         <div class="col text-right">
-          <button class="btn btn-danger" @click="clearSearchKeyword">Clear</button>
+          <button class="btn btn-danger" @click="clearSearchKeyword">
+            Clear
+          </button>
         </div>
       </div>
     </div>
 
     <div class="row row-grid">
-      <div class="col-md-6 col-lg-4 col-xl-3" v-for="(patient, idx) in filteredPatients" :key="idx">
+      <div
+        class="col-md-6 col-lg-4 col-xl-3"
+        v-for="(patient, idx) in filteredPatients"
+        :key="idx"
+      >
         <div class="card widget-profile pat-widget-profile">
           <div class="card-body">
             <div class="pro-widget-content">
               <div class="profile-info-widget">
-                <router-link :to="getPatientDetailLink(patient.id)" class="booking-doc-img">
-                  <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
+                <router-link
+                  :to="getPatientDetailLink(patient.id)"
+                  class="booking-doc-img"
+                >
+                  <img
+                    src="@/assets/img/patients/patient-default.png"
+                    alt="User Image"
+                  />
                 </router-link>
                 <div class="profile-det-info">
                   <h3>
-                    <router-link :to="getPatientDetailLink(patient.id)">{{patient.name}}</router-link>
+                    <router-link :to="getPatientDetailLink(patient.id)">{{
+                      patient.name
+                    }}</router-link>
                     <!-- <a href="patient-profile.html">{{patient.name}}</a> -->
                   </h3>
 
                   <div class="patient-details">
                     <h5>
                       <b>Last visit :</b>
-                      {{getLastVisit(patient.accessTime)}}
+                      {{ getLastVisit(patient.accessTime) }}
                     </h5>
                     <!-- <h5 class="mb-0">
                       <i class="fas fa-map-marker-alt"></i> Alabama, USA
@@ -61,7 +75,7 @@
               <ul>
                 <li>
                   Phone
-                  <span>{{patient.patientMobile}}</span>
+                  <span>{{ patient.patientMobile }}</span>
                 </li>
               </ul>
             </div>
@@ -77,6 +91,7 @@
       color="primary"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
+      v-if="isDoctor"
     ></vs-button>
   </div>
 </template>
@@ -135,6 +150,9 @@ export default {
           return patient;
         }
       });
+    },
+    isDoctor() {
+      return this.userInfo.role == "dcotor";
     }
   },
   components: {
@@ -164,9 +182,16 @@ export default {
         return;
       }
       this.$vs.loading();
-      let patientRef = db
-        .collection("History")
-        .where("doctorPhoneNumber", "==", this.userInfo.phone);
+      let patientRef = null;
+      if (this.userInfo.role == "doctor") {
+        patientRef = db
+          .collection("History")
+          .where("doctorUid", "==", this.userInfo.id);
+      } else if (this.userInfo.role == "assistant") {
+        patientRef = db
+          .collection("History")
+          .where("doctorUid", "==", this.userInfo.doctorId);
+      }
       const patients = await patientRef
         .orderBy("accessTime", "desc")
         .limit(10)
@@ -202,5 +227,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

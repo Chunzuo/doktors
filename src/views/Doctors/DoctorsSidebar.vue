@@ -6,11 +6,11 @@
           <img src="@/assets/img/doctors/doctor-default.jpg" alt="User Image" />
         </a>
         <div class="profile-det-info">
-          <h3>Dr. {{userInfo.name}}</h3>
+          <h3>{{ userName }}</h3>
 
           <div class="patient-details">
             <!-- <h5 class="mb-0">BDS, MDS - Oral & Maxillofacial Surgery</h5> -->
-            <h5 class="mb-0">{{userInfo.phone}}</h5>
+            <h5 class="mb-0">{{ userInfo.phone }}</h5>
           </div>
         </div>
       </div>
@@ -24,40 +24,64 @@
               Dashboard
             </router-link>
           </li>-->
-          <li :class="{'active': sidebarItem == 'My Patients'}">
+          <li :class="{ active: sidebarItem == 'My Patients' }">
             <router-link to="/doctors-mypatients">
               <i class="fas fa-user-injured"></i>
               <span>My Patients</span>
             </router-link>
           </li>
-          <li :class="{'active': sidebarItem == 'Schedule Timings'}">
+          <li
+            :class="{ active: sidebarItem == 'Schedule Timings' }"
+            v-if="!isAssistant"
+          >
             <router-link to="/doctors-scheduletime">
               <i class="fas fa-hourglass-start"></i>
               <span>Schedule Timings</span>
             </router-link>
           </li>
-          <li :class="{'active': sidebarItem == 'Profile Settings'}">
+          <li
+            :class="{ active: sidebarItem == 'Profile Settings' }"
+            v-if="!isAssistant"
+          >
             <router-link to="/doctors-profile">
               <i class="fas fa-user-cog"></i>
               <span>Profile Settings</span>
             </router-link>
           </li>
-          <li :class="{'active': sidebarItem == 'Social Media'}">
+          <li
+            :class="{ active: sidebarItem == 'Social Media' }"
+            v-if="!isAssistant"
+          >
             <router-link to="/doctors-social">
               <i class="fas fa-share-alt"></i>
               <span>Social Media</span>
             </router-link>
           </li>
-          <li :class="{'active': sidebarItem == 'Calendar'}">
+          <li
+            :class="{ active: sidebarItem == 'Calendar' }"
+            v-if="!isAssistant"
+          >
             <router-link to="/doctors-calendar">
               <i class="fas fa-calendar"></i>
               <span>Calendar</span>
             </router-link>
           </li>
-          <li :class="{'active': sidebarItem == 'Settings'}">
+          <li
+            :class="{ active: sidebarItem == 'Settings' }"
+            v-if="!isAssistant"
+          >
             <router-link to="/doctors-setting">
               <i class="fas fa-cog"></i>
               <span>Settings</span>
+            </router-link>
+          </li>
+          <li
+            :class="{ active: sidebarItem == 'Appointment' }"
+            v-if="!isAssistant"
+          >
+            <router-link to="/doctors-appointment">
+              <i class="fas fa-calendar-check"></i>
+              <span>Appointments</span>
             </router-link>
           </li>
           <li>
@@ -81,6 +105,15 @@ export default {
     },
     userInfo() {
       return this.$store.state.user.user;
+    },
+    isAssistant() {
+      return this.userInfo.role == "assistant";
+    },
+    userName() {
+      if (this.userInfo.role == "doctor") {
+        return `Dr.${this.userInfo.name}`;
+      }
+      return this.userInfo.name;
     }
   },
   mounted() {},
@@ -97,5 +130,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

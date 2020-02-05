@@ -8,13 +8,22 @@
           :subtitle="null"
           finishButtonText="Submit"
         >
-          <tab-content title="Basic information" class="mb-5" :before-change="validateStep1">
+          <tab-content
+            title="Basic information"
+            class="mb-5"
+            :before-change="validateStep1"
+          >
             <!-- tab 1 content -->
             <form data-vv-scope="step-1">
               <div class="row">
                 <div class="col">
                   <label for>Name</label>
-                  <input class="form-control" style="width: 100%" v-model="name" name="name" />
+                  <input
+                    class="form-control"
+                    style="width: 100%"
+                    v-model="name"
+                    name="name"
+                  />
                 </div>
                 <div class="col">
                   <label for>Phone Number</label>
@@ -30,7 +39,11 @@
           </tab-content>
 
           <!-- tab 2 content -->
-          <tab-content title="Details" class="mb-5" :before-change="validateStep2">
+          <tab-content
+            title="Details"
+            class="mb-5"
+            :before-change="validateStep2"
+          >
             <form data-vv-scope="step-2">
               <div class="row">
                 <div
@@ -38,7 +51,7 @@
                   v-for="(element, index) in historyElements"
                   :key="`element - ${index}`"
                 >
-                  <label>{{element.title}}</label>
+                  <label>{{ element.title }}</label>
                   <input
                     v-model="detailInfo[element.id]"
                     class="w-full mb-4 form-control"
@@ -59,18 +72,21 @@
                   <div v-if="element.type == 'radio'">
                     <div
                       class="form-check"
-                      v-for="(value, index) in element.values"
-                      :key="`value - ${index}`"
+                      v-for="(value, index1) in element.values"
+                      :key="`value - ${index1}`"
                     >
                       <input
                         class="form-check-input"
                         type="radio"
-                        name="exampleRadios"
-                        :id="`radio${index}`"
+                        :id="`radio${index}${index1}`"
                         :value="value"
                         v-model="detailInfo[element.id]"
                       />
-                      <label class="form-check-label" :for="`radio${index}`">{{value}}</label>
+                      <label
+                        class="form-check-label"
+                        :for="`radio${index}${index1}`"
+                        >{{ value }}</label
+                      >
                     </div>
                   </div>
                 </div>
@@ -200,25 +216,21 @@ export default {
       this.$vs.loading();
       // // Check existing patient
       const signInUser = firebase.auth().currentUser;
-      // console.log(signInUser);
       const patientInfo = await db
         .collection("History")
         .where("doctorPhoneNumber", "==", signInUser.phoneNumber)
         .where("patientMobile", "==", this.phoneNumber)
         .get();
-
       if (patientInfo.empty) {
         // Create a new patient
         const newPatient = {
           name: this.name,
           patientMobile: this.phoneNumber,
-          assistants: this.userInfo.assistantsPhones,
-          doctorPhoneNumber: signInUser.phoneNumber,
-          doctorUid: signInUser.uid,
+          doctorPhoneNumber: this.userInfo.phone,
+          doctorUid: this.userInfo.id,
           accessTime: firebase.firestore.FieldValue.serverTimestamp()
         };
         const response = await db.collection("History").add(newPatient);
-
         this.newPatientId = response.id;
       } else {
         this.$vs.notify({
@@ -248,20 +260,17 @@ export default {
     async getHistoryElement() {
       this.$vs.loading();
 
-      const { uid } = firebase.auth().currentUser;
       const doctor = await db
         .collection("Doctors")
-        .doc(uid)
+        .doc(this.userInfo.id)
         .get();
+
       const { historyElements } = doctor.data();
       this.historyElements = historyElements.filter(element => {
         if (element.active) {
           return element;
         }
       });
-
-      console.log("HistoryElements");
-      console.log(historyElements);
 
       jQuery(".datepicker input").addClass("form-control");
 

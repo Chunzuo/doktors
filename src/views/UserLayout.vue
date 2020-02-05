@@ -47,10 +47,14 @@ export default {
           this.$store.commit("updateLoginStatus", true);
           const userInfo = await db
             .collection("Users")
-            .doc(firebaseCurrentUser.uid)
+            .where("phone", "==", firebaseCurrentUser.phoneNumber)
             .get();
-
-          if (!userInfo.exists) {
+          var userData = null;
+          userInfo.forEach(item => {
+            userData = item.data();
+            userData["id"] = item.id;
+          });
+          if (userInfo.empty) {
             // Create a new user
             let userInfo = {
               name: "",
@@ -58,16 +62,10 @@ export default {
               country: "Iraq",
               role: "patient"
             };
-            await db
-              .collection("Users")
-              .doc(firebaseCurrentUser.uid)
-              .set(userInfo);
-            userInfo["id"] = firebaseCurrentUser.uid;
+
             this.$store.commit("setUserInfo", userInfo);
-            localStorage.setItem("role", "patient");
+            this.$router.push("/complete-profile");
           } else {
-            let userData = userInfo.data();
-            userData["id"] = userInfo.id;
             this.$store.commit("setUserInfo", userData);
             localStorage.setItem("role", userData.role);
             localStorage.setItem("userId", userInfo.id);

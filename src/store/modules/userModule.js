@@ -4,7 +4,7 @@ export default {
   },
   mutations: {
     setUserInfo(state, value) {
-      state.user = value
+      state.user = value;
     }
   }
-}
+};
