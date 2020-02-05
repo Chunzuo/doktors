@@ -29,7 +29,7 @@
                           <b>Last Visit :</b>
                           {{ convertTimestampToString(patientInfo.accessTime) }}
                         </h5>
-                        <div class="row" v-if="isDoctor">
+                        <div class="row">
                           <div class="col" v-if="!editable">
                             <button class="btn bg-success-light" @click="switchToEditMode">
                               <i class="far fa-edit"></i>

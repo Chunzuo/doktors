@@ -81,7 +81,6 @@
       color="primary"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
-      v-if="isDoctor"
     ></vs-button>
   </div>
 </template>

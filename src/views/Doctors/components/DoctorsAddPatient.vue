@@ -8,22 +8,13 @@
           :subtitle="null"
           finishButtonText="Submit"
         >
-          <tab-content
-            title="Basic information"
-            class="mb-5"
-            :before-change="validateStep1"
-          >
+          <tab-content title="Basic information" class="mb-5" :before-change="validateStep1">
             <!-- tab 1 content -->
             <form data-vv-scope="step-1">
               <div class="row">
                 <div class="col">
                   <label for>Name</label>
-                  <input
-                    class="form-control"
-                    style="width: 100%"
-                    v-model="name"
-                    name="name"
-                  />
+                  <input class="form-control" style="width: 100%" v-model="name" name="name" />
                 </div>
                 <div class="col">
                   <label for>Phone Number</label>
@@ -39,11 +30,7 @@
           </tab-content>
 
           <!-- tab 2 content -->
-          <tab-content
-            title="Details"
-            class="mb-5"
-            :before-change="validateStep2"
-          >
+          <tab-content title="Details" class="mb-5" :before-change="validateStep2">
             <form data-vv-scope="step-2">
               <div class="row">
                 <div
@@ -82,11 +69,7 @@
                         :value="value"
                         v-model="detailInfo[element.id]"
                       />
-                      <label
-                        class="form-check-label"
-                        :for="`radio${index}${index1}`"
-                        >{{ value }}</label
-                      >
+                      <label class="form-check-label" :for="`radio${index}${index1}`">{{ value }}</label>
                     </div>
                   </div>
                 </div>
@@ -223,11 +206,15 @@ export default {
         .get();
       if (patientInfo.empty) {
         // Create a new patient
+        const doctorId =
+          this.userInfo.role == "doctor"
+            ? this.userInfo.id
+            : this.userInfo.doctorId;
         const newPatient = {
           name: this.name,
           patientMobile: this.phoneNumber,
           doctorPhoneNumber: this.userInfo.phone,
-          doctorUid: this.userInfo.id,
+          doctorUid: doctorId,
           accessTime: firebase.firestore.FieldValue.serverTimestamp()
         };
         const response = await db.collection("History").add(newPatient);
@@ -241,6 +228,9 @@ export default {
         return false;
       }
       this.$vs.loading.close();
+      setTimeout(() => {
+        jQuery(".datepicker input").addClass("form-control");
+      }, 100);
       return true;
     },
     async validateStep2() {
@@ -260,10 +250,18 @@ export default {
     async getHistoryElement() {
       this.$vs.loading();
 
-      const doctor = await db
-        .collection("Doctors")
-        .doc(this.userInfo.id)
-        .get();
+      let doctor = null;
+      if (this.userInfo.role == "doctor") {
+        doctor = await db
+          .collection("Doctors")
+          .doc(this.userInfo.id)
+          .get();
+      } else if (this.userInfo.role == "assistant") {
+        doctor = await db
+          .collection("Doctors")
+          .doc(this.userInfo.doctorId)
+          .get();
+      }
 
       const { historyElements } = doctor.data();
       this.historyElements = historyElements.filter(element => {
@@ -271,9 +269,6 @@ export default {
           return element;
         }
       });
-
-      jQuery(".datepicker input").addClass("form-control");
-
       this.$vs.loading.close();
     }
   },
@@ -284,7 +279,6 @@ export default {
   },
   mounted() {
     this.getHistoryElement();
-    jQuery(".datepicker input").addClass("form-control");
   }
 };
 </script>

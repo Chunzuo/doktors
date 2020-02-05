@@ -69,6 +69,11 @@ export default {
             this.$store.commit("setUserInfo", userData);
             localStorage.setItem("role", userData.role);
             localStorage.setItem("userId", userInfo.id);
+            if (userData.role == "doctor") {
+              this.$router.push("/doctors-mypatients");
+            } else {
+              this.$router.push("/");
+            }
           }
         } else {
           this.$store.commit("updateLoginStatus", false);
