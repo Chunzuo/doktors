@@ -327,9 +327,7 @@ export default {
       );
     },
     enableEditVisit(index) {
-      console.log(index);
       this.visitEditables[index] = true;
-      console.log(this.visitEditables);
     }
   },
   components: {
