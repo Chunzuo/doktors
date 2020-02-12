@@ -17,6 +17,19 @@
             <div class="card widget-profile pat-widget-profile">
               <div class="card-body">
                 <div class="pro-widget-content">
+                  <i
+                    class="fas fa-chevron-down"
+                    @click="collapseHistory"
+                    style="position: absolute; right: 20px; cursor: pointer;"
+                    v-if="!historyCollapseStatus"
+                  ></i>
+                  <i
+                    class="fas fa-chevron-up"
+                    @click="collapseHistory"
+                    style="position: absolute; right: 20px; cursor: pointer;"
+                    v-else
+                  ></i>
+
                   <div class="profile-info-widget">
                     <a href="#" class="booking-doc-img">
                       <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
@@ -53,7 +66,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="patient-info" v-if="patientInfo.history">
+                <div class="patient-info" v-if="patientInfo.history && historyCollapseStatus">
                   <ul>
                     <li v-for="(history, index) in historyElements" :key="`history-${index}`">
                       {{ history.title }}
@@ -83,17 +96,19 @@
                             v-for="(value, index1) in history.values"
                             :key="`value - ${index1}`"
                           >
-                            <input
-                              class="form-check-input"
-                              type="radio"
-                              :id="`radio${index}${index1}`"
-                              :value="value"
-                              v-model="patientInfo.history[history.id]"
-                            />
-                            <label
-                              class="form-check-label"
-                              :for="`radio${index}${index1}`"
-                            >{{ value }}</label>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                :id="`radio${index}${index1}`"
+                                :value="value"
+                                v-model="patientInfo.history[history.id]"
+                                class="custom-control-input"
+                              />
+                              <label
+                                class="custom-control-label"
+                                :for="`radio${index}${index1}`"
+                              >{{value}}</label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -205,7 +220,8 @@ export default {
       taskUploadFile: null,
       visitEditables: [],
       visitEditable: false,
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      historyCollapseStatus: false
     };
   },
   mounted() {
@@ -224,9 +240,11 @@ export default {
       this.patientInfo = patientInfo.data();
       const { visits } = this.patientInfo;
 
-      visits.forEach(() => {
-        this.visitEditables.push(false);
-      });
+      if (visits) {
+        visits.forEach(() => {
+          this.visitEditables.push(false);
+        });
+      }
       this.$vs.loading.close();
     },
     convertTimestampToString(accessTime) {
@@ -328,6 +346,10 @@ export default {
     },
     enableEditVisit(index) {
       this.visitEditables[index] = true;
+    },
+    emitChange() {},
+    collapseHistory() {
+      this.historyCollapseStatus = !this.historyCollapseStatus;
     }
   },
   components: {

@@ -81,7 +81,7 @@ service cloud.firestore {
     match /History/{historyID}{
       allow read: if isLoggedIn();// && isAuthenticatedHistory(historyID);
       allow create: if true; //isLoggedIn() && isDoctorOrAssistant(historyID);
-      allow update, delete: if isLoggedIn() && isAuthenticatedHistory(historyID);
+      allow update, delete: if true;//isLoggedIn() && isAuthenticatedHistory(historyID);
     }
 
     match /Ads/{adsID} {

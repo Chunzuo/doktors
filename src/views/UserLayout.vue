@@ -70,9 +70,9 @@ export default {
             localStorage.setItem("role", userData.role);
             localStorage.setItem("userId", userInfo.id);
             if (userData.role == "doctor") {
-              this.$router.push("/doctors-mypatients");
+              this.$router.push("/doctors-mypatients").catch(() => {});
             } else {
-              this.$router.push("/");
+              this.$router.push("/").catch(() => {});
             }
           }
         } else {

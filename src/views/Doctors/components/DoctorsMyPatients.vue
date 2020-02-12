@@ -79,6 +79,7 @@
       icon="add"
       radius
       color="primary"
+      size="large"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
     ></vs-button>

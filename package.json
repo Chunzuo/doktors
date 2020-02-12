@@ -26,6 +26,7 @@
     "vue-flatpickr-component": "^8.1.5",
     "vue-form-wizard": "^0.8.4",
     "vue-full-calendar": "^2.7.0",
+    "vue-html-to-paper": "^1.3.0",
     "vue-input-tag": "^2.0.6",
     "vue-router": "^3.1.3",
     "vue-router-multi-view": "^0.1.0",

@@ -14,21 +14,17 @@
                 <!-- Register Form -->
                 <form>
                   <div class="form-group form-focus">
-                    <input
-                      type="text"
-                      class="form-control floating"
-                      v-model="user.name"
-                    />
+                    <input type="text" class="form-control floating" v-model="user.name" />
                     <label class="focus-label">Name</label>
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label for class="text-secondary">Mobile Number</label>
                     <input
                       type="text"
                       class="form-control"
                       v-model="user.phone"
                     />
-                  </div>
+                  </div>-->
                   <div class="form-group">
                     <label class="text-secondary">Select Role</label>
                     <select name id class="form-control" v-model="user.role">
@@ -44,9 +40,7 @@
                     type="submit"
                     @click.prevent="signup"
                     :disabled="!validateForm"
-                  >
-                    Signup
-                  </button>
+                  >Signup</button>
                   <!-- <div class="login-or">
                     <span class="or-line"></span>
                     <span class="span-or">or</span>
@@ -93,7 +87,7 @@ export default {
       return this.$store.state.user.user;
     },
     validateForm() {
-      return this.user.name != "" && this.user.phone != "";
+      return this.user.name != "";
     }
   },
   mounted() {

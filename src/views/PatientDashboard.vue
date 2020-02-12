@@ -13,13 +13,10 @@
                       class="nav-link active"
                       href="#pat_appointments"
                       data-toggle="tab"
-                      >Appointments</a
-                    >
+                    >Appointments</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#pat_treatments" data-toggle="tab"
-                      >Treatments</a
-                    >
+                    <a class="nav-link" href="#pat_treatments" data-toggle="tab">Treatments</a>
                   </li>
                 </ul>
               </nav>
@@ -41,30 +38,27 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr
-                              v-for="(appt, index) in appointments"
-                              :key="`appt - ${index}`"
-                            >
+                            <tr v-for="(appt, index) in appointments" :key="`appt - ${index}`">
                               <td>
                                 <h2 class="table-avatar">
                                   <router-link
                                     :to="`/doctor-detail/${appt.doctorId}`"
-                                    >{{ appt.doctorName }}</router-link
-                                  >
+                                  >{{ appt.doctorName }}</router-link>
                                 </h2>
                               </td>
                               <td>
                                 {{ getFormatDay(appt.date) }}
-                                <span class="d-block text-info">{{
+                                <span class="d-block text-info">
+                                  {{
                                   formatTime(appt.time)
-                                }}</span>
+                                  }}
+                                </span>
                               </td>
                               <td>
                                 <span
                                   class="badge badge-pill"
                                   :class="getStatusColor(appt.status)"
-                                  >{{ getStatusLabel(appt.status) }}</span
-                                >
+                                >{{ getStatusLabel(appt.status) }}</span>
                               </td>
                             </tr>
                           </tbody>

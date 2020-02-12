@@ -113,7 +113,6 @@
               :center="doctorProfile.mapCenter"
               :zoom="15"
               style="width: 100%; height: 500px"
-              v-if="doctorProfile.mapCenter"
             >
               <gmap-marker :position="doctorProfile.mapCenter" :clickable="true"></gmap-marker>
             </gmap-map>
@@ -412,6 +411,14 @@ export default {
         .doc(this.userInfo.id)
         .get();
       this.doctorProfile = profile.data();
+      if (this.doctorProfile.mapCenter) {
+        this.doctorProfile.mapCenter.lat = parseFloat(
+          this.doctorProfile.mapCenter.lat
+        );
+        this.doctorProfile.mapCenter.lng = parseFloat(
+          this.doctorProfile.mapCenter.lng
+        );
+      }
       this.$vs.loading.close();
     },
     uploadAvatar(e) {
