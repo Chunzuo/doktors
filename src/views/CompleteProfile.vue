@@ -158,10 +158,13 @@ export default {
       const webStructure = webStructureRef.data()
       let historyElements = {}
       if (webStructure) historyElements = webStructure['historyElements']
+      const expireDate = new Date()
+      expireDate.setMonth(expireDate.getMonth() + 1)
       const doctor = {
         historyElements: historyElements,
         name: this.user.name,
-        phone: this.user.phone
+        phone: this.user.phone,
+        expireDate: expireDate
       }
       await db
         .collection('Doctors')

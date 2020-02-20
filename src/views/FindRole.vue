@@ -31,7 +31,6 @@ import { db } from '@/firebase'
 export default {
   computed: {
     keyword() {
-      console.log(this.$store.state.homeSearchKeyword)
       return this.$store.state.homeSearchKeyword
     }
   },

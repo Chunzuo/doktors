@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { storage, db } from "@/firebase";
+import { storage, db } from '@/firebase'
 export default {
   props: {
     data: { type: Object, requires: true },
@@ -93,94 +93,94 @@ export default {
   methods: {
     convertTimestampToString(accessTime) {
       if (accessTime == null) {
-        return "";
+        return ''
       }
-      var timestamp = accessTime.value ? accessTime.value : accessTime;
+      var timestamp = accessTime.value ? accessTime.value : accessTime
       try {
-        const tDate = timestamp.toDate();
+        const tDate = timestamp.toDate()
         return (
           tDate.getMonth() +
           1 +
-          "/" +
+          '/' +
           tDate.getDate() +
-          "/" +
+          '/' +
           tDate.getFullYear()
-        );
+        )
       } catch {
-        return "";
+        return ''
       }
     },
     getFileUrl(url) {
-      if (url.includes(".pdf")) {
-        const images = require.context("../../../assets/img", false, /\.png$/);
-        return images("./pdf.png");
+      if (url.includes('.pdf')) {
+        const images = require.context('../../../assets/img', false, /\.png$/)
+        return images('./pdf.png')
       }
-      return url;
+      return url
     },
     async updateVisitInfo() {
-      this.patientInfo.visits[this.visitIndex] = this.data;
+      this.patientInfo.visits[this.visitIndex] = this.data
 
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("History")
+        .collection('History')
         .doc(this.id)
-        .update(this.patientInfo);
-      this.editable = false;
-      this.$vs.loading.close();
+        .update(this.patientInfo)
+      this.editable = false
+      this.$vs.loading.close()
     },
     uploadFile(e) {
-      const fileList = e.target.files || e.dataTransfer.files;
-      const file = fileList[0];
-      const today = new Date();
+      const fileList = e.target.files || e.dataTransfer.files
+      const file = fileList[0]
+      const today = new Date()
       const fileName =
         file.name +
-        "-" +
+        '-' +
         today.getHours() +
         today.getMinutes() +
-        today.getSeconds();
-      this.$vs.loading();
-      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file);
+        today.getSeconds()
+      this.$vs.loading()
+      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file)
     },
     removeFile(index) {
-      let newFiles = [];
+      let newFiles = []
       for (let i = 0; i < this.data.files.length; i++) {
         if (i != index) {
-          newFiles.push(this.data.files[i]);
+          newFiles.push(this.data.files[i])
         }
       }
-      this.data.files = newFiles;
+      this.data.files = newFiles
     },
     downloadFile(url) {
-      window.open(url);
+      window.open(url)
     },
     print() {
-      this.$htmlToPaper("printMe");
+      this.$htmlToPaper('printMe')
     }
   },
   data() {
     return {
       editable: false,
       taskUploadFile: null
-    };
+    }
   },
   watch: {
     taskUploadFile: function() {
       this.taskUploadFile.on(
-        "state_changed",
+        'state_changed',
         function() {},
         null,
         function() {
           this.taskUploadFile.snapshot.ref
             .getDownloadURL()
             .then(function(downloadURL) {
-              this.data.files.push(downloadURL);
-              this.$vs.loading.close();
-            });
+              this.data.files.push(downloadURL)
+              this.$vs.loading.close()
+            })
         }
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

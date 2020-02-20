@@ -91,9 +91,20 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Payment</h4>
+        Expire Date:
+        <strong>{{ convertTimestampToString(doctor.expireDate) }}</strong>
+      </div>
+    </div>
+
     <div class="card" v-if="doctor">
       <div class="card-body">
-        <div class="card-title">History of elements</div>
+        <h4 class="card-title">History of elements</h4>
+        <em class="text-secondary"
+          >You can change the order of history elements.</em
+        >
         <draggable v-model="doctor.historyElements">
           <div
             v-for="(element, index) in doctor.historyElements"
@@ -122,114 +133,133 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
-import draggable from "vuedraggable";
+import { db } from '@/firebase'
+import draggable from 'vuedraggable'
 
 export default {
   created() {
-    this.$store.commit("updateDoctorSidebarItem", "Settings");
-    this.$store.commit("updateSelectItem", "Settings");
+    this.$store.commit('updateDoctorSidebarItem', 'Settings')
+    this.$store.commit('updateSelectItem', 'Settings')
   },
   data() {
     return {
       assistants: [
         {
-          phone: "",
-          name: ""
+          phone: '',
+          name: ''
         }
       ],
       doctor: null
-    };
+    }
   },
   methods: {
     removeAssistant(index) {
-      let newList = [];
+      let newList = []
       for (var i = 0; i < this.assistants.length; i++) {
         if (index != i) {
-          newList.push(this.assistants[i]);
+          newList.push(this.assistants[i])
         }
       }
-      this.assistants = newList;
+      this.assistants = newList
     },
     addEmptyAssistant() {
       this.assistants.push({
-        phone: "",
-        name: ""
-      });
+        phone: '',
+        name: ''
+      })
     },
     async save() {
-      this.$vs.loading();
+      this.$vs.loading()
 
-      this.doctor["assistants"] = this.assistants;
+      this.doctor['assistants'] = this.assistants
 
-      this.saveAssistant();
+      this.saveAssistant()
 
       await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.userInfo.id)
-        .update(this.doctor);
+        .update(this.doctor)
 
-      this.$vs.loading.close();
+      this.$vs.loading.close()
       this.$vs.notify({
-        text: "Success in update profile",
-        color: "success"
-      });
+        text: 'Success in update profile',
+        color: 'success'
+      })
     },
     async getDoctorInfo() {
       if (!this.userInfo.id) {
-        return;
+        return
       }
-      this.$vs.loading();
+      this.$vs.loading()
 
       const doctorInfo = await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.userInfo.id)
-        .get();
-      this.doctor = doctorInfo.data();
+        .get()
+      this.doctor = doctorInfo.data()
       if (this.doctor.assistants) {
-        this.assistants = this.doctor.assistants;
+        this.assistants = this.doctor.assistants
       }
 
-      this.$vs.loading.close();
+      this.$vs.loading.close()
     },
     async saveAssistant() {
       var query = db
-        .collection("Users")
-        .where("doctorId", "==", this.userInfo.id);
-      const querySnapshot = await query.get();
+        .collection('Users')
+        .where('doctorId', '==', this.userInfo.id)
+      const querySnapshot = await query.get()
       querySnapshot.forEach(function(doc) {
-        doc.ref.delete();
-      });
+        doc.ref.delete()
+      })
 
-      var batch = db.batch();
+      var batch = db.batch()
       this.assistants.forEach(assistant => {
-        const docRef = db.collection("Users").doc();
+        const docRef = db.collection('Users').doc()
         const doc = {
           name: assistant.name,
           phone: assistant.phone,
-          role: "assistant",
+          role: 'assistant',
           doctorId: this.userInfo.id
-        };
-        batch.set(docRef, doc);
-      });
-      batch.commit().then(function() {});
+        }
+        batch.set(docRef, doc)
+      })
+      batch.commit().then(function() {})
+    },
+    convertTimestampToString(accessTime) {
+      if (accessTime == null) {
+        return ''
+      }
+      var timestamp = accessTime.value ? accessTime.value : accessTime
+      try {
+        const tDate = timestamp.toDate()
+        return (
+          tDate.getMonth() +
+          1 +
+          '/' +
+          tDate.getDate() +
+          '/' +
+          tDate.getFullYear()
+        )
+      } catch {
+        return ''
+      }
     }
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     }
   },
   watch: {
     userInfo() {
-      this.getDoctorInfo();
+      this.getDoctorInfo()
     }
   },
   mounted() {
-    this.getDoctorInfo();
+    this.getDoctorInfo()
   },
   components: { draggable }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

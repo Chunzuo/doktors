@@ -225,11 +225,9 @@ export default {
       this.phoneNumber = ''
     },
     getFormatPhoneNumber(stringNumber) {
-      console.log(stringNumber)
       const phoneNumber = parsePhoneNumberFromString(stringNumber)
 
       if (phoneNumber != null) {
-        console.log(phoneNumber)
         return phoneNumber.formatInternational()
       }
       return stringNumber

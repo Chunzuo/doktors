@@ -98,7 +98,6 @@ export default {
   },
   methods: {
     searchFeature(feature) {
-      console.log(feature)
       const keyword = {
         role: feature
       }
