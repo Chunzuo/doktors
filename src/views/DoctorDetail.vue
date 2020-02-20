@@ -11,7 +11,7 @@
                     :src="doctor.avatar"
                     onerror="javascript:this.src='assets/img/doctor-default.jpg'"
                     alt="User Image"
-                    style="width: 150px;"
+                    style="width: 150px; height: 150px;"
                   />
                 </div>
                 <div class="doc-info-cont">
@@ -113,14 +113,19 @@
                       <div class="widget awards-widget">
                         <h4 class="widget-title">Awards</h4>
                         <div class="experience-box">
-                          <slick :options="slickOptions">
-                            <img
+                          <div class="row">
+                            <div
+                              class="col-md-4"
                               v-for="(cert,
                               index) in doctorProfile.certifications"
                               :key="`cert - ${index}`"
-                              :src="cert"
-                            />
-                          </slick>
+                            >
+                              <a :href="cert" data-fancybox="gallery">
+                                <img style="width: 100%" :src="cert" />
+                              </a>
+                              <!-- <img style="width: 100%" :src="cert" /> -->
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <!-- /Awards Details -->
@@ -200,13 +205,13 @@
                 {{ doctor.location }}
               </p>
               <gmap-map
-                :center="doctorProfile.mapCenter"
+                :center="getMapCenter(doctorProfile.mapCenter)"
                 :zoom="15"
                 style="width: 100%; height: 300px"
                 v-if="doctorProfile.mapCenter"
               >
                 <gmap-marker
-                  :position="doctorProfile.mapCenter"
+                  :position="getMapCenter(doctorProfile.mapCenter)"
                   :clickable="true"
                 ></gmap-marker>
               </gmap-map>
@@ -219,60 +224,56 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
-import Slick from "vue-slick";
+import { db } from '@/firebase'
+
 export default {
   data() {
     return {
       doctor: {},
       doctorProfile: {},
       days: [
-        { text: "Monday", value: "mon" },
-        { text: "Tuesday", value: "tue" },
-        { text: "Wendsday", value: "wed" },
-        { text: "Thursday", value: "thu" },
-        { text: "Friday", value: "fri" },
-        { text: "Satureday", value: "sat" },
-        { text: "Sunday", value: "sun" }
-      ],
-      slickOptions: {
-        dots: false,
-        autoplay: false,
-        infinite: true,
-        variableWidth: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        adaptiveHeight: true
-      }
-    };
+        { text: 'Monday', value: 'mon' },
+        { text: 'Tuesday', value: 'tue' },
+        { text: 'Wendsday', value: 'wed' },
+        { text: 'Thursday', value: 'thu' },
+        { text: 'Friday', value: 'fri' },
+        { text: 'Satureday', value: 'sat' },
+        { text: 'Sunday', value: 'sun' }
+      ]
+    }
   },
   mounted() {
-    this.getDoctorInfo();
+    this.getDoctorInfo()
   },
   methods: {
     async getDoctorInfo() {
-      let doctorId = this.$route.params.id;
+      let doctorId = this.$route.params.id
       if (!doctorId) {
-        return;
+        return
       }
-      this.$vs.loading();
+      this.$vs.loading()
 
       const doctorInfo = await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(doctorId)
-        .get();
-      this.doctor = doctorInfo.data();
+        .get()
+      this.doctor = doctorInfo.data()
 
       const profile = await db
-        .collection("DoctorProfiles")
+        .collection('DoctorProfiles')
         .doc(doctorId)
-        .get();
-      this.doctorProfile = profile.data();
-      this.$vs.loading.close();
+        .get()
+      this.doctorProfile = profile.data()
+      this.$vs.loading.close()
+    },
+    getMapCenter(mapCenter) {
+      return {
+        lat: parseFloat(mapCenter.lat),
+        lng: parseFloat(mapCenter.lng)
+      }
     }
-  },
-  components: { Slick }
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

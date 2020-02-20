@@ -1,21 +1,30 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 // Modules
-import headerModule from "./modules/headerModule";
-import userModule from "./modules/userModule";
-import doctorModule from "./modules/doctorModule";
-import webStructureModule from "./modules/webStructureModule";
+import headerModule from './modules/headerModule'
+import userModule from './modules/userModule'
+import doctorModule from './modules/doctorModule'
+import webStructureModule from './modules/webStructureModule'
 
 export default new Vuex.Store({
   state: {
-    homeSearchKeyword: null
+    homeSearchKeyword: null,
+    windowWidth: 0
   },
   mutations: {
     updateHomeSearchKeyword(state, value) {
-      state.homeSearchKeyword = value;
+      state.homeSearchKeyword = value
+    },
+    setWindowWidth(state, value) {
+      state.windowWidth = value
+    }
+  },
+  getters: {
+    isMobile(state) {
+      return state.windowWidth < 992
     }
   },
   actions: {},
@@ -25,4 +34,4 @@ export default new Vuex.Store({
     doctor: doctorModule,
     webStructure: webStructureModule
   }
-});
+})

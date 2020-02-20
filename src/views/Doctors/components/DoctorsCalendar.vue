@@ -78,17 +78,17 @@
 </template>
 
 <script>
-import moment from "moment";
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import { db } from "@/firebase";
+import moment from 'moment'
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+import { db } from '@/firebase'
 
 export default {
   data() {
     return {
       events: [],
       config: {
-        defaultView: "month"
+        defaultView: 'month'
       },
       showModal: false,
       configdateTimePicker: {
@@ -99,130 +99,140 @@ export default {
       timeSlots: [],
       slotDate: null,
       doctorSlot: null
-    };
+    }
   },
   methods: {
     onClickDay(moment) {
-      this.slotDate = moment.toDate();
+      this.slotDate = moment.toDate()
 
-      const date = moment.toDate();
+      const date = moment.toDate()
       const strDate =
-        date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+        date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear()
       this.doctorSlot.forEach(slot => {
         if (this.convertTimestampToString(slot.date) == strDate) {
-          this.timeSlots = slot.slots;
+          this.timeSlots = slot.slots
         }
-      });
+      })
 
-      this.showModal = true;
+      this.showModal = true
     },
     async saveTimeSlot() {
-      this.$vs.loading();
+      this.$vs.loading()
 
       const strDate =
         this.slotDate.getMonth() +
         1 +
-        "/" +
+        '/' +
         this.slotDate.getDate() +
-        "/" +
-        this.slotDate.getFullYear();
+        '/' +
+        this.slotDate.getFullYear()
 
-      var existingSlot = false;
+      var existingSlot = false
       this.doctorSlot.map(slot => {
         if (this.convertTimestampToString(slot.date) == strDate) {
-          slot.slots = this.timeSlots;
-          existingSlot = true;
+          slot.slots = this.timeSlots
+          existingSlot = true
         }
-      });
+      })
       if (!existingSlot) {
         this.doctorSlot.push({
           date: this.slotDate,
           slots: this.timeSlots
-        });
+        })
       }
       await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.userInfo.id)
         .update({
           timeSlots: this.doctorSlot
-        });
-      this.$vs.loading.close();
-      this.loadSlots();
+        })
+      this.$vs.loading.close()
+      this.loadSlots()
     },
     addSlot() {
-      this.timeSlots.push({});
+      this.timeSlots.push({})
     },
     removeSlot(index) {
-      let newSlots = [];
+      let newSlots = []
       for (var i = 0; i < this.timeSlots.length; i++) {
         if (i != index) {
-          newSlots.push(this.timeSlots[i]);
+          newSlots.push(this.timeSlots[i])
         }
       }
-      this.timeSlots = newSlots;
+      this.timeSlots = newSlots
     },
     closeModal() {
-      this.showModal = false;
-      this.timeSlots = [];
+      this.showModal = false
+      this.timeSlots = []
     },
     async loadSlots() {
-      this.$vs.loading();
+      if (!this.userInfo.id) {
+        return
+      }
+      this.$vs.loading()
       const ref = await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.userInfo.id)
-        .get();
-      const { timeSlots } = ref.data();
-      this.doctorSlot = timeSlots ? timeSlots : [];
-      this.events = [];
-      timeSlots.forEach(item => {
-        const date = this.convertTimestampToString(item.date);
+        .get()
+      const { timeSlots } = ref.data()
+      this.doctorSlot = timeSlots ? timeSlots : []
+      this.events = []
+      if (timeSlots) {
+        timeSlots.forEach(item => {
+          const date = this.convertTimestampToString(item.date)
 
-        item.slots.forEach(slot => {
-          const date1 = new Date(date + " " + slot.time);
+          item.slots.forEach(slot => {
+            const date1 = new Date(date + ' ' + slot.time)
 
-          this.events.push({
-            start: moment(date1)
-          });
-        });
-      });
+            this.events.push({
+              start: moment(date1)
+            })
+          })
+        })
+      }
 
-      this.$vs.loading.close();
+      this.$vs.loading.close()
     },
     convertTimestampToString(accessTime) {
       if (accessTime == null) {
-        return "";
+        return ''
       }
-      var timestamp = accessTime.value ? accessTime.value : accessTime;
+      var timestamp = accessTime.value ? accessTime.value : accessTime
       try {
-        const tDate = timestamp.toDate();
+        const tDate = timestamp.toDate()
         return (
           tDate.getMonth() +
           1 +
-          "/" +
+          '/' +
           tDate.getDate() +
-          "/" +
+          '/' +
           tDate.getFullYear()
-        );
+        )
       } catch {
-        return "";
+        return ''
       }
     }
   },
   created() {
-    this.$store.commit("updateDoctorSidebarItem", "Calendar");
+    this.$store.commit('updateDoctorSidebarItem', 'Calendar')
   },
   components: {
     flatPickr
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     }
   },
   mounted() {
-    this.loadSlots();
+    this.loadSlots()
+  },
+  watch: {
+    userInfo() {
+      this.loadSlots()
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">

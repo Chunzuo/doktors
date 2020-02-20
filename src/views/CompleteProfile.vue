@@ -14,7 +14,11 @@
                 <!-- Register Form -->
                 <form>
                   <div class="form-group form-focus">
-                    <input type="text" class="form-control floating" v-model="user.name" />
+                    <input
+                      type="text"
+                      class="form-control floating"
+                      v-model="user.name"
+                    />
                     <label class="focus-label">Name</label>
                   </div>
                   <!-- <div class="form-group">
@@ -32,6 +36,9 @@
                       <option value="doctor">Doctor</option>
                       <option value="hospital">Hospital</option>
                       <option value="pharmacy">Pharmacy</option>
+                      <option value="xray">X-Ray</option>
+                      <option value="cosmetics">Cosmetics</option>
+                      <option value="sonar">Sonar</option>
                     </select>
                   </div>
 
@@ -40,7 +47,9 @@
                     type="submit"
                     @click.prevent="signup"
                     :disabled="!validateForm"
-                  >Signup</button>
+                  >
+                    Signup
+                  </button>
                   <!-- <div class="login-or">
                     <span class="or-line"></span>
                     <span class="span-or">or</span>
@@ -70,100 +79,97 @@
 </template>
 
 <script>
-import $ from "jquery";
-import { db } from "@/firebase";
+import $ from 'jquery'
+import { db } from '@/firebase'
 export default {
   data() {
     return {
       user: {
-        role: "patient",
-        phone: ""
+        role: 'patient',
+        phone: ''
       },
       locations: null
-    };
+    }
   },
   computed: {
     storedUser() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     },
     validateForm() {
-      return this.user.name != "";
+      return this.user.name != ''
     }
   },
   mounted() {
     navigator.geolocation.getCurrentPosition(pos => {
-      this.locations = pos;
-    });
+      this.locations = pos
+    })
 
-    this.user.phone = this.storedUser.phone;
+    this.user.phone = this.storedUser.phone
     // Floating Label
-    if ($(".floating").length > 0) {
-      $(".floating")
-        .on("focus blur", function(e) {
+    if ($('.floating').length > 0) {
+      $('.floating')
+        .on('focus blur', function(e) {
           $(this)
-            .parents(".form-focus")
-            .toggleClass(
-              "focused",
-              e.type === "focus" || this.value.length > 0
-            );
+            .parents('.form-focus')
+            .toggleClass('focused', e.type === 'focus' || this.value.length > 0)
         })
-        .trigger("blur");
+        .trigger('blur')
     }
   },
   methods: {
     async signup() {
-      this.$vs.loading();
-      const newUser = await db.collection("Users").add(this.user);
-      if (this.user.role == "doctor") {
-        await this.addDoctor(newUser.id);
+      this.$vs.loading()
+      const newUser = await db.collection('Users').add(this.user)
+      if (this.user.role == 'doctor') {
+        await this.addDoctor(newUser.id)
       }
 
-      this.$vs.loading.close();
-      this.user.id = newUser.id;
-      localStorage.setItem("role", this.user.role);
-      this.$store.commit("setUserInfo", this.user);
-      this.$router.push("/");
+      this.$vs.loading.close()
+      this.user.id = newUser.id
+      localStorage.setItem('role', this.user.role)
+      this.$store.commit('setUserInfo', this.user)
+      this.$router.push('/')
     },
     async addDoctor(doctorId) {
       const doctorProfile = {
         openingHours: {
-          mon: { closed: true, from: "", until: "" },
-          tue: { closed: true, from: "", until: "" },
-          wed: { closed: true, from: "", until: "" },
-          thu: { closed: true, from: "", until: "" },
-          fri: { closed: true, from: "", until: "" },
-          sat: { closed: true, from: "", until: "" },
-          sun: { closed: true, from: "", until: "" }
+          mon: { closed: true, from: '', until: '' },
+          tue: { closed: true, from: '', until: '' },
+          wed: { closed: true, from: '', until: '' },
+          thu: { closed: true, from: '', until: '' },
+          fri: { closed: true, from: '', until: '' },
+          sat: { closed: true, from: '', until: '' },
+          sun: { closed: true, from: '', until: '' }
         },
         mapCenter: {
           lng: this.locations ? this.locations.coords.longitude : 0.0,
           lat: this.locations ? this.locations.coords.latitude : 0.0
         }
-      };
+      }
       await db
-        .collection("DoctorProfiles")
+        .collection('DoctorProfiles')
         .doc(doctorId)
-        .set(doctorProfile);
+        .set(doctorProfile)
 
       const webStructureRef = await db
-        .collection("WebStructure")
-        .doc("en")
-        .get();
-      const webStructure = webStructureRef.data();
-      let historyElements = {};
-      if (webStructure) historyElements = webStructure["historyElements"];
+        .collection('WebStructure')
+        .doc('en')
+        .get()
+      const webStructure = webStructureRef.data()
+      let historyElements = {}
+      if (webStructure) historyElements = webStructure['historyElements']
       const doctor = {
         historyElements: historyElements,
         name: this.user.name,
         phone: this.user.phone
-      };
+      }
       await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(doctorId)
-        .set(doctor);
+        .set(doctor)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -3,7 +3,10 @@
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar" sticky-container>
+          <div
+            class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar"
+            sticky-container
+          >
             <div v-sticky="true" sticky-offset="stickyOffset">
               <!-- Search Filter -->
               <div class="card search-filter">
@@ -33,26 +36,38 @@
                           v-for="(speciality, index) in specialityList"
                           :key="`speciality - ${index}`"
                           :value="speciality"
-                        >{{ speciality }}</option>
+                          >{{ speciality }}</option
+                        >
                       </select>
                     </div>
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
-                      <select class="form-control" v-model="keywordCity" id="city_select">
+                      <select
+                        class="form-control"
+                        v-model="keywordCity"
+                        id="city_select"
+                      >
                         <option value>All</option>
                         <option
                           v-for="(city, index) in cityList"
                           :key="`city - ${index}`"
                           :value="city"
-                        >{{ city }}</option>
+                          >{{ city }}</option
+                        >
                       </select>
                     </div>
                   </div>
                   <div class="btn-search">
                     <div class="row">
                       <div class="col-md-6 mt-2">
-                        <button type="button" class="btn btn-block" @click="getDoctors(0)">Search</button>
+                        <button
+                          type="button"
+                          class="btn btn-block"
+                          @click="getDoctors(0)"
+                        >
+                          Search
+                        </button>
                       </div>
                       <div class="col-md-6 mt-2">
                         <button
@@ -60,7 +75,9 @@
                           class="btn btn-block"
                           style="background-color: #fe0d28; border-color: #fe0d28"
                           @click="resetKeyword"
-                        >Reset</button>
+                        >
+                          Reset
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -68,7 +85,11 @@
               </div>
               <!-- /Search Filter -->
 
-              <slick :options="slickOptions" class="doctor-slider slider" v-if="adsList.length > 0">
+              <slick
+                :options="slickOptions"
+                class="doctor-slider slider"
+                v-if="adsList.length > 0"
+              >
                 <div
                   class="profile-widget"
                   v-for="(ads, index) in adsList"
@@ -85,7 +106,10 @@
                       />
                     </a>
                   </div>
-                  <div class="pro-content" style="height: 120px; min-height: 120px;">
+                  <div
+                    class="pro-content"
+                    style="height: 120px; min-height: 120px;"
+                  >
                     <h3 class="title">
                       <a :href="ads.link">{{ ads.title }}</a>
                       <!-- <i class="fas fa-check-circle verified"></i> -->
@@ -99,7 +123,11 @@
 
           <div class="col-md-12 col-lg-8 col-xl-9">
             <div class="row">
-              <div class="col-md-3" v-for="(doctor, index) in doctors" :key="`doctor - ${index}`">
+              <div
+                class="col-md-3"
+                v-for="(doctor, index) in doctors"
+                :key="`doctor - ${index}`"
+              >
                 <div class="profile-widget" style="min-height: 350px;">
                   <div class="doc-img" style="text-align: center;">
                     <router-link :to="`/doctor-detail/${doctor.id}`">
@@ -114,7 +142,9 @@
                   </div>
                   <div class="pro-content">
                     <h3 class="title">
-                      <router-link :to="`/doctor-detail/${doctor.id}`">Dr. {{ doctor.name }}</router-link>
+                      <router-link :to="`/doctor-detail/${doctor.id}`"
+                        >Dr. {{ doctor.name }}</router-link
+                      >
                     </h3>
                     <p class="speciality">{{ doctor.speciality }}</p>
                     <ul class="available-info">
@@ -128,13 +158,15 @@
                         <router-link
                           :to="`/doctor-detail/${doctor.id}`"
                           class="btn view-btn"
-                        >View Profile</router-link>
+                          >View Profile</router-link
+                        >
                       </div>
                       <div class="col-12">
                         <router-link
                           :to="`/book-appointment/${doctor.id}`"
                           class="btn view-btn"
-                        >Appointment</router-link>
+                          >Appointment</router-link
+                        >
                       </div>
                     </div>
                   </div>
@@ -147,7 +179,8 @@
                 class="btn btn-primary btn-sm"
                 href="javascript:void(0);"
                 @click="getDoctors(1)"
-              >Load More</a>
+                >Load More</a
+              >
             </div>
           </div>
         </div>
@@ -157,19 +190,19 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
-require("select2/dist/js/select2.full.js");
+import { db } from '@/firebase'
+require('select2/dist/js/select2.full.js')
 // import $ from "jquery";
-import Slick from "vue-slick";
-import Sticky from "vue-sticky-directive";
+import Slick from 'vue-slick'
+import Sticky from 'vue-sticky-directive'
 export default {
   data() {
     return {
       doctors: [],
       lastVisible: 0,
-      keywordCity: "",
-      keywordSpeciality: "",
-      keywordName: "",
+      keywordCity: '',
+      keywordSpeciality: '',
+      keywordName: '',
       slickOptions: {
         dots: false,
         autoplay: false,
@@ -183,82 +216,82 @@ export default {
       stickyOffset: {
         top: 30
       }
-    };
+    }
   },
   computed: {
     keyword() {
-      return this.$store.state.homeSearchKeyword;
+      return this.$store.state.homeSearchKeyword
     },
     specialityList() {
-      return this.$store.state.webStructure.specialityList;
+      return this.$store.state.webStructure.specialityList
     },
     cityList() {
-      return this.$store.state.webStructure.cityList;
+      return this.$store.state.webStructure.cityList
     }
   },
   async mounted() {
     if (this.keyword) {
-      this.keywordCity = this.keyword.city;
-      this.keywordSpeciality = this.keyword.speciality;
-      this.keywordName = this.keyword.name;
+      this.keywordCity = this.keyword.city
+      this.keywordSpeciality = this.keyword.speciality
+      this.keywordName = this.keyword.name
     }
-    this.getDoctors(0);
+    this.getDoctors(0)
     if (this.specialityList.length == 0) {
-      this.$vs.loading();
-      await this.$store.dispatch("getWebStructure");
-      this.$vs.loading.close();
+      this.$vs.loading()
+      await this.$store.dispatch('getWebStructure')
+      this.$vs.loading.close()
     }
-    this.initJquery();
-    this.getAdsList();
+    this.initJquery()
+    this.getAdsList()
   },
   methods: {
     async getDoctors(type) {
-      this.$vs.loading();
+      this.$vs.loading()
 
-      let ref = db.collection("Doctors");
-      if (this.keywordCity != "" && this.keywordCity != null) {
-        ref = ref.where("city", "==", this.keywordCity);
+      let ref = db.collection('Doctors')
+      if (this.keywordCity != '' && this.keywordCity != null) {
+        ref = ref.where('city', '==', this.keywordCity)
       }
-      if (this.keywordSpeciality != "" && this.keywordSpeciality != null) {
-        ref = ref.where("speciality", "==", this.keywordSpeciality);
+      if (this.keywordSpeciality != '' && this.keywordSpeciality != null) {
+        ref = ref.where('speciality', '==', this.keywordSpeciality)
       }
 
       const doctors =
         type == 0
           ? await ref
               .limit(10)
-              .orderBy("name")
+              .orderBy('name')
               .get()
           : await ref
-              .orderBy("name")
+              .orderBy('name')
               .startAfter(this.lastVisible)
               .limit(10)
-              .get();
-      this.lastVisible = doctors.docs[doctors.docs.length - 1];
+              .get()
+      this.lastVisible = doctors.docs[doctors.docs.length - 1]
 
       if (type == 0) {
-        this.doctors = [];
+        this.doctors = []
       }
 
       doctors.forEach(doctor => {
-        let data = doctor.data();
-        data["id"] = doctor.id;
+        let data = doctor.data()
+        data['id'] = doctor.id
 
-        if (this.keywordName != "") {
+        if (this.keywordName != '') {
           if (data.name.includes(this.keywordName)) {
-            this.doctors.push(data);
+            this.doctors.push(data)
           }
         } else {
-          this.doctors.push(data);
+          this.doctors.push(data)
         }
-      });
+      })
 
-      this.$vs.loading.close();
+      this.$vs.loading.close()
     },
     resetKeyword() {
-      this.keywordName = "";
-      this.keywordCity = "";
-      this.keywordSpeciality = "";
+      this.keywordName = ''
+      this.keywordCity = ''
+      this.keywordSpeciality = ''
     },
     initJquery() {
       // $("#city_select").select2({
@@ -273,20 +306,20 @@ export default {
       // });
     },
     async getAdsList() {
-      const ref = await db.collection("Ads").get();
-      this.adsList = [];
+      const ref = await db.collection('Ads').get()
+      this.adsList = []
       ref.docs.forEach(doc => {
-        let data = doc.data();
-        data["id"] = doc.id;
-        this.adsList.push(data);
-      });
+        let data = doc.data()
+        data['id'] = doc.id
+        this.adsList.push(data)
+      })
     }
   },
   components: {
     Slick
   },
   directives: { Sticky }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -15,67 +15,14 @@
             <!-- <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p> -->
           </div>
           <slick :options="slickOptions" class="features-slider slider">
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-01.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>Hospital</p>
-            </div>
-
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-02.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>Clinics</p>
-            </div>
-
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-03.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>Pharmacy</p>
-            </div>
-
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-04.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>Labs</p>
-            </div>
-
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-05.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>X-Ray</p>
-            </div>
-
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-06.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>Cosmetics</p>
-            </div>
-
-            <div class="feature-item text-center">
-              <img
-                src="@/assets/img/features/feature-04.jpg"
-                class="img-fluid"
-                alt="Feature"
-              />
-              <p>Sonar</p>
+            <div
+              class="feature-item text-center"
+              v-for="(feature, index) in features"
+              :key="index"
+              @click="searchFeature(feature.keyword)"
+            >
+              <img :src="feature.image" class="img-fluid" alt="Feature" />
+              <p>{{ feature.text }}</p>
             </div>
           </slick>
         </div>
@@ -85,7 +32,7 @@
 </template>
 
 <script>
-import Slick from "vue-slick";
+import Slick from 'vue-slick'
 export default {
   components: {
     Slick
@@ -109,10 +56,61 @@ export default {
             }
           }
         ]
+      },
+      features: [
+        {
+          image: '../assets/img/features/feature-01.jpg',
+          text: 'Hospital',
+          keyword: 'hospital'
+        },
+        {
+          image: '../assets/img/features/feature-02.jpg',
+          text: 'Clinics',
+          keyword: 'clinics'
+        },
+        {
+          image: '../assets/img/features/feature-03.jpg',
+          text: 'Pharmacy',
+          keyword: 'pharmacy'
+        },
+        {
+          image: '../assets/img/features/feature-04.jpg',
+          text: 'Labs',
+          keyword: 'labs'
+        },
+        {
+          image: '../assets/img/features/feature-05.jpg',
+          text: 'X-Ray',
+          keyword: 'xray'
+        },
+        {
+          image: '../assets/img/features/feature-06.jpg',
+          text: 'Cosmetics',
+          keyword: 'cosmetics'
+        },
+        {
+          image: '../assets/img/features/feature-04.jpg',
+          text: 'Sonar',
+          keyword: 'sonar'
+        }
+      ]
+    }
+  },
+  methods: {
+    searchFeature(feature) {
+      console.log(feature)
+      const keyword = {
+        role: feature
       }
-    };
+      this.$store.commit('updateHomeSearchKeyword', keyword)
+      this.$router.push('/find-role')
+    }
   }
-};
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.feature-item {
+  cursor: pointer;
+}
+</style>

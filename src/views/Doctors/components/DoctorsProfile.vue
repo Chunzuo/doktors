@@ -16,13 +16,16 @@
                   />
                 </div>
                 <div class="upload-img">
-                  <div class="change-photo-btn vs-con-loading__container" id="button-with-loading">
-                    <span>
-                      <i class="fa fa-upload"></i> Upload Photo
-                    </span>
+                  <div
+                    class="change-photo-btn vs-con-loading__container"
+                    id="button-with-loading"
+                  >
+                    <span> <i class="fa fa-upload"></i> Upload Photo </span>
                     <input type="file" class="upload" @change="uploadAvatar" />
                   </div>
-                  <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
+                  <small class="form-text text-muted"
+                    >Allowed JPG, GIF or PNG. Max size of 2MB</small
+                  >
                 </div>
               </div>
             </div>
@@ -43,26 +46,36 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>City</label>
-              <select class="form-control" id="city_select" v-model="doctor.city">
+              <select
+                class="form-control"
+                id="city_select"
+                v-model="doctor.city"
+              >
                 <option value>All</option>
                 <option
                   v-for="(city, index) in cityList"
                   :key="`city - ${index}`"
                   :value="city"
-                >{{ city }}</option>
+                  >{{ city }}</option
+                >
               </select>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label>Speciality</label>
-              <select class="form-control" id="speciality_select" v-model="doctor.speciality">
+              <select
+                class="form-control"
+                id="speciality_select"
+                v-model="doctor.speciality"
+              >
                 <option value>All</option>
                 <option
                   v-for="(speciality, index) in specialityList"
                   :key="`speciality - ${index}`"
                   :value="speciality"
-                >{{ speciality }}</option>
+                  >{{ speciality }}</option
+                >
               </select>
             </div>
           </div>
@@ -77,7 +90,11 @@
         <h4 class="card-title">About Me</h4>
         <div class="form-group mb-0">
           <label>Biography</label>
-          <textarea class="form-control" rows="5" v-model="doctorProfile.bio"></textarea>
+          <textarea
+            class="form-control"
+            rows="5"
+            v-model="doctorProfile.bio"
+          ></textarea>
         </div>
       </div>
     </div>
@@ -91,7 +108,11 @@
           <div class="col-md-12">
             <div class="form-group">
               <label>Location</label>
-              <input type="text" class="form-control" v-model="doctor.location" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="doctor.location"
+              />
             </div>
           </div>
         </div>
@@ -99,22 +120,33 @@
           <div class="col-6">
             <div class="form-group">
               <label>Langitude</label>
-              <input type="text" class="form-control" v-model="doctorProfile.mapCenter.lng" />
+              <input
+                type="number"
+                class="form-control"
+                v-model="doctorProfile.mapCenter.lng"
+              />
             </div>
           </div>
           <div class="col-6">
             <div class="form-group">
               <label>Latitude</label>
-              <input type="text" class="form-control" v-model="doctorProfile.mapCenter.lat" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="doctorProfile.mapCenter.lat"
+              />
             </div>
           </div>
           <div class="col-md-12">
             <gmap-map
-              :center="doctorProfile.mapCenter"
+              :center="getMapCenter(doctorProfile.mapCenter)"
               :zoom="15"
               style="width: 100%; height: 500px"
             >
-              <gmap-marker :position="doctorProfile.mapCenter" :clickable="true"></gmap-marker>
+              <gmap-marker
+                :position="getMapCenter(doctorProfile.mapCenter)"
+                :clickable="true"
+              ></gmap-marker>
             </gmap-map>
           </div>
         </div>
@@ -135,12 +167,16 @@
                 <div class="change-avatar">
                   <div class="upload-img">
                     <div class="change-photo-btn">
-                      <span>
-                        <i class="fa fa-upload"></i> Upload Photo
-                      </span>
-                      <input type="file" class="upload" @change="uploadCertificate" />
+                      <span> <i class="fa fa-upload"></i> Upload Photo </span>
+                      <input
+                        type="file"
+                        class="upload"
+                        @change="uploadCertificate"
+                      />
                     </div>
-                    <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
+                    <small class="form-text text-muted"
+                      >Allowed JPG, GIF or PNG. Max size of 2MB</small
+                    >
                   </div>
                 </div>
               </div>
@@ -186,33 +222,56 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Degree</label>
-                    <input type="text" v-model="education.degree" class="form-control" />
+                    <input
+                      type="text"
+                      v-model="education.degree"
+                      class="form-control"
+                    />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>College/Institute</label>
-                    <input type="text" class="form-control" v-model="education.college" />
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="education.college"
+                    />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Year of Completion</label>
-                    <input type="text" class="form-control" v-model="education.year" />
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="education.year"
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-2 col-lg-1">
-              <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
-              <a href="#" class="btn btn-danger trash" @click.prevent="removeEducation(index)">
+              <label
+                class="d-md-block d-sm-none d-none"
+                v-html="'&nbsp;'"
+              ></label>
+              <a
+                href="#"
+                class="btn btn-danger trash"
+                @click.prevent="removeEducation(index)"
+              >
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="add-more">
-          <a href="javascript:void(0);" class="add-education" @click="addEmptyEducation">
+          <a
+            href="javascript:void(0);"
+            class="add-education"
+            @click="addEmptyEducation"
+          >
             <i class="fa fa-plus-circle"></i> Add More
           </a>
         </div>
@@ -234,33 +293,56 @@
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Hospital Name</label>
-                    <input type="text" class="form-control" v-model="experience.hospital" />
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="experience.hospital"
+                    />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Designation</label>
-                    <input type="text" class="form-control" v-model="experience.designation" />
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="experience.designation"
+                    />
                   </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4">
                   <div class="form-group">
                     <label>Year of period</label>
-                    <input type="text" class="form-control" v-model="experience.year" />
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="experience.year"
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-2 col-lg-1">
-              <label class="d-md-block d-sm-none d-none" v-html="'&nbsp;'"></label>
-              <a href="#" class="btn btn-danger trash" @click.prevent="removeExperience(index)">
+              <label
+                class="d-md-block d-sm-none d-none"
+                v-html="'&nbsp;'"
+              ></label>
+              <a
+                href="#"
+                class="btn btn-danger trash"
+                @click.prevent="removeExperience(index)"
+              >
                 <i class="far fa-trash-alt"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="add-more">
-          <a href="javascript:void(0);" class="add-experience" @click="addEmptyExperience">
+          <a
+            href="javascript:void(0);"
+            class="add-experience"
+            @click="addEmptyExperience"
+          >
             <i class="fa fa-plus-circle"></i> Add More
           </a>
         </div>
@@ -274,63 +356,73 @@
         <div class="form-group">
           <label>Services</label>
           <input-tag v-model="services"></input-tag>
-          <small class="form-text text-muted">Note : Type & Press enter to add new services</small>
+          <small class="form-text text-muted"
+            >Note : Type & Press enter to add new services</small
+          >
         </div>
         <div class="form-group mb-0">
           <label>Specialization</label>
           <input-tag v-model="specializations"></input-tag>
-          <small class="form-text text-muted">Note : Type & Press enter to add new specialization</small>
+          <small class="form-text text-muted"
+            >Note : Type & Press enter to add new specialization</small
+          >
         </div>
       </div>
     </div>
     <!-- /Services and Specialization -->
 
     <div class="submit-section submit-btn-bottom">
-      <button type="submit" class="btn btn-primary submit-btn" @click="updateProfile">Save Changes</button>
+      <button
+        type="submit"
+        class="btn btn-primary submit-btn"
+        @click="updateProfile"
+      >
+        Save Changes
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { db, storage } from "@/firebase";
-import InputTag from "vue-input-tag";
+import { db, storage } from '@/firebase'
+import InputTag from 'vue-input-tag'
 export default {
   created() {
-    this.$store.commit("updateDoctorSidebarItem", "Profile Settings");
+    this.$store.commit('updateDoctorSidebarItem', 'Profile Settings')
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     },
     cityList() {
-      return this.$store.state.webStructure.cityList;
+      return this.$store.state.webStructure.cityList
     },
     specialityList() {
-      return this.$store.state.webStructure.specialityList;
+      return this.$store.state.webStructure.specialityList
     }
   },
   watch: {
     userInfo() {
-      this.getDoctorInfo();
+      this.getDoctorInfo()
     },
     taskUploadAvatar: function() {
       this.taskUploadAvatar.on(
-        "state_changed",
+        'state_changed',
         () => {},
         null,
         () => {
           this.taskUploadAvatar.snapshot.ref
             .getDownloadURL()
             .then(downloadURL => {
-              this.doctor.avatar = downloadURL;
-              this.$vs.loading.close("#button-with-loading > .con-vs-loading");
-            });
+              this.doctor.avatar = downloadURL
+              this.$vs.loading.close('#button-with-loading > .con-vs-loading')
+            })
         }
-      );
+      )
     },
     taskUploadCert: function() {
       this.taskUploadCert.on(
-        "state_changed",
+        'state_changed',
         () => {},
         null,
         () => {
@@ -338,12 +430,12 @@ export default {
             .getDownloadURL()
             .then(downloadURL => {
               if (!this.doctorProfile.certifications) {
-                this.doctorProfile.certifications = [];
+                this.doctorProfile.certifications = []
               }
-              this.doctorProfile.certifications.push(downloadURL);
-            });
+              this.doctorProfile.certifications.push(downloadURL)
+            })
         }
-      );
+      )
     }
   },
   data() {
@@ -354,180 +446,186 @@ export default {
       taskUploadCert: null,
       educations: [
         {
-          degree: "",
-          college: "",
-          year: ""
+          degree: '',
+          college: '',
+          year: ''
         }
       ],
       experiences: [
         {
-          hospital: "",
-          designation: "",
-          year: ""
+          hospital: '',
+          designation: '',
+          year: ''
         }
       ],
       services: [],
       specializations: [],
       user: {}
-    };
+    }
   },
   mounted() {
-    this.getDoctorInfo();
-    this.getWebStructureInfo();
+    this.getDoctorInfo()
+    this.getWebStructureInfo()
   },
   methods: {
     async getDoctorInfo() {
       if (!this.userInfo.id) {
-        return;
+        return
       }
-      this.$vs.loading();
+      this.$vs.loading()
 
       const user = await db
-        .collection("Users")
+        .collection('Users')
         .doc(this.userInfo.id)
-        .get();
-      this.user = user.data();
+        .get()
+      this.user = user.data()
 
       const doctorInfo = await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.userInfo.id)
-        .get();
-      this.doctor = doctorInfo.data();
+        .get()
+      this.doctor = doctorInfo.data()
       if (this.doctor.educations) {
-        this.educations = this.doctor.educations;
+        this.educations = this.doctor.educations
       }
       if (this.doctor.experiences) {
-        this.experiences = this.doctor.experiences;
+        this.experiences = this.doctor.experiences
       }
       if (this.doctor.services) {
-        this.services = this.doctor.services;
+        this.services = this.doctor.services
       }
       if (this.doctor.specializations) {
-        this.specializations = this.doctor.specializations;
+        this.specializations = this.doctor.specializations
       }
 
       const profile = await db
-        .collection("DoctorProfiles")
+        .collection('DoctorProfiles')
         .doc(this.userInfo.id)
-        .get();
-      this.doctorProfile = profile.data();
+        .get()
+      this.doctorProfile = profile.data()
       if (this.doctorProfile.mapCenter) {
         this.doctorProfile.mapCenter.lat = parseFloat(
           this.doctorProfile.mapCenter.lat
-        );
+        )
         this.doctorProfile.mapCenter.lng = parseFloat(
           this.doctorProfile.mapCenter.lng
-        );
+        )
       }
-      this.$vs.loading.close();
+      this.$vs.loading.close()
     },
     uploadAvatar(e) {
-      const fileList = e.target.files || e.dataTransfer.files;
-      const file = fileList[0];
-      const today = new Date();
+      const fileList = e.target.files || e.dataTransfer.files
+      const file = fileList[0]
+      const today = new Date()
       const fileName =
         file.name +
-        "-" +
+        '-' +
         today.getHours() +
         today.getMinutes() +
-        today.getSeconds();
+        today.getSeconds()
       this.$vs.loading({
         background: this.backgroundLoading,
         color: this.colorLoading,
-        container: "#button-with-loading",
+        container: '#button-with-loading',
         scale: 0.45
-      });
-      this.taskUploadAvatar = storage.ref(`images/${fileName}`).put(file);
+      })
+      this.taskUploadAvatar = storage.ref(`images/${fileName}`).put(file)
     },
     async updateProfile() {
-      this.$vs.loading();
+      this.$vs.loading()
 
-      this.doctor["educations"] = this.educations;
-      this.doctor["experiences"] = this.experiences;
-      this.doctor["services"] = this.services;
-      this.doctor["specializations"] = this.specializations;
-      this.doctor.name = this.user.name;
-      this.doctor.phone = this.user.phone;
+      this.doctor['educations'] = this.educations
+      this.doctor['experiences'] = this.experiences
+      this.doctor['services'] = this.services
+      this.doctor['specializations'] = this.specializations
+      this.doctor.name = this.user.name
+      this.doctor.phone = this.user.phone
 
       await db
-        .collection("Users")
+        .collection('Users')
         .doc(this.userInfo.id)
-        .update(this.user);
+        .update(this.user)
       await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.userInfo.id)
-        .update(this.doctor);
+        .update(this.doctor)
       await db
-        .collection("DoctorProfiles")
+        .collection('DoctorProfiles')
         .doc(this.userInfo.id)
-        .update(this.doctorProfile);
+        .update(this.doctorProfile)
 
-      this.$vs.loading.close();
+      this.$vs.loading.close()
       this.$vs.notify({
-        text: "Success in update profile",
-        color: "success"
-      });
+        text: 'Success in update profile',
+        color: 'success'
+      })
     },
     uploadCertificate(e) {
-      const fileList = e.target.files || e.dataTransfer.files;
-      const file = fileList[0];
-      const today = new Date();
+      const fileList = e.target.files || e.dataTransfer.files
+      const file = fileList[0]
+      const today = new Date()
       const fileName =
         file.name +
-        "-" +
+        '-' +
         today.getHours() +
         today.getMinutes() +
-        today.getSeconds();
+        today.getSeconds()
 
-      this.taskUploadCert = storage.ref(`images/${fileName}`).put(file);
+      this.taskUploadCert = storage.ref(`images/${fileName}`).put(file)
     },
     removeCert(index) {
-      this.doctorProfile.certifications.splice(index, 1);
+      this.doctorProfile.certifications.splice(index, 1)
     },
     addEmptyEducation() {
       this.educations.push({
-        degree: "",
-        college: "",
-        year: ""
-      });
+        degree: '',
+        college: '',
+        year: ''
+      })
     },
     removeEducation(index) {
-      let newList = [];
+      let newList = []
       for (var i = 0; i < this.educations.length; i++) {
         if (i != index) {
-          newList.push(this.educations[i]);
+          newList.push(this.educations[i])
         }
       }
-      this.educations = newList;
+      this.educations = newList
     },
     addEmptyExperience() {
       this.experiences.push({
-        hospital: "",
-        designation: "",
-        year: ""
-      });
+        hospital: '',
+        designation: '',
+        year: ''
+      })
     },
     removeExperience(index) {
-      let newList = [];
+      let newList = []
       for (var i = 0; i < this.experiences.length; i++) {
         if (i != index) {
-          newList.push(this.experiences[i]);
+          newList.push(this.experiences[i])
         }
       }
-      this.experiences = newList;
+      this.experiences = newList
     },
     async getWebStructureInfo() {
       if (this.cityList.length == 0) {
-        this.$vs.loading();
-        await this.$store.dispatch("getWebStructure");
-        this.$vs.loading.close();
+        this.$vs.loading()
+        await this.$store.dispatch('getWebStructure')
+        this.$vs.loading.close()
+      }
+    },
+    getMapCenter(mapCenter) {
+      return {
+        lat: parseFloat(mapCenter.lat),
+        lng: parseFloat(mapCenter.lng)
       }
     }
   },
   components: {
     InputTag
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

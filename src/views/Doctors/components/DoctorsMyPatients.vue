@@ -25,26 +25,36 @@
         </div>
 
         <div class="col text-right">
-          <button class="btn btn-danger" @click="clearSearchKeyword">Clear</button>
+          <button class="btn btn-danger" @click="clearSearchKeyword">
+            Clear
+          </button>
         </div>
       </div>
     </div>
 
     <div class="row row-grid">
-      <div class="col-md-6 col-lg-4 col-xl-3" v-for="(patient, idx) in filteredPatients" :key="idx">
+      <div
+        class="col-md-6 col-lg-4 col-xl-3"
+        v-for="(patient, idx) in filteredPatients"
+        :key="idx"
+      >
         <div class="card widget-profile pat-widget-profile">
           <div class="card-body">
             <div class="pro-widget-content">
               <div class="profile-info-widget">
-                <router-link :to="getPatientDetailLink(patient.id)" class="booking-doc-img">
-                  <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
+                <router-link
+                  :to="getPatientDetailLink(patient.id)"
+                  class="booking-doc-img"
+                >
+                  <img
+                    src="@/assets/img/patients/patient-default.png"
+                    alt="User Image"
+                  />
                 </router-link>
                 <div class="profile-det-info">
                   <h3>
                     <router-link :to="getPatientDetailLink(patient.id)">
-                      {{
-                      patient.name
-                      }}
+                      {{ patient.name }}
                     </router-link>
                     <!-- <a href="patient-profile.html">{{patient.name}}</a> -->
                   </h3>
@@ -65,7 +75,7 @@
               <ul>
                 <li>
                   Phone
-                  <span>{{ patient.patientMobile }}</span>
+                  <span>{{ getFormatPhoneNumber(patient.patientMobile) }}</span>
                 </li>
               </ul>
             </div>
@@ -87,62 +97,63 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
-import Datepicker from "vuejs-datepicker";
-import jQuery from "jquery";
+import { db } from '@/firebase'
+import Datepicker from 'vuejs-datepicker'
+import jQuery from 'jquery'
+import { parsePhoneNumberFromString } from 'libphonenumber-js'
 // import fab from "vue-fab";
 export default {
   created() {
-    this.$store.commit("updateDoctorSidebarItem", "My Patients");
-    this.$store.commit("updateSelectItem", "MyPatients");
+    this.$store.commit('updateDoctorSidebarItem', 'My Patients')
+    this.$store.commit('updateSelectItem', 'MyPatients')
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     },
     filteredPatients() {
       return this.patients.filter(patient => {
-        const accessDate = patient.accessTime.toDate();
+        const accessDate = patient.accessTime.toDate()
 
         if (this.startDate != null) {
           if (this.endDate != null) {
             if (accessDate >= this.startDate && accessDate <= this.endDate) {
-              return patient;
+              return patient
             }
           } else {
             if (accessDate >= this.startDate) {
-              return patient;
+              return patient
             }
           }
         }
 
         if (this.endDate != null && accessDate <= this.endDate) {
-          return patient;
+          return patient
         }
 
-        if (this.name != "" && patient.name.includes(this.name)) {
-          return patient;
+        if (this.name != '' && patient.name.includes(this.name)) {
+          return patient
         }
 
         if (
-          this.phoneNumber != "" &&
+          this.phoneNumber != '' &&
           patient.patientMobile.includes(this.phoneNumber)
         ) {
-          return patient;
+          return patient
         }
 
         if (
           this.startDate == null &&
           this.endDate == null &&
-          this.name == "" &&
-          this.phoneNumber == ""
+          this.name == '' &&
+          this.phoneNumber == ''
         ) {
-          return patient;
+          return patient
         }
-      });
+      })
     },
     isDoctor() {
-      return this.userInfo.role == "dcotor";
+      return this.userInfo.role == 'dcotor'
     }
   },
   components: {
@@ -153,68 +164,78 @@ export default {
       patients: [],
       startDate: null,
       endDate: null,
-      name: "",
-      phoneNumber: ""
-    };
+      name: '',
+      phoneNumber: ''
+    }
   },
   watch: {
     userInfo() {
-      this.loadPatients();
+      this.loadPatients()
     }
   },
   mounted() {
-    this.loadPatients();
-    jQuery(".datepicker input").addClass("form-control");
+    this.loadPatients()
+    jQuery('.datepicker input').addClass('form-control')
   },
   methods: {
     async loadPatients() {
       if (!this.userInfo.phone) {
-        return;
+        return
       }
-      this.$vs.loading();
-      let patientRef = null;
-      if (this.userInfo.role == "doctor") {
+      this.$vs.loading()
+      let patientRef = null
+      if (this.userInfo.role == 'doctor') {
         patientRef = db
-          .collection("History")
-          .where("doctorUid", "==", this.userInfo.id);
-      } else if (this.userInfo.role == "assistant") {
+          .collection('History')
+          .where('doctorUid', '==', this.userInfo.id)
+      } else if (this.userInfo.role == 'assistant') {
         patientRef = db
-          .collection("History")
-          .where("doctorUid", "==", this.userInfo.doctorId);
+          .collection('History')
+          .where('doctorUid', '==', this.userInfo.doctorId)
       }
       const patients = await patientRef
-        .orderBy("accessTime", "desc")
+        .orderBy('accessTime', 'desc')
         .limit(10)
-        .get();
+        .get()
 
-      this.patients = [];
+      this.patients = []
       patients.forEach(patient => {
-        let data = patient.data();
-        data["id"] = patient.id;
-        this.patients.push(data);
-      });
-      this.$vs.loading.close();
+        let data = patient.data()
+        data['id'] = patient.id
+        this.patients.push(data)
+      })
+      this.$vs.loading.close()
     },
     getLastVisit(accessTime) {
       return (
         accessTime.toDate().getDate() +
-        "/" +
+        '/' +
         (accessTime.toDate().getMonth() + 1) +
-        "/" +
+        '/' +
         accessTime.toDate().getFullYear()
-      );
+      )
     },
     getPatientDetailLink(patientId) {
-      return `/doctors-patient-detail/${patientId}`;
+      return `/doctors-patient-detail/${patientId}`
     },
     clearSearchKeyword() {
-      this.startDate = null;
-      this.endDate = null;
-      this.name = "";
-      this.phoneNumber = "";
+      this.startDate = null
+      this.endDate = null
+      this.name = ''
+      this.phoneNumber = ''
+    },
+    getFormatPhoneNumber(stringNumber) {
+      console.log(stringNumber)
+      const phoneNumber = parsePhoneNumberFromString(stringNumber)
+
+      if (phoneNumber != null) {
+        console.log(phoneNumber)
+        return phoneNumber.formatInternational()
+      }
+      return stringNumber
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

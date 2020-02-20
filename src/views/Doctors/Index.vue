@@ -12,7 +12,11 @@
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar" sticky-container>
+          <div
+            class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar"
+            sticky-container
+            v-if="!isMobile"
+          >
             <doctors-sidebar sticky-offset="{top: 30}"></doctors-sidebar>
           </div>
           <div class="col-md-7 col-lg-8 col-xl-9">
@@ -25,25 +29,28 @@
 </template>
 
 <script>
-import DoctorsSidebar from "./DoctorsSidebar";
-import Sticky from "vue-sticky-directive";
+import DoctorsSidebar from './DoctorsSidebar'
+import Sticky from 'vue-sticky-directive'
 export default {
   components: {
     DoctorsSidebar
   },
   computed: {
     sidebarItem() {
-      return this.$store.state.doctor.sidebarItem;
+      return this.$store.state.doctor.sidebarItem
+    },
+    isMobile() {
+      return this.$store.getters.isMobile
     }
   },
   directives: { Sticky },
   mounted() {
-    const role = localStorage.getItem("role");
-    if (!(role == "doctor" || role == "assistant")) {
-      this.$router.push("/");
+    const role = localStorage.getItem('role')
+    if (!(role == 'doctor' || role == 'assistant')) {
+      this.$router.push('/')
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

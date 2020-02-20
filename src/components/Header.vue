@@ -15,9 +15,9 @@
       </div>
       <div class="main-menu-wrapper">
         <div class="menu-header">
-          <a href="index.html" class="menu-logo">
+          <router-link to="/" class="menu-logo">
             <img src="assets/img/logo.png" class="img-fluid" alt="Logo" />
-          </a>
+          </router-link>
           <a id="menu_close" class="menu-close" href="javascript:void(0);">
             <i class="fas fa-times"></i>
           </a>
@@ -28,9 +28,46 @@
           </li>
           <li
             :class="{ active: selectedItem == 'MyPatients' }"
-            v-if="isDoctor || isAssistant"
+            v-if="(isDoctor || isAssistant) && !isMobile"
           >
             <router-link to="/doctors-mypatients">Patients</router-link>
+          </li>
+          <li
+            class="has-submenu"
+            :class="{ active: selectedItem == 'MyPatients' }"
+            v-if="(isDoctor || isAssistant) && isMobile"
+          >
+            <a href="javascript:;">
+              Patients
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="submenu">
+              <li :class="{ active: sidebarItem == 'My Patients' }">
+                <router-link to="/doctors-mypatients">My Patients</router-link>
+              </li>
+              <li :class="{ active: sidebarItem == 'Schedule Timings' }">
+                <router-link to="/doctors-scheduletime"
+                  >Schedule Timings</router-link
+                >
+              </li>
+              <li :class="{ active: sidebarItem == 'Profile Settings' }">
+                <router-link to="/doctors-profile"
+                  >Profile Settings</router-link
+                >
+              </li>
+              <li :class="{ active: sidebarItem == 'Social Media' }">
+                <router-link to="/doctors-social">Social Media</router-link>
+              </li>
+              <li :class="{ active: sidebarItem == 'Calendar' }">
+                <router-link to="/doctors-calendar">Calendar</router-link>
+              </li>
+              <!-- <li :class="{ active: sidebarItem == 'Settings' }">
+                <router-link to="/doctors-setting">Settings</router-link>
+              </li> -->
+              <li :class="{ active: sidebarItem == 'Appointment' }">
+                <router-link to="/doctors-appointment">Appointment</router-link>
+              </li>
+            </ul>
           </li>
           <li :class="{ active: selectedItem == 'Settings' }" v-if="isDoctor">
             <router-link to="/doctors-setting">Settings</router-link>
@@ -69,32 +106,17 @@
               >Logout</a
             >
           </li>
-
-          <!-- <li class="login-link">
-            <router-link to="/login">Login / Signup</router-link>
-          </li>-->
         </ul>
       </div>
       <ul class="nav header-navbar-rht">
-        <!-- <li class="nav-item contact-item">
-          <div class="header-contact-img">
-            <i class="far fa-hospital"></i>
-          </div>
-          <div class="header-contact-detail">
-            <p class="contact-header">Contact</p>
-            <p class="contact-info-header">+1 315 369 5943</p>
-          </div>
-        </li>-->
         <li class="nav-item" v-if="!loginStatus">
           <router-link class="nav-link header-login" to="/login"
             >Login / Signup</router-link
           >
-          <!-- <a class="nav-link header-login" href="login.html">login / Signup</a> -->
         </li>
 
         <!-- User Menu -->
         <li class="nav-item" v-else>
-          <!-- <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"> -->
           <a
             href="javascript:;"
             @click.prevent="gotoProfileSetting"
@@ -122,39 +144,49 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import firebase from 'firebase'
+import $ from 'jquery'
 export default {
-  mounted() {},
+  mounted() {
+    this.initSubmenuEvent()
+  },
   computed: {
     selectedItem() {
-      return this.$store.state.header.selectedItem;
+      return this.$store.state.header.selectedItem
     },
     loginStatus() {
-      return this.$store.state.header.loginStatus;
+      return this.$store.state.header.loginStatus
     },
     user() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     },
     userName() {
-      if (this.user.role == "doctor") {
-        return `Dr. ${this.user.name}`;
+      if (this.user.role == 'doctor') {
+        return `Dr. ${this.user.name}`
       }
-      return this.user.name;
+      return this.user.name
     },
     isUserManager() {
-      return this.user.role == "userManager";
+      return this.user.role == 'userManager'
     },
     isAdsManager() {
-      return this.user.role == "adsManager";
+      return this.user.role == 'adsManager'
     },
     isDoctor() {
-      return this.user.role == "doctor";
+      return this.user.role == 'doctor'
     },
     isAssistant() {
-      return this.user.role == "assistant";
+      return this.user.role == 'assistant'
     },
     isPatient() {
-      return this.user.role == "patient";
+      return this.user.role == 'patient'
+    },
+    isMobile() {
+      this.initSubmenuEvent()
+      return this.$store.getters.isMobile
+    },
+    sidebarItem() {
+      return this.$store.state.doctor.sidebarItem
     }
   },
   methods: {
@@ -162,18 +194,44 @@ export default {
       firebase
         .auth()
         .signOut()
-        .then(() => {});
-      localStorage.removeItem("role");
-      this.$store.commit("setUserInfo", {});
-      this.$router.push("/");
+        .then(() => {})
+      localStorage.removeItem('role')
+      this.$store.commit('setUserInfo', {})
+      this.$router.push('/')
     },
     gotoProfileSetting() {
-      if (this.user.role == "doctor") {
-        this.$router.push("/doctors-profile");
+      if (this.user.role == 'doctor') {
+        this.$router.push('/doctors-profile')
       }
+    },
+    initSubmenuEvent() {
+      setTimeout(() => {
+        $('.main-nav a').on('click', function(e) {
+          if (
+            $(this)
+              .parent()
+              .hasClass('has-submenu')
+          ) {
+            e.preventDefault()
+          }
+          if (!$(this).hasClass('submenu')) {
+            $('ul', $(this).parents('ul:first')).slideUp(350)
+            $('a', $(this).parents('ul:first')).removeClass('submenu')
+            $(this)
+              .next('ul')
+              .slideDown(350)
+            $(this).addClass('submenu')
+          } else if ($(this).hasClass('submenu')) {
+            $(this).removeClass('submenu')
+            $(this)
+              .next('ul')
+              .slideUp(350)
+          }
+        })
+      }, 100)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>
