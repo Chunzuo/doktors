@@ -1,10 +1,10 @@
 export default {
   state: {
-    sidebarItem: "My Patients"
+    sidebarItem: 'My Patients'
   },
   mutations: {
     updateDoctorSidebarItem(state, value) {
-      state.sidebarItem = value;
+      state.sidebarItem = value
     }
   }
-};
+}

@@ -91,13 +91,22 @@
           <li :class="{ active: selectedItem == 'About' }">
             <router-link to="/about">About</router-link>
           </li>
-          <li v-if="isUserManager" :class="{ active: selectedItem == 'UserManagement' }">
+          <li
+            v-if="isUserManager"
+            :class="{ active: selectedItem == 'UserManagement' }"
+          >
             <router-link to="/user-management">User Management</router-link>
           </li>
-          <li v-if="isAdsManager" :class="{ active: selectedItem == 'AdsManagement' }">
+          <li
+            v-if="isAdsManager"
+            :class="{ active: selectedItem == 'AdsManagement' }"
+          >
             <router-link to="/ads-management">Ads Management</router-link>
           </li>
-          <li v-if="isPatient" :class="{ active: selectedItem == 'PatientDashboard' }">
+          <li
+            v-if="isPatient"
+            :class="{ active: selectedItem == 'PatientDashboard' }"
+          >
             <router-link to="/patient-dashboard">Dashboard</router-link>
           </li>
 
@@ -107,18 +116,25 @@
               style="color: red;"
               href="javascript:;"
               @click="logout"
-            >Logout</a>
+              >Logout</a
+            >
           </li>
         </ul>
       </div>
       <ul class="nav header-navbar-rht">
         <li class="nav-item" v-if="!loginStatus">
-          <router-link class="nav-link header-login" to="/login">Login / Signup</router-link>
+          <router-link class="nav-link header-login" to="/login"
+            >Login / Signup</router-link
+          >
         </li>
 
         <!-- User Menu -->
         <li class="nav-item" v-else>
-          <a href="javascript:;" @click.prevent="gotoProfileSetting" class="nav-link">
+          <a
+            href="javascript:;"
+            @click.prevent="gotoProfileSetting"
+            class="nav-link"
+          >
             <div class="row" style="align-items:center">
               <div class="ml-2">
                 <h6>{{ userName }}</h6>

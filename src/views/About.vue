@@ -81,10 +81,10 @@
 <script>
 export default {
   created() {
-    this.$store.commit("updateSelectItem", "About");
+    this.$store.commit('updateSelectItem', 'About')
   },
   mounted() {}
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

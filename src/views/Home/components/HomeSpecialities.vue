@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import Slick from "vue-slick";
+import Slick from 'vue-slick'
 export default {
   components: {
     Slick
@@ -115,9 +115,9 @@ export default {
         prevArrow: false,
         nextArrow: false
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

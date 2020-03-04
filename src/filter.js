@@ -1,12 +1,12 @@
-import Vue from "vue";
+import Vue from 'vue'
 
-Vue.filter("month", function(val, showYear = true) {
-  val = String(val);
+Vue.filter('month', function(val, showYear = true) {
+  val = String(val)
 
-  const regx = /\w+\s(\w+)\s\d+\s(\d+)./;
+  const regx = /\w+\s(\w+)\s\d+\s(\d+)./
   if (!showYear) {
-    return regx.exec(val)[1];
+    return regx.exec(val)[1]
   } else {
-    return regx.exec(val)[1] + " " + regx.exec(val)[2];
+    return regx.exec(val)[1] + ' ' + regx.exec(val)[2]
   }
-});
+})

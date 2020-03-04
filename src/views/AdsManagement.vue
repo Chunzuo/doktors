@@ -118,18 +118,18 @@
 </template>
 
 <script>
-import { db, storage } from "@/firebase";
+import { db, storage } from '@/firebase'
 export default {
   created() {
-    this.$store.commit("updateSelectItem", "AdsManagement");
-    const role = localStorage.getItem("role");
+    this.$store.commit('updateSelectItem', 'AdsManagement')
+    const role = localStorage.getItem('role')
 
-    if (role != "adsManager") {
-      this.$router.push("/");
+    if (role != 'adsManager') {
+      this.$router.push('/')
     }
   },
   mounted() {
-    this.getAdsList();
+    this.getAdsList()
   },
   data() {
     return {
@@ -139,109 +139,109 @@ export default {
       adsInfo: {},
       modalMode: 0, // 0: Add, 1: Edit
       idToEdit: null
-    };
+    }
   },
   methods: {
     async getAdsList() {
-      this.$vs.loading();
-      const ref = await db.collection("Ads").get();
-      this.adsList = [];
+      this.$vs.loading()
+      const ref = await db.collection('Ads').get()
+      this.adsList = []
       ref.docs.forEach(doc => {
-        let data = doc.data();
-        data["id"] = doc.id;
-        this.adsList.push(data);
-      });
-      this.$vs.loading.close();
+        let data = doc.data()
+        data['id'] = doc.id
+        this.adsList.push(data)
+      })
+      this.$vs.loading.close()
     },
     uploadFile(e) {
-      const fileList = e.target.files || e.dataTransfer.files;
-      const file = fileList[0];
-      const today = new Date();
+      const fileList = e.target.files || e.dataTransfer.files
+      const file = fileList[0]
+      const today = new Date()
       const fileName =
         file.name +
-        "-" +
+        '-' +
         today.getHours() +
         today.getMinutes() +
-        today.getSeconds();
-      this.$vs.loading();
-      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file);
+        today.getSeconds()
+      this.$vs.loading()
+      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file)
     },
     async saveAds() {
-      this.$vs.loading();
+      this.$vs.loading()
       if (this.modalMode == 0) {
-        await db.collection("Ads").add(this.adsInfo);
+        await db.collection('Ads').add(this.adsInfo)
         this.$vs.notify({
-          text: "Success in add new ads",
-          color: "success"
-        });
-        this.$vs.loading.close();
+          text: 'Success in add new ads',
+          color: 'success'
+        })
+        this.$vs.loading.close()
       } else {
         await db
-          .collection("Ads")
+          .collection('Ads')
           .doc(this.idToEdit)
-          .set(this.adsInfo);
+          .set(this.adsInfo)
         this.$vs.notify({
-          text: "Success in update ads",
-          color: "success"
-        });
+          text: 'Success in update ads',
+          color: 'success'
+        })
       }
-      this.getAdsList();
+      this.getAdsList()
     },
     openAddModal() {
-      this.showModal = true;
-      this.modalMode = 0;
+      this.showModal = true
+      this.modalMode = 0
     },
     async openEditModal(id) {
-      this.$vs.loading();
+      this.$vs.loading()
       const adsInfo = await db
-        .collection("Ads")
+        .collection('Ads')
         .doc(id)
-        .get();
-      this.adsInfo = adsInfo.data();
-      this.showModal = true;
-      this.modalMode = 1;
-      this.idToEdit = id;
-      this.$vs.loading.close();
+        .get()
+      this.adsInfo = adsInfo.data()
+      this.showModal = true
+      this.modalMode = 1
+      this.idToEdit = id
+      this.$vs.loading.close()
     },
     openDeleteModal(id) {
-      this.idToEdit = id;
+      this.idToEdit = id
       this.$vs.dialog({
-        type: "confirm",
-        color: "danger",
+        type: 'confirm',
+        color: 'danger',
         title: `Confirm Delete`,
         text: `Are you sure delete this ads?`,
         accept: this.deleteAds,
-        acceptText: "Delete"
-      });
+        acceptText: 'Delete'
+      })
     },
     async deleteAds() {
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("Ads")
+        .collection('Ads')
         .doc(this.idToEdit)
-        .delete();
-      this.$vs.loading.close();
-      this.getAdsList();
+        .delete()
+      this.$vs.loading.close()
+      this.getAdsList()
     }
   },
   watch: {
     taskUploadFile: function() {
       this.taskUploadFile.on(
-        "state_changed",
+        'state_changed',
         () => {},
         null,
         () => {
           this.taskUploadFile.snapshot.ref
             .getDownloadURL()
             .then(downloadURL => {
-              this.adsInfo.image = downloadURL;
-              this.$vs.loading.close();
-            });
+              this.adsInfo.image = downloadURL
+              this.$vs.loading.close()
+            })
         }
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

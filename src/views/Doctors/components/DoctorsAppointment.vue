@@ -68,29 +68,29 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
+import { db } from '@/firebase'
 export default {
   created() {
-    this.$store.commit("updateDoctorSidebarItem", "Appointment");
+    this.$store.commit('updateDoctorSidebarItem', 'Appointment')
   },
   mounted() {
-    this.getAppointment();
+    this.getAppointment()
   },
   methods: {
     async getAppointment() {
-      this.$vs.loading();
+      this.$vs.loading()
       const appts = await db
-        .collection("Appointments")
-        .where("doctorId", "==", this.userInfo.id)
-        .get();
-      this.appointments = [];
+        .collection('Appointments')
+        .where('doctorId', '==', this.userInfo.id)
+        .get()
+      this.appointments = []
       appts.forEach(async appt => {
-        const { patientId, date, time, status } = appt.data();
+        const { patientId, date, time, status } = appt.data()
         const user = await db
-          .collection("Users")
+          .collection('Users')
           .doc(patientId)
-          .get();
-        const { name, phone } = user.data();
+          .get()
+        const { name, phone } = user.data()
         this.appointments.push({
           patientName: name,
           patientPhone: phone,
@@ -98,91 +98,91 @@ export default {
           time: time,
           id: appt.id,
           status: status
-        });
-      });
-      this.$vs.loading.close();
+        })
+      })
+      this.$vs.loading.close()
     },
     getFormatDay(timestamp) {
-      const date = timestamp.toDate();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
+      const date = timestamp.toDate()
+      const year = date.getFullYear()
+      const month = date.getMonth()
+      const day = date.getDate()
       const strMonthDate = [
-        "January",
-        "Feburary",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "Octorber",
-        "November",
-        "December"
-      ];
-      return day + " " + strMonthDate[month] + " " + year;
+        'January',
+        'Feburary',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'Octorber',
+        'November',
+        'December'
+      ]
+      return day + ' ' + strMonthDate[month] + ' ' + year
     },
     formatTime(time) {
-      const hour = time.split(":")[0];
-      const minute = time.split(":")[1];
+      const hour = time.split(':')[0]
+      const minute = time.split(':')[1]
       if (hour == 12) {
-        return time + " PM";
+        return time + ' PM'
       }
       if (hour > 12) {
-        return hour - 12 + ":" + minute + " PM";
+        return hour - 12 + ':' + minute + ' PM'
       } else {
-        return time + " AM";
+        return time + ' AM'
       }
     },
     async acceptAppt(id) {
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("Appointments")
+        .collection('Appointments')
         .doc(id)
-        .update({ status: 1 });
-      this.$vs.loading.close();
-      this.getAppointment();
+        .update({ status: 1 })
+      this.$vs.loading.close()
+      this.getAppointment()
     },
     async cancelAppt(id) {
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("Appointments")
+        .collection('Appointments')
         .doc(id)
-        .update({ status: 2 });
-      this.$vs.loading.close();
-      this.getAppointment();
+        .update({ status: 2 })
+      this.$vs.loading.close()
+      this.getAppointment()
     },
     getStatusColor(status) {
       if (status == 0) {
-        return "bg-warning-light";
+        return 'bg-warning-light'
       } else if (status == 1) {
-        return "bg-success-light";
+        return 'bg-success-light'
       } else {
-        return "bg-danger-light";
+        return 'bg-danger-light'
       }
     },
     getStatusLabel(status) {
       if (status == 0) {
-        return "Pending";
+        return 'Pending'
       } else if (status == 1) {
-        return "Confirmed";
+        return 'Confirmed'
       } else if (status == 2) {
-        return "Cancelled";
+        return 'Cancelled'
       }
     }
   },
   data() {
     return {
       appointments: []
-    };
+    }
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

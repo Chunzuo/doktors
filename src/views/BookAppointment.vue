@@ -18,9 +18,7 @@
                 <div class="booking-info">
                   <h4>
                     <router-link :to="`/doctor-detail/${doctor.id}`">
-                      {{
-                      doctor.name
-                      }}
+                      {{ doctor.name }}
                     </router-link>
                   </h4>
 
@@ -52,14 +50,15 @@
                           <i class="fa fa-chevron-left"></i>
                         </a>
                       </li>
-                      <li v-for="(date, index) in weekDates" :key="`week-date-${index}`">
+                      <li
+                        v-for="(date, index) in weekDates"
+                        :key="`week-date-${index}`"
+                      >
                         <span>{{ getShortFormatDate(date) }}</span>
                         <span class="slot-date">
                           {{ getShortFormatDay(date) }}
                           <small class="slot-year">
-                            {{
-                            getYearOfDate(date)
-                            }}
+                            {{ getYearOfDate(date) }}
                           </small>
                         </span>
                       </li>
@@ -83,7 +82,10 @@
                   <!-- Time Slot -->
                   <div class="time-slot">
                     <ul class="clearfix">
-                      <li v-for="(slot, index) in weekSlots" :key="`slot-${index}`">
+                      <li
+                        v-for="(slot, index) in weekSlots"
+                        :key="`slot-${index}`"
+                      >
                         <a class="timing" v-if="slot.length == 0">
                           <span>-</span>
                         </a>
@@ -123,12 +125,15 @@
                 Appointment booked with
                 <strong>Dr. {{ doctor.name }}</strong>
                 <br />on
-                <strong>{{ getShortFormatDay(apptDate) }} {{ apptTime }}</strong>
+                <strong
+                  >{{ getShortFormatDay(apptDate) }} {{ apptTime }}</strong
+                >
               </p>
               <router-link
                 to="/patient-dashboard"
                 class="btn btn-primary view-inv-btn"
-              >View Appointments</router-link>
+                >View Appointments</router-link
+              >
             </div>
           </div>
         </div>

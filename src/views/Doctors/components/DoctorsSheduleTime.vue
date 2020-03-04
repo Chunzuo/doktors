@@ -19,7 +19,9 @@
                     <tbody>
                       <tr v-for="(day, idx) in days" :key="idx">
                         <td>{{ day.text }}</td>
-                        <td>{{ formatOpeningHours(openingHours[day.value]) }}</td>
+                        <td>
+                          {{ formatOpeningHours(openingHours[day.value]) }}
+                        </td>
                         <td>
                           <a
                             href="javascript:void(0);"
@@ -37,7 +39,13 @@
             </div>
 
             <div class="card-actions mt-3">
-              <button type="submit" class="btn btn-primary submit-btn" @click="save">Save Changes</button>
+              <button
+                type="submit"
+                class="btn btn-primary submit-btn"
+                @click="save"
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
@@ -75,7 +83,11 @@
         <div class="row mt-4">
           <div class="col">
             <label class="custom_check">
-              <input type="checkbox" name="select_specialist" v-model="closed" />
+              <input
+                type="checkbox"
+                name="select_specialist"
+                v-model="closed"
+              />
               <span class="checkmark"></span>
               Closed
             </label>

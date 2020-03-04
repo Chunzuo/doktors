@@ -60,8 +60,8 @@
 </template>
 
 <script>
-import Slick from "vue-slick";
-import { db } from "@/firebase";
+import Slick from 'vue-slick'
+import { db } from '@/firebase'
 export default {
   components: {
     Slick
@@ -76,23 +76,23 @@ export default {
         adaptiveHeight: true
       },
       adsList: []
-    };
+    }
   },
   mounted() {
-    this.getAdsList();
+    this.getAdsList()
   },
   methods: {
     async getAdsList() {
-      const ref = await db.collection("Ads").get();
-      this.adsList = [];
+      const ref = await db.collection('Ads').get()
+      this.adsList = []
       ref.docs.forEach(doc => {
-        let data = doc.data();
-        data["id"] = doc.id;
-        this.adsList.push(data);
-      });
+        let data = doc.data()
+        data['id'] = doc.id
+        this.adsList.push(data)
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

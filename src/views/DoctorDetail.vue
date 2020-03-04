@@ -27,19 +27,31 @@
 
                   <div style="display: flex;">
                     <div v-if="doctorProfile.facebook">
-                      <a class="social-icon" :href="doctorProfile.facebook" target="_blank">
+                      <a
+                        class="social-icon"
+                        :href="doctorProfile.facebook"
+                        target="_blank"
+                      >
                         <i class="fab fa-facebook-f"></i>
                       </a>
                     </div>
 
                     <div v-if="doctorProfile.twitter">
-                      <a :href="doctorProfile.twitter" target="_blank" class="social-icon ml-2">
+                      <a
+                        :href="doctorProfile.twitter"
+                        target="_blank"
+                        class="social-icon ml-2"
+                      >
                         <i class="fab fa-twitter"></i>
                       </a>
                     </div>
 
                     <div v-if="doctorProfile.instagram">
-                      <a :href="doctorProfile.instagram" target="_blank" class="social-icon ml-2">
+                      <a
+                        :href="doctorProfile.instagram"
+                        target="_blank"
+                        class="social-icon ml-2"
+                      >
                         <i class="fab fa-instagram"></i>
                       </a>
                     </div>
@@ -52,7 +64,8 @@
                   <router-link
                     :to="`/book-appointment/${doctor.id}`"
                     class="apt-btn"
-                  >Book Appointment</router-link>
+                    >Book Appointment</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -97,9 +110,7 @@
                               <div class="experience-content">
                                 <div class="timeline-content">
                                   <a href="#/" class="name">
-                                    {{
-                                    education.college
-                                    }}
+                                    {{ education.college }}
                                   </a>
                                   <div>{{ education.degree }}</div>
                                   <span class="time">{{ education.year }}</span>
@@ -130,9 +141,7 @@
                                     {{ experience.hospital }}
                                   </a>
                                   <span class="time">
-                                    {{
-                                    experience.year
-                                    }}
+                                    {{ experience.year }}
                                   </span>
                                 </div>
                               </div>
@@ -170,7 +179,9 @@
                           <li
                             v-for="(service, index) in doctor.services"
                             :key="`service - ${index}`"
-                          >{{ service }}</li>
+                          >
+                            {{ service }}
+                          </li>
                         </ul>
                       </div>
                       <!-- /Services List -->
@@ -182,7 +193,9 @@
                           <li
                             v-for="(spec, index) in doctor.specializations"
                             :key="`spec - ${index}`"
-                          >{{ spec }}</li>
+                          >
+                            {{ spec }}
+                          </li>
                         </ul>
                       </div>
                       <!-- /Specializations List -->
@@ -211,7 +224,10 @@
                   >
                     <div class="day">{{ day.text }}</div>
                     <div class="time-items">
-                      <span class="time" v-if="doctorProfile.openingHours[day.value].closed">
+                      <span
+                        class="time"
+                        v-if="doctorProfile.openingHours[day.value].closed"
+                      >
                         <span class="badge bg-danger-light">Closed</span>
                       </span>
                       <span class="time" v-else>
@@ -236,7 +252,10 @@
                 style="width: 100%; height: 300px"
                 v-if="doctorProfile.mapCenter"
               >
-                <gmap-marker :position="getMapCenter(doctorProfile.mapCenter)" :clickable="true"></gmap-marker>
+                <gmap-marker
+                  :position="getMapCenter(doctorProfile.mapCenter)"
+                  :clickable="true"
+                ></gmap-marker>
               </gmap-map>
             </div>
           </div>
