@@ -19,9 +19,7 @@
                     <tbody>
                       <tr v-for="(day, idx) in days" :key="idx">
                         <td>{{ day.text }}</td>
-                        <td>
-                          {{ formstOpeningHours(openingHours[day.value]) }}
-                        </td>
+                        <td>{{ formatOpeningHours(openingHours[day.value]) }}</td>
                         <td>
                           <a
                             href="javascript:void(0);"
@@ -39,13 +37,7 @@
             </div>
 
             <div class="card-actions mt-3">
-              <button
-                type="submit"
-                class="btn btn-primary submit-btn"
-                @click="save"
-              >
-                Save Changes
-              </button>
+              <button type="submit" class="btn btn-primary submit-btn" @click="save">Save Changes</button>
             </div>
           </div>
         </div>
@@ -80,44 +72,53 @@
             />
           </div>
         </div>
+        <div class="row mt-4">
+          <div class="col">
+            <label class="custom_check">
+              <input type="checkbox" name="select_specialist" v-model="closed" />
+              <span class="checkmark"></span>
+              Closed
+            </label>
+          </div>
+        </div>
       </div>
     </vs-prompt>
   </div>
 </template>
 
 <script>
-import { db } from "@/firebase";
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
+import { db } from '@/firebase'
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 
 export default {
   created() {
-    this.$store.commit("updateDoctorSidebarItem", "Schedule Timings");
+    this.$store.commit('updateDoctorSidebarItem', 'Schedule Timings')
   },
   components: {
     flatPickr
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     }
   },
   watch: {
     userInfo() {
-      this.getDoctorProfile();
+      this.getDoctorProfile()
     }
   },
   data() {
     return {
       openingHours: {},
       days: [
-        { text: "Monday", value: "mon" },
-        { text: "Tuesday", value: "tue" },
-        { text: "Wendsday", value: "wed" },
-        { text: "Thursday", value: "thu" },
-        { text: "Friday", value: "fri" },
-        { text: "Satureday", value: "sat" },
-        { text: "Sunday", value: "sun" }
+        { text: 'Monday', value: 'mon' },
+        { text: 'Tuesday', value: 'tue' },
+        { text: 'Wendsday', value: 'wed' },
+        { text: 'Thursday', value: 'thu' },
+        { text: 'Friday', value: 'fri' },
+        { text: 'Satureday', value: 'sat' },
+        { text: 'Sunday', value: 'sun' }
       ],
       configdateTimePicker: {
         enableTime: true,
@@ -127,63 +128,69 @@ export default {
       showEditModal: false,
       startTime: null,
       endTime: null,
-      index: 0
-    };
+      index: 0,
+      closed: false
+    }
   },
   mounted() {
-    this.getDoctorProfile();
+    this.getDoctorProfile()
   },
   methods: {
     async getDoctorProfile() {
       if (!this.userInfo.id) {
-        return;
+        return
       }
-      this.$vs.loading();
+      this.$vs.loading()
 
       const profile = await db
-        .collection("DoctorProfiles")
+        .collection('DoctorProfiles')
         .doc(this.userInfo.id)
-        .get();
+        .get()
 
-      const profileData = profile.data();
-      this.openingHours = profileData.openingHours;
+      const profileData = profile.data()
+      this.openingHours = profileData.openingHours
+      console.log(this.openingHours)
 
-      this.$vs.loading.close();
+      this.$vs.loading.close()
     },
-    formstOpeningHours(data) {
-      if (!data || data["closed"]) {
-        return "Not available";
+    formatOpeningHours(data) {
+      if (!data || data['closed']) {
+        return 'Not available'
       }
-      return data["from"] + " ~ " + data["until"];
+      return data['from'] + ' ~ ' + data['until']
     },
     openEditModal(idx) {
-      this.startTime = this.openingHours[this.days[idx]["value"]]["from"];
-      this.endTime = this.openingHours[this.days[idx]["value"]]["until"];
-      this.showEditModal = true;
-      this.index = idx;
+      this.startTime = this.openingHours[this.days[idx]['value']]['from']
+      this.endTime = this.openingHours[this.days[idx]['value']]['until']
+      this.closed = this.openingHours[this.days[idx]['value']]['closed']
+      this.showEditModal = true
+      this.index = idx
     },
     updateHours() {
-      this.openingHours[this.days[this.index]["value"]][
-        "from"
-      ] = this.startTime;
-      this.openingHours[this.days[this.index]["value"]]["until"] = this.endTime;
+      this.openingHours[this.days[this.index]['value']]['from'] = this.closed
+        ? null
+        : this.startTime
+      this.openingHours[this.days[this.index]['value']]['until'] = this.closed
+        ? null
+        : this.endTime
+      this.openingHours[this.days[this.index]['value']]['closed'] = this.closed
     },
     async save() {
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("DoctorProfiles")
+        .collection('DoctorProfiles')
         .doc(this.userInfo.id)
         .update({
           openingHours: this.openingHours
-        });
-      this.$vs.loading.close();
+        })
+      this.$vs.loading.close()
       this.$vs.notify({
-        text: "Success in update shedule timings",
-        color: "success"
-      });
+        text: 'Success in update shedule timings',
+        color: 'success'
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

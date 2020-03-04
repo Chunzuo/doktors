@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import HomeSearch from "./components/HomeSearch";
-import HomeSpecialities from "./components/HomeSpecialities";
-import HomeDoctors from "./components/HomeDoctors";
-import HomeFeatures from "./components/HomeFeatures";
+import HomeSearch from './components/HomeSearch'
+import HomeSpecialities from './components/HomeSpecialities'
+import HomeDoctors from './components/HomeDoctors'
+import HomeFeatures from './components/HomeFeatures'
 
 export default {
   components: {
@@ -24,21 +24,21 @@ export default {
     HomeFeatures
   },
   data() {
-    return {};
+    return {}
   },
   created() {
-    this.$store.commit("updateSelectItem", "Home");
+    this.$store.commit('updateSelectItem', 'Home')
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     },
     isManager() {
       return (
-        this.userInfo.role == "userManager" ||
-        this.userInfo.role == "adsManager"
-      );
+        this.userInfo.role == 'userManager' ||
+        this.userInfo.role == 'adsManager'
+      )
     }
   }
-};
+}
 </script>

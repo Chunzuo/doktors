@@ -13,10 +13,13 @@
                       class="nav-link active"
                       href="#pat_appointments"
                       data-toggle="tab"
-                    >Appointments</a>
+                      >Appointments</a
+                    >
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#pat_treatments" data-toggle="tab">Treatments</a>
+                    <a class="nav-link" href="#pat_treatments" data-toggle="tab"
+                      >Treatments</a
+                    >
                   </li>
                 </ul>
               </nav>
@@ -38,27 +41,30 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="(appt, index) in appointments" :key="`appt - ${index}`">
+                            <tr
+                              v-for="(appt, index) in appointments"
+                              :key="`appt - ${index}`"
+                            >
                               <td>
                                 <h2 class="table-avatar">
                                   <router-link
                                     :to="`/doctor-detail/${appt.doctorId}`"
-                                  >{{ appt.doctorName }}</router-link>
+                                    >{{ appt.doctorName }}</router-link
+                                  >
                                 </h2>
                               </td>
                               <td>
                                 {{ getFormatDay(appt.date) }}
                                 <span class="d-block text-info">
-                                  {{
-                                  formatTime(appt.time)
-                                  }}
+                                  {{ formatTime(appt.time) }}
                                 </span>
                               </td>
                               <td>
                                 <span
                                   class="badge badge-pill"
                                   :class="getStatusColor(appt.status)"
-                                >{{ getStatusLabel(appt.status) }}</span>
+                                  >{{ getStatusLabel(appt.status) }}</span
+                                >
                               </td>
                             </tr>
                           </tbody>
@@ -79,7 +85,7 @@
                             <tr>
                               <th>Date</th>
                               <th>Treatment</th>
-                              <th></th>
+                              <th>Files</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -89,6 +95,16 @@
                             >
                               <td>{{ getFormatDay(treatment.date) }}</td>
                               <td>{{ treatment.treatment }}</td>
+                              <td>
+                                <a
+                                  v-for="(file, index) in treatment.files"
+                                  :key="`file${index}`"
+                                  :href="file"
+                                  target="_blank"
+                                  class="ml-2"
+                                  ><i class="fas fa-file"></i
+                                ></a>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -108,126 +124,128 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
+import { db } from '@/firebase'
 export default {
   created() {
-    this.$store.commit("updateSelectItem", "PatientDashboard");
-    const role = localStorage.getItem("role");
+    this.$store.commit('updateSelectItem', 'PatientDashboard')
+    const role = localStorage.getItem('role')
 
-    if (role != "patient") {
-      this.$router.push("/");
+    if (role != 'patient') {
+      this.$router.push('/')
     }
   },
   mounted() {
-    this.loadAppointment();
-    this.loadTreatments();
+    this.loadAppointment()
+    this.loadTreatments()
   },
   methods: {
     async loadAppointment() {
-      this.$vs.loading();
+      this.$vs.loading()
 
       const appts = await db
-        .collection("Appointments")
-        .where("patientId", "==", this.userInfo.id)
-        .get();
-      this.appointments = [];
+        .collection('Appointments')
+        .where('patientId', '==', this.userInfo.id)
+        .get()
+      this.appointments = []
       appts.forEach(async appt => {
-        const { doctorId, date, status, time } = appt.data();
+        const { doctorId, date, status, time } = appt.data()
         const doctor = await db
-          .collection("Doctors")
+          .collection('Doctors')
           .doc(doctorId)
-          .get();
-        const { name } = doctor.data();
+          .get()
+        const { name } = doctor.data()
         this.appointments.push({
           doctorName: name,
           date: date,
           time: time,
           status: status,
           doctorId: doctorId
-        });
-      });
-      this.$vs.loading.close();
+        })
+      })
+      this.$vs.loading.close()
     },
     getFormatDay(timestamp) {
-      const date = timestamp.toDate();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
+      const date = timestamp.toDate()
+      const year = date.getFullYear()
+      const month = date.getMonth()
+      const day = date.getDate()
       const strMonthDate = [
-        "January",
-        "Feburary",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "Octorber",
-        "November",
-        "December"
-      ];
-      return day + " " + strMonthDate[month] + " " + year;
+        'January',
+        'Feburary',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'Octorber',
+        'November',
+        'December'
+      ]
+      return day + ' ' + strMonthDate[month] + ' ' + year
     },
     formatTime(time) {
-      const hour = time.split(":")[0];
-      const minute = time.split(":")[1];
+      const hour = time.split(':')[0]
+      const minute = time.split(':')[1]
       if (hour == 12) {
-        return time + " PM";
+        return time + ' PM'
       }
       if (hour > 12) {
-        return hour - 12 + ":" + minute + " PM";
+        return hour - 12 + ':' + minute + ' PM'
       } else {
-        return time + " AM";
+        return time + ' AM'
       }
     },
     getStatusColor(status) {
       if (status == 0) {
-        return "bg-warning-light";
+        return 'bg-warning-light'
       } else if (status == 1) {
-        return "bg-success-light";
+        return 'bg-success-light'
       } else {
-        return "bg-danger-light";
+        return 'bg-danger-light'
       }
     },
     getStatusLabel(status) {
       if (status == 0) {
-        return "Pending";
+        return 'Pending'
       } else if (status == 1) {
-        return "Confirmed";
+        return 'Confirmed'
       } else if (status == 2) {
-        return "Cancelled";
+        return 'Cancelled'
       }
     },
     async loadTreatments() {
       const histories = await db
-        .collection("History")
-        .where("patientMobile", "==", this.userInfo.phone)
-        .get();
-      this.treatments = [];
+        .collection('History')
+        .where('patientMobile', '==', this.userInfo.phone)
+        .get()
+      this.treatments = []
       histories.forEach(history => {
-        const { visits } = history.data();
+        const { visits } = history.data()
+
         visits.forEach(visit => {
           this.treatments.push({
             date: visit.time,
-            treatment: visit.treatment
-          });
-        });
-      });
+            treatment: visit.treatment,
+            files: visit.files
+          })
+        })
+      })
     }
   },
   data() {
     return {
       appointments: [],
       treatments: []
-    };
+    }
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

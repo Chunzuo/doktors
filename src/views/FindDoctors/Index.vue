@@ -292,6 +292,7 @@ export default {
       this.keywordName = ''
       this.keywordCity = ''
       this.keywordSpeciality = ''
+      this.getDoctors(0)
     },
     initJquery() {
       // $("#city_select").select2({

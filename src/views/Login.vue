@@ -32,49 +32,49 @@
 </template>
 
 <script>
-import jQuery from "jquery";
-import firebase from "firebase/app";
-import * as firebaseui from "firebaseui";
+import jQuery from 'jquery'
+import firebase from 'firebase/app'
+import * as firebaseui from 'firebaseui'
 
 export default {
   created() {
-    jQuery("body").addClass("account-page");
-    this.$store.commit("updateSelectItem", "Login");
+    jQuery('body').addClass('account-page')
+    this.$store.commit('updateSelectItem', 'Login')
   },
   destroyed() {
-    jQuery("body").removeClass("account-page");
+    jQuery('body').removeClass('account-page')
   },
   mounted() {
     const uiConfig = {
-      signInSuccessUrl: "/",
+      signInSuccessUrl: '/',
       signInOptions: [
         {
           provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
           recaptchaParameters: {
-            type: "image", // 'audio'
-            size: "invisible", // 'invisible' or 'compact'
-            badge: "bottomleft" // ' bottomright' or 'inline' applies to invisible.
+            type: 'image', // 'audio'
+            size: 'invisible', // 'invisible' or 'compact'
+            badge: 'bottomleft' // ' bottomright' or 'inline' applies to invisible.
           },
-          defaultCountry: "IQ", // Set default country
-          whitelistedCountries: ["+964"]
+          defaultCountry: 'IQ', // Set default country
+          whitelistedCountries: ['+964']
         }
       ]
-    };
+    }
     if (!firebaseui.auth.AuthUI.getInstance()) {
-      let ui = new firebaseui.auth.AuthUI(firebase.auth());
+      let ui = new firebaseui.auth.AuthUI(firebase.auth())
       if (firebaseui.auth.AuthUI.getInstance()) {
-        ui = firebaseui.auth.AuthUI.getInstance();
+        ui = firebaseui.auth.AuthUI.getInstance()
       }
 
-      ui.start("#firebaseui-auth-container", uiConfig);
+      ui.start('#firebaseui-auth-container', uiConfig)
     } else {
       firebaseui.auth.AuthUI.getInstance().start(
-        "#firebaseui-auth-container",
+        '#firebaseui-auth-container',
         uiConfig
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="css" scoped></style>

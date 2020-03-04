@@ -17,9 +17,11 @@
                 </router-link>
                 <div class="booking-info">
                   <h4>
-                    <router-link :to="`/doctor-detail/${doctor.id}`">{{
+                    <router-link :to="`/doctor-detail/${doctor.id}`">
+                      {{
                       doctor.name
-                    }}</router-link>
+                      }}
+                    </router-link>
                   </h4>
 
                   <p class="text-muted mb-0">
@@ -50,16 +52,15 @@
                           <i class="fa fa-chevron-left"></i>
                         </a>
                       </li>
-                      <li
-                        v-for="(date, index) in weekDates"
-                        :key="`week-date-${index}`"
-                      >
+                      <li v-for="(date, index) in weekDates" :key="`week-date-${index}`">
                         <span>{{ getShortFormatDate(date) }}</span>
                         <span class="slot-date">
                           {{ getShortFormatDay(date) }}
-                          <small class="slot-year">{{
+                          <small class="slot-year">
+                            {{
                             getYearOfDate(date)
-                          }}</small>
+                            }}
+                          </small>
                         </span>
                       </li>
                       <li class="right-arrow">
@@ -82,10 +83,7 @@
                   <!-- Time Slot -->
                   <div class="time-slot">
                     <ul class="clearfix">
-                      <li
-                        v-for="(slot, index) in weekSlots"
-                        :key="`slot-${index}`"
-                      >
+                      <li v-for="(slot, index) in weekSlots" :key="`slot-${index}`">
                         <a class="timing" v-if="slot.length == 0">
                           <span>-</span>
                         </a>
@@ -125,15 +123,12 @@
                 Appointment booked with
                 <strong>Dr. {{ doctor.name }}</strong>
                 <br />on
-                <strong
-                  >{{ getShortFormatDay(apptDate) }} {{ apptTime }}</strong
-                >
+                <strong>{{ getShortFormatDay(apptDate) }} {{ apptTime }}</strong>
               </p>
               <router-link
                 to="/patient-dashboard"
                 class="btn btn-primary view-inv-btn"
-                >View Appointments</router-link
-              >
+              >View Appointments</router-link>
             </div>
           </div>
         </div>
@@ -144,7 +139,7 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
+import { db } from '@/firebase'
 export default {
   data() {
     return {
@@ -155,150 +150,157 @@ export default {
       success: false,
       apptDate: null,
       apptTime: null
-    };
+    }
   },
   mounted() {
-    this.loadDoctorInfo();
+    this.loadDoctorInfo()
   },
   methods: {
     async loadDoctorInfo() {
-      this.$vs.loading();
+      this.$vs.loading()
       const ref = await db
-        .collection("Doctors")
+        .collection('Doctors')
         .doc(this.doctorId)
-        .get();
-      this.doctor = ref.data();
-      this.$vs.loading.close();
-      this.weeklyInfo();
+        .get()
+      this.doctor = ref.data()
+      this.$vs.loading.close()
+      this.weeklyInfo()
     },
     getFormatDay(date) {
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
+      const year = date.getFullYear()
+      const month = date.getMonth()
+      const day = date.getDate()
       const strMonthDate = [
-        "January",
-        "Feburary",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "Octorber",
-        "November",
-        "December"
-      ];
-      return day + " " + strMonthDate[month] + " " + year;
+        'January',
+        'Feburary',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'Octorber',
+        'November',
+        'December'
+      ]
+      return day + ' ' + strMonthDate[month] + ' ' + year
     },
     getShortFormatDay(date) {
-      const month = date.getMonth();
-      const day = date.getDate();
+      const month = date.getMonth()
+      const day = date.getDate()
       const strMonthDate = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ];
-      return day + " " + strMonthDate[month];
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ]
+      return day + ' ' + strMonthDate[month]
     },
     getYearOfDate(date) {
-      return date.getFullYear();
+      return date.getFullYear()
     },
     getFormateDate(date) {
-      const day = date.getDay();
+      const day = date.getDay()
       const strDays = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wendesday",
-        "Thusday",
-        "Friday",
-        "Satureday"
-      ];
-      return strDays[day - 1];
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wendesday',
+        'Thusday',
+        'Friday',
+        'Satureday'
+      ]
+      return strDays[day - 1]
     },
     getShortFormatDate(date) {
-      const day = date.getDay();
-      const strDays = ["Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat"];
-      return strDays[day];
+      const day = date.getDay()
+      const strDays = ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat']
+      return strDays[day]
     },
     weeklyInfo() {
-      const curr = new Date();
-      const first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-      let weekDates = [];
+      const curr = new Date()
+      const first = curr.getDate() - curr.getDay() // First day is the day of the month - the day of the week
+      let weekDates = []
       for (let i = 0; i < 7; i++) {
-        weekDates.push(new Date(curr.setDate(first + i)));
+        weekDates.push(new Date(curr.setDate(first + i)))
       }
-      this.weekDates = weekDates;
+      this.weekDates = weekDates
 
-      const { timeSlots } = this.doctor;
+      const { timeSlots } = this.doctor
 
       weekDates.forEach(weekDate => {
-        let weekInfo = [];
+        let weekInfo = []
         timeSlots.forEach(slot => {
-          const slotDate = slot.date.toDate();
+          const slotDate = slot.date.toDate()
           if (
             weekDate.getFullYear() == slotDate.getFullYear() &&
             weekDate.getMonth() == slotDate.getMonth() &&
             weekDate.getDate() == slotDate.getDate()
           ) {
-            weekInfo = slot.slots;
+            weekInfo = slot.slots
           }
-        });
-        this.weekSlots.push(weekInfo);
-      });
+        })
+        this.weekSlots.push(weekInfo)
+      })
     },
     formatTime(time) {
-      const hour = time.split(":")[0];
-      const minute = time.split(":")[1];
+      const hour = time.split(':')[0]
+      const minute = time.split(':')[1]
       if (hour == 12) {
-        return time + " PM";
+        return time + ' PM'
       }
       if (hour > 12) {
-        return hour - 12 + ":" + minute + " PM";
+        return hour - 12 + ':' + minute + ' PM'
       } else {
-        return time + " AM";
+        return time + ' AM'
       }
     },
     async makeAppointment(time, index) {
+      if (!this.userInfo.id) {
+        this.$vs.notify({
+          text: 'Login before make an appointment',
+          color: 'danger'
+        })
+        return
+      }
       const apptData = {
         doctorId: this.doctorId,
         patientId: this.userInfo.id,
         date: this.weekDates[index],
         time: time,
         status: 0
-      };
-      this.apptDate = this.weekDates[index];
-      this.apptTime = time;
-      this.$vs.loading();
-      await db.collection("Appointments").add(apptData);
-      this.success = true;
-      this.$vs.loading.close();
+      }
+      this.apptDate = this.weekDates[index]
+      this.apptTime = time
+      this.$vs.loading()
+      await db.collection('Appointments').add(apptData)
+      this.success = true
+      this.$vs.loading.close()
     }
   },
   computed: {
     today() {
-      const today = new Date();
-      return this.getFormatDay(today);
+      const today = new Date()
+      return this.getFormatDay(today)
     },
     toDate() {
-      const today = new Date();
-      return this.getFormateDate(today);
+      const today = new Date()
+      return this.getFormateDate(today)
     },
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

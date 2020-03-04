@@ -14,9 +14,41 @@
                     >Add User</a
                   >
                 </div>
+                <div class="row mb-2">
+                  <div class="col-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search name"
+                      v-model="keyword.name"
+                    />
+                  </div>
+                  <div class="col-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search phone number"
+                      v-model="keyword.phone"
+                    />
+                  </div>
+                  <div class="col-4">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search role"
+                      v-model="keyword.role"
+                    />
+                  </div>
+                </div>
+
                 <div class="card card-table mb-0">
                   <div class="card-body">
-                    <vs-table search pagination max-items="10" :data="userList">
+                    <vs-table
+                      search
+                      pagination
+                      max-items="10"
+                      :data="filteredList"
+                    >
                       <template slot="header">
                         <h3 class="p-3">Users</h3>
                       </template>
@@ -104,14 +136,14 @@
 </template>
 
 <script>
-import { db } from "@/firebase";
+import { db } from '@/firebase'
 export default {
   created() {
-    this.$store.commit("updateSelectItem", "UserManagement");
-    const role = localStorage.getItem("role");
+    this.$store.commit('updateSelectItem', 'UserManagement')
+    const role = localStorage.getItem('role')
 
-    if (role != "userManager") {
-      this.$router.push("/");
+    if (role != 'userManager') {
+      this.$router.push('/')
     }
   },
   data() {
@@ -119,111 +151,129 @@ export default {
       userList: [],
       showModal: false,
       newUser: {
-        name: "",
-        phone: "",
-        role: ""
+        name: '',
+        phone: '',
+        role: ''
       },
       roleOptions: [
-        { label: "Doctor", value: "doctor" },
-        { label: "Lab", value: "lab" },
-        { label: "Pharmacy", value: "pharmacy" },
-        { label: "Hospital", value: "hospital" }
+        { label: 'Doctor', value: 'doctor' },
+        { label: 'Lab', value: 'lab' },
+        { label: 'Pharmacy', value: 'pharmacy' },
+        { label: 'Hospital', value: 'hospital' }
       ],
-      userIdToDelete: "",
-      dialogMode: 0 // 0: Add, 1: Edit
-    };
+      userIdToDelete: '',
+      dialogMode: 0, // 0: Add, 1: Edit
+      keyword: {
+        name: '',
+        phone: '',
+        role: ''
+      }
+    }
   },
   mounted() {
-    this.getUserList();
+    this.getUserList()
   },
   methods: {
     async getUserList() {
-      this.$vs.loading();
-      const users = await db.collection("Users").get();
-      this.userList = [];
+      this.$vs.loading()
+      const users = await db.collection('Users').get()
+      this.userList = []
       users.docs.forEach(item => {
-        let data = item.data();
-        data["id"] = item.id;
-        if (data.role != "userManager") {
-          this.userList.push(data);
+        let data = item.data()
+        data['id'] = item.id
+        if (data.role != 'userManager') {
+          this.userList.push(data)
         }
-      });
-      this.$vs.loading.close();
+      })
+      this.$vs.loading.close()
     },
     getRoleBackground(role) {
-      if (role == "patient") {
-        return "bg-info-light";
-      } else if (role == "doctor") {
-        return "bg-success-light";
-      } else if (role == "pharmacy") {
-        return "bg-warning-light";
-      } else if (role == "hospital") {
-        return "bg-danger-light";
+      if (role == 'patient') {
+        return 'bg-info-light'
+      } else if (role == 'doctor') {
+        return 'bg-success-light'
+      } else if (role == 'pharmacy') {
+        return 'bg-warning-light'
+      } else if (role == 'hospital') {
+        return 'bg-danger-light'
       }
-      return "bg-primary-light";
+      return 'bg-primary-light'
     },
     async addUser() {
-      this.$vs.loading();
+      this.$vs.loading()
       if (this.dialogMode == 0) {
-        await db.collection("Users").add(this.newUser);
+        await db.collection('Users').add(this.newUser)
       } else {
         await db
-          .collection("Users")
+          .collection('Users')
           .doc(this.newUser.id)
-          .update(this.newUser);
+          .update(this.newUser)
         await db
-          .collection("Doctors")
+          .collection('Doctors')
           .doc(this.newUser.id)
-          .update({ phone: this.newUser.phone, name: this.newUser.name });
+          .update({ phone: this.newUser.phone, name: this.newUser.name })
       }
 
-      this.newUser = {};
-      this.$vs.loading.close();
+      this.newUser = {}
+      this.$vs.loading.close()
       const notifyMsg =
         this.dialogMode == 0
-          ? "Success in add new user"
-          : "Success in update user";
+          ? 'Success in add new user'
+          : 'Success in update user'
       this.$vs.notify({
         text: notifyMsg,
-        color: "success"
-      });
-      this.getUserList();
+        color: 'success'
+      })
+      this.getUserList()
     },
     openDeleteDialog(userId) {
       this.$vs.dialog({
-        type: "confirm",
-        color: "danger",
+        type: 'confirm',
+        color: 'danger',
         title: `Confirm`,
-        text: "Are you sure delete this user?",
+        text: 'Are you sure delete this user?',
         accept: this.deleteUser
-      });
-      this.userIdToDelete = userId;
+      })
+      this.userIdToDelete = userId
     },
     async deleteUser() {
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("Users")
+        .collection('Users')
         .doc(this.userIdToDelete)
-        .delete();
-      this.$vs.loading.close();
+        .delete()
+      this.$vs.loading.close()
       this.$vs.notify({
-        color: "success",
-        text: "The selected user was successfully deleted"
-      });
-      this.getUserList();
+        color: 'success',
+        text: 'The selected user was successfully deleted'
+      })
+      this.getUserList()
     },
     openEditDialog(user) {
-      this.newUser = user;
-      this.showModal = true;
-      this.dialogMode = 1;
+      this.newUser = user
+      this.showModal = true
+      this.dialogMode = 1
     },
     openAddDialog() {
-      this.showModal = true;
-      this.dialogMode = 0;
-      this.newUser = {};
+      this.showModal = true
+      this.dialogMode = 0
+      this.newUser = {}
+    }
+  },
+  computed: {
+    filteredList() {
+      return this.userList.filter(user => {
+        if (
+          user.name.includes(this.keyword.name) &&
+          user.phone.includes(this.keyword.phone) &&
+          user.role.includes(this.keyword.role)
+        ) {
+          return user
+        }
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

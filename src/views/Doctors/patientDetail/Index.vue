@@ -1,19 +1,11 @@
 <template>
   <div>
-    <div class="breadcrumb-bar">
-      <div class="container-fluid">
-        <div class="row align-items-center">
-          <div class="col-md-12 col-12">
-            <h2 class="breadcrumb-title" v-if="patientInfo">{{ patientInfo.name }}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="content">
       <div class="container-fluid" v-if="patientInfo">
         <div class="row">
-          <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+          <div
+            class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft"
+          >
             <div class="card widget-profile pat-widget-profile">
               <div class="card-body">
                 <div class="pro-widget-content">
@@ -32,10 +24,19 @@
 
                   <div class="profile-info-widget">
                     <a href="#" class="booking-doc-img">
-                      <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
+                      <img
+                        src="@/assets/img/patients/patient-default.png"
+                        alt="User Image"
+                      />
                     </a>
                     <div class="profile-det-info">
-                      <h3>{{ patientInfo.name }}</h3>
+                      <input
+                        type="text"
+                        class="form-control mb-2"
+                        v-model="patientInfo.name"
+                        v-if="editable"
+                      />
+                      <h3 v-else>{{ patientInfo.name }}</h3>
 
                       <div class="patient-details">
                         <h5>
@@ -44,18 +45,28 @@
                         </h5>
                         <div class="row">
                           <div class="col" v-if="!editable">
-                            <button class="btn bg-success-light" @click="switchToEditMode">
+                            <button
+                              class="btn bg-success-light"
+                              @click="switchToEditMode"
+                            >
                               <i class="far fa-edit"></i>
                               Edit
                             </button>
                           </div>
                           <div class="col" v-if="editable">
-                            <button class="btn bg-info-light" @click="saveHistory">
+                            <button
+                              class="btn bg-info-light"
+                              @click="saveHistory"
+                            >
                               <i class="far fa-save"></i>
                               Save
                             </button>
                           </div>
-                          <div class="col" v-if="editable" @click="editable = false">
+                          <div
+                            class="col"
+                            v-if="editable"
+                            @click="editable = false"
+                          >
                             <button class="btn bg-danger-light">
                               <i class="far"></i>
                               Cancel
@@ -66,9 +77,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="patient-info" v-if="patientInfo.history && historyCollapseStatus">
+                <div
+                  class="patient-info"
+                  v-if="patientInfo.history && historyCollapseStatus"
+                >
                   <ul>
-                    <li v-for="(history, index) in historyElements" :key="`history-${index}`">
+                    <li
+                      v-for="(history, index) in historyElements"
+                      :key="`history-${index}`"
+                    >
                       {{ history.title }}
                       <div v-if="editable">
                         <input
@@ -85,7 +102,11 @@
                         />
                         <datepicker
                           class="w-full mb-4 md:mb-0 datepicker"
-                          :value="convertTimestampToString(patientInfo.history[history.id])"
+                          :value="
+                            convertTimestampToString(
+                              patientInfo.history[history.id]
+                            )
+                          "
                           @selected="setDateValue(history.id)"
                           :id="`datepicker-${history.id}`"
                           v-if="history.type == 'date'"
@@ -96,7 +117,9 @@
                             v-for="(value, index1) in history.values"
                             :key="`value - ${index1}`"
                           >
-                            <div class="custom-control custom-radio custom-control-inline">
+                            <div
+                              class="custom-control custom-radio custom-control-inline"
+                            >
                               <input
                                 type="radio"
                                 :id="`radio${index}${index1}`"
@@ -107,7 +130,8 @@
                               <label
                                 class="custom-control-label"
                                 :for="`radio${index}${index1}`"
-                              >{{value}}</label>
+                                >{{ value }}</label
+                              >
                             </div>
                           </div>
                         </div>
@@ -115,15 +139,13 @@
                       <span v-else>
                         <span v-if="history.type == 'date'">
                           {{
-                          convertTimestampToString(
-                          patientInfo.history[history.id]
-                          )
+                            convertTimestampToString(
+                              patientInfo.history[history.id]
+                            )
                           }}
                         </span>
                         <span v-else>
-                          {{
-                          patientInfo.history[history.id]
-                          }}
+                          {{ patientInfo.history[history.id] }}
                         </span>
                       </span>
                     </li>
@@ -143,7 +165,8 @@
                         href="javascript:;"
                         class="add-new-btn"
                         @click="showAddModal = true"
-                      >Add Visit</a>
+                        >Add Visit</a
+                      >
                     </div>
                     <div class="card card-table mb-0">
                       <div class="card-body">
@@ -177,22 +200,32 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Diagnosis</label>
-            <textarea class="form-control" v-model="visitInfo.diagnosis"></textarea>
+            <textarea
+              class="form-control"
+              v-model="visitInfo.diagnosis"
+            ></textarea>
           </div>
           <div class="form-group">
             <label>Symptems</label>
-            <textarea class="form-control" v-model="visitInfo.symptems"></textarea>
+            <textarea
+              class="form-control"
+              v-model="visitInfo.symptems"
+            ></textarea>
           </div>
           <div class="form-group">
             <label>Treatment</label>
-            <textarea class="form-control" v-model="visitInfo.treatment"></textarea>
+            <textarea
+              class="form-control"
+              v-model="visitInfo.treatment"
+            ></textarea>
           </div>
           <div class="form-group">
             <div class="upload-img">
-              <div class="change-photo-btn vs-con-loading__container" id="button-with-loading">
-                <span>
-                  <i class="fa fa-upload"></i> Upload File
-                </span>
+              <div
+                class="change-photo-btn vs-con-loading__container"
+                id="button-with-loading"
+              >
+                <span> <i class="fa fa-upload"></i> Upload File </span>
                 <input type="file" class="upload" @change="uploadFile" />
               </div>
             </div>
@@ -204,11 +237,11 @@
 </template>
 
 <script>
-import { db, storage } from "@/firebase";
-import firebase from "firebase";
-import Datepicker from "vuejs-datepicker";
-import $ from "jquery";
-import DoctorsPatientVisitItem from "./DoctorsPatientVisitItem";
+import { db, storage } from '@/firebase'
+import firebase from 'firebase'
+import Datepicker from 'vuejs-datepicker'
+import $ from 'jquery'
+import DoctorsPatientVisitItem from './DoctorsPatientVisitItem'
 export default {
   data() {
     return {
@@ -222,134 +255,138 @@ export default {
       visitEditable: false,
       id: this.$route.params.id,
       historyCollapseStatus: false
-    };
+    }
   },
   mounted() {
-    this.loadPatientInfo();
-    this.getDoctorInfo();
+    this.loadPatientInfo()
+    this.getDoctorInfo()
   },
   methods: {
     async loadPatientInfo() {
-      this.$vs.loading();
+      this.$vs.loading()
 
       const patientInfo = await db
-        .collection("History")
+        .collection('History')
         .doc(this.id)
-        .get();
+        .get()
 
-      this.patientInfo = patientInfo.data();
-      const { visits } = this.patientInfo;
+      this.patientInfo = patientInfo.data()
+      const { visits } = this.patientInfo
+      visits.sort((a, b) => {
+        return a.time < b.time
+      })
+      this.patientInfo.visits = visits
 
       if (visits) {
         visits.forEach(() => {
-          this.visitEditables.push(false);
-        });
+          this.visitEditables.push(false)
+        })
       }
-      this.$vs.loading.close();
+      this.$vs.loading.close()
     },
     convertTimestampToString(accessTime) {
       if (accessTime == null) {
-        return "";
+        return ''
       }
-      var timestamp = accessTime.value ? accessTime.value : accessTime;
+      var timestamp = accessTime.value ? accessTime.value : accessTime
       try {
-        const tDate = timestamp.toDate();
+        const tDate = timestamp.toDate()
         return (
           tDate.getMonth() +
           1 +
-          "/" +
+          '/' +
           tDate.getDate() +
-          "/" +
+          '/' +
           tDate.getFullYear()
-        );
+        )
       } catch {
-        return "";
+        return ''
       }
     },
     async saveVisit() {
-      this.visitInfo["time"] = new Date();
-      this.$vs.loading();
+      this.visitInfo['time'] = new Date()
+      this.$vs.loading()
       await db
-        .collection("History")
+        .collection('History')
         .doc(this.id)
         .update({
           visits: firebase.firestore.FieldValue.arrayUnion(this.visitInfo),
           accessTime: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      this.$vs.loading.close();
-      this.loadPatientInfo();
+        })
+      this.$vs.loading.close()
+      this.loadPatientInfo()
     },
     async saveHistory() {
-      this.$vs.loading();
+      this.$vs.loading()
       await db
-        .collection("History")
+        .collection('History')
         .doc(this.id)
-        .update(this.patientInfo);
-      this.editable = false;
-      this.$vs.loading.close();
+        .update(this.patientInfo)
+      this.editable = false
+      this.$vs.loading.close()
     },
     async getDoctorInfo() {
       if (!this.userInfo.id) {
-        return;
+        return
       }
-      this.$vs.loading();
-      let doctorInfo = null;
-      if (this.userInfo.role == "doctor") {
+      this.$vs.loading()
+      let doctorInfo = null
+      if (this.userInfo.role == 'doctor') {
         doctorInfo = await db
-          .collection("Doctors")
+          .collection('Doctors')
           .doc(this.userInfo.id)
-          .get();
-      } else if (this.userInfo.role == "assistant") {
+          .get()
+      } else if (this.userInfo.role == 'assistant') {
         doctorInfo = await db
-          .collection("Doctors")
+          .collection('Doctors')
           .doc(this.userInfo.doctorId)
-          .get();
+          .get()
       }
 
-      this.doctor = doctorInfo.data();
-      this.$vs.loading.close();
+      this.doctor = doctorInfo.data()
+      this.$vs.loading.close()
     },
     uploadFile(e) {
-      const fileList = e.target.files || e.dataTransfer.files;
-      const file = fileList[0];
-      const today = new Date();
+      const fileList = e.target.files || e.dataTransfer.files
+      const file = fileList[0]
+      const today = new Date()
       const fileName =
         file.name +
-        "-" +
+        '-' +
         today.getHours() +
         today.getMinutes() +
-        today.getSeconds();
-      this.$vs.loading();
-      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file);
+        today.getSeconds()
+      this.$vs.loading()
+      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file)
     },
     getFileUrl(url) {
-      if (url.includes(".pdf")) {
-        const images = require.context("../../../assets/img", false, /\.png$/);
-        return images("./pdf.png");
+      if (url.includes('.pdf')) {
+        const images = require.context('../../../assets/img', false, /\.png$/)
+        return images('./pdf.png')
       }
-      return url;
+      return url
     },
     downloadFile(url) {
-      window.open(url);
+      window.open(url)
     },
     switchToEditMode() {
-      this.editable = true;
+      this.editable = true
 
       setTimeout(() => {
-        $(".datepicker input").addClass("form-control");
-      }, 100);
+        $('.datepicker input').addClass('form-control')
+      }, 100)
     },
     setDateValue(historyId) {
       this.patientInfo.history[historyId] = new Date(
         $(`#datepicker-${historyId}`).val()
-      );
+      )
     },
     enableEditVisit(index) {
-      this.visitEditables[index] = true;
+      this.visitEditables[index] = true
     },
     emitChange() {},
     collapseHistory() {
-      this.historyCollapseStatus = !this.historyCollapseStatus;
+      this.historyCollapseStatus = !this.historyCollapseStatus
     }
   },
   components: {
@@ -358,46 +395,46 @@ export default {
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.user;
+      return this.$store.state.user.user
     },
     historyElements() {
       if (this.doctor == null) {
-        return [];
+        return []
       }
       return this.doctor.historyElements.filter(element => {
         if (element.active) {
-          return element;
+          return element
         }
-      });
+      })
     },
     isDoctor() {
-      return this.userInfo.role == "doctor";
+      return this.userInfo.role == 'doctor'
     },
     formattedDate(timestamp) {
-      return this.convertTimestampToString(timestamp);
+      return this.convertTimestampToString(timestamp)
     }
   },
   watch: {
     userInfo() {
-      this.getDoctorInfo();
+      this.getDoctorInfo()
     },
     taskUploadFile: function() {
       this.taskUploadFile.on(
-        "state_changed",
+        'state_changed',
         () => {},
         null,
         () => {
           this.taskUploadFile.snapshot.ref
             .getDownloadURL()
             .then(downloadURL => {
-              this.visitInfo.files.push(downloadURL);
-              this.$vs.loading.close();
-            });
+              this.visitInfo.files.push(downloadURL)
+              this.$vs.loading.close()
+            })
         }
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

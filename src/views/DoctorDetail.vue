@@ -3,14 +3,14 @@
     <div class="content">
       <div class="container">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body top-card">
             <div class="doctor-widget">
               <div class="doc-info-left">
                 <div class="doctor-img">
                   <img
                     :src="doctor.avatar"
                     onerror="javascript:this.src='assets/img/doctor-default.jpg'"
-                    alt="User Image"
+                    alt="Doctor Image"
                     style="width: 150px; height: 150px;"
                   />
                 </div>
@@ -24,6 +24,35 @@
                       {{ doctor.location }}
                     </p>
                   </div>
+
+                  <div style="display: flex;">
+                    <div v-if="doctorProfile.facebook">
+                      <a class="social-icon" :href="doctorProfile.facebook" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                      </a>
+                    </div>
+
+                    <div v-if="doctorProfile.twitter">
+                      <a :href="doctorProfile.twitter" target="_blank" class="social-icon ml-2">
+                        <i class="fab fa-twitter"></i>
+                      </a>
+                    </div>
+
+                    <div v-if="doctorProfile.instagram">
+                      <a :href="doctorProfile.instagram" target="_blank" class="social-icon ml-2">
+                        <i class="fab fa-instagram"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="doc-info-right">
+                <div class="clinic-booking">
+                  <router-link
+                    :to="`/book-appointment/${doctor.id}`"
+                    class="apt-btn"
+                  >Book Appointment</router-link>
                 </div>
               </div>
             </div>
@@ -43,7 +72,7 @@
                           <div class="avatar">
                             <img
                               class="avatar-img rounded-circle"
-                              alt="User Image"
+                              alt="Doctor Image"
                               :src="doctor.avatar"
                             />
                           </div>
@@ -67,9 +96,11 @@
                               </div>
                               <div class="experience-content">
                                 <div class="timeline-content">
-                                  <a href="#/" class="name">{{
+                                  <a href="#/" class="name">
+                                    {{
                                     education.college
-                                  }}</a>
+                                    }}
+                                  </a>
                                   <div>{{ education.degree }}</div>
                                   <span class="time">{{ education.year }}</span>
                                 </div>
@@ -94,13 +125,15 @@
                               </div>
                               <div class="experience-content">
                                 <div class="timeline-content">
-                                  <a href="#/" class="name"
-                                    >{{ experience.designation }}
-                                    {{ experience.hospital }}</a
-                                  >
-                                  <span class="time">{{
+                                  <a href="#/" class="name">
+                                    {{ experience.designation }}
+                                    {{ experience.hospital }}
+                                  </a>
+                                  <span class="time">
+                                    {{
                                     experience.year
-                                  }}</span>
+                                    }}
+                                  </span>
                                 </div>
                               </div>
                             </li>
@@ -137,9 +170,7 @@
                           <li
                             v-for="(service, index) in doctor.services"
                             :key="`service - ${index}`"
-                          >
-                            {{ service }}
-                          </li>
+                          >{{ service }}</li>
                         </ul>
                       </div>
                       <!-- /Services List -->
@@ -151,9 +182,7 @@
                           <li
                             v-for="(spec, index) in doctor.specializations"
                             :key="`spec - ${index}`"
-                          >
-                            {{ spec }}
-                          </li>
+                          >{{ spec }}</li>
                         </ul>
                       </div>
                       <!-- /Specializations List -->
@@ -182,16 +211,13 @@
                   >
                     <div class="day">{{ day.text }}</div>
                     <div class="time-items">
-                      <span
-                        class="time"
-                        v-if="doctorProfile.openingHours[day.value].closed"
-                      >
+                      <span class="time" v-if="doctorProfile.openingHours[day.value].closed">
                         <span class="badge bg-danger-light">Closed</span>
                       </span>
-                      <span class="time" v-else
-                        >{{ doctorProfile.openingHours[day.value].from }} ~
-                        {{ doctorProfile.openingHours[day.value].until }}</span
-                      >
+                      <span class="time" v-else>
+                        {{ doctorProfile.openingHours[day.value].from }} ~
+                        {{ doctorProfile.openingHours[day.value].until }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -210,10 +236,7 @@
                 style="width: 100%; height: 300px"
                 v-if="doctorProfile.mapCenter"
               >
-                <gmap-marker
-                  :position="getMapCenter(doctorProfile.mapCenter)"
-                  :clickable="true"
-                ></gmap-marker>
+                <gmap-marker :position="getMapCenter(doctorProfile.mapCenter)" :clickable="true"></gmap-marker>
               </gmap-map>
             </div>
           </div>
@@ -258,6 +281,7 @@ export default {
         .doc(doctorId)
         .get()
       this.doctor = doctorInfo.data()
+      this.doctor['id'] = doctorInfo.id
 
       const profile = await db
         .collection('DoctorProfiles')
@@ -276,4 +300,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.top-card {
+  background-image: url('../assets/img/banner-doctor.jpg');
+  background-size: cover;
+}
+.social-icon {
+  color: white;
+  :hover {
+    color: #20c0f3;
+  }
+}
+</style>

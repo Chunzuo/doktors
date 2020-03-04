@@ -33,42 +33,55 @@
             <router-link to="/doctors-mypatients">Patients</router-link>
           </li>
           <li
-            class="has-submenu"
-            :class="{ active: selectedItem == 'MyPatients' }"
+            :class="{ active: sidebarItem == 'My Patients' }"
             v-if="(isDoctor || isAssistant) && isMobile"
           >
-            <a href="javascript:;">
-              Patients
-              <i class="fas fa-chevron-down"></i>
-            </a>
-            <ul class="submenu">
-              <li :class="{ active: sidebarItem == 'My Patients' }">
-                <router-link to="/doctors-mypatients">My Patients</router-link>
-              </li>
-              <li :class="{ active: sidebarItem == 'Schedule Timings' }">
-                <router-link to="/doctors-scheduletime"
-                  >Schedule Timings</router-link
-                >
-              </li>
-              <li :class="{ active: sidebarItem == 'Profile Settings' }">
-                <router-link to="/doctors-profile"
-                  >Profile Settings</router-link
-                >
-              </li>
-              <li :class="{ active: sidebarItem == 'Social Media' }">
-                <router-link to="/doctors-social">Social Media</router-link>
-              </li>
-              <li :class="{ active: sidebarItem == 'Calendar' }">
-                <router-link to="/doctors-calendar">Calendar</router-link>
-              </li>
-              <!-- <li :class="{ active: sidebarItem == 'Settings' }">
-                <router-link to="/doctors-setting">Settings</router-link>
-              </li> -->
-              <li :class="{ active: sidebarItem == 'Appointment' }">
-                <router-link to="/doctors-appointment">Appointment</router-link>
-              </li>
-            </ul>
+            <router-link to="/doctors-mypatients">
+              <i class="fas fa-user-injured"></i>My Patients
+            </router-link>
           </li>
+
+          <li
+            :class="{ active: sidebarItem == 'Schedule Timings' }"
+            v-if="(isDoctor || isAssistant) && isMobile"
+          >
+            <router-link to="/doctors-scheduletime">
+              <i class="fas fa-hourglass-start"></i>Schedule Timings
+            </router-link>
+          </li>
+          <li
+            :class="{ active: sidebarItem == 'Profile Settings' }"
+            v-if="(isDoctor || isAssistant) && isMobile"
+          >
+            <router-link to="/doctors-profile">
+              <i class="fas fa-user-cog"></i>Profile Settings
+            </router-link>
+          </li>
+          <li
+            :class="{ active: sidebarItem == 'Social Media' }"
+            v-if="(isDoctor || isAssistant) && isMobile"
+          >
+            <router-link to="/doctors-social">
+              <i class="fas fa-share-alt"></i>Social Media
+            </router-link>
+          </li>
+          <li
+            :class="{ active: sidebarItem == 'Calendar' }"
+            v-if="(isDoctor || isAssistant) && isMobile"
+          >
+            <router-link to="/doctors-calendar">
+              <i class="fas fa-calendar"></i>Calendar
+            </router-link>
+          </li>
+          <li
+            :class="{ active: sidebarItem == 'Appointment' }"
+            v-if="(isDoctor || isAssistant) && isMobile"
+          >
+            <router-link to="/doctors-appointment">
+              <i class="fas fa-calendar-check"></i>Appointment
+            </router-link>
+          </li>
+
           <li :class="{ active: selectedItem == 'Settings' }" v-if="isDoctor">
             <router-link to="/doctors-setting">Settings</router-link>
           </li>
@@ -78,22 +91,13 @@
           <li :class="{ active: selectedItem == 'About' }">
             <router-link to="/about">About</router-link>
           </li>
-          <li
-            v-if="isUserManager"
-            :class="{ active: selectedItem == 'UserManagement' }"
-          >
+          <li v-if="isUserManager" :class="{ active: selectedItem == 'UserManagement' }">
             <router-link to="/user-management">User Management</router-link>
           </li>
-          <li
-            v-if="isAdsManager"
-            :class="{ active: selectedItem == 'AdsManagement' }"
-          >
+          <li v-if="isAdsManager" :class="{ active: selectedItem == 'AdsManagement' }">
             <router-link to="/ads-management">Ads Management</router-link>
           </li>
-          <li
-            v-if="isPatient"
-            :class="{ active: selectedItem == 'PatientDashboard' }"
-          >
+          <li v-if="isPatient" :class="{ active: selectedItem == 'PatientDashboard' }">
             <router-link to="/patient-dashboard">Dashboard</router-link>
           </li>
 
@@ -103,25 +107,18 @@
               style="color: red;"
               href="javascript:;"
               @click="logout"
-              >Logout</a
-            >
+            >Logout</a>
           </li>
         </ul>
       </div>
       <ul class="nav header-navbar-rht">
         <li class="nav-item" v-if="!loginStatus">
-          <router-link class="nav-link header-login" to="/login"
-            >Login / Signup</router-link
-          >
+          <router-link class="nav-link header-login" to="/login">Login / Signup</router-link>
         </li>
 
         <!-- User Menu -->
         <li class="nav-item" v-else>
-          <a
-            href="javascript:;"
-            @click.prevent="gotoProfileSetting"
-            class="nav-link"
-          >
+          <a href="javascript:;" @click.prevent="gotoProfileSetting" class="nav-link">
             <div class="row" style="align-items:center">
               <div class="ml-2">
                 <h6>{{ userName }}</h6>

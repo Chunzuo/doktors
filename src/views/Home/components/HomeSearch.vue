@@ -12,13 +12,13 @@
         <div class="search-box">
           <form>
             <div class="form-group search-location">
-              <select class="form-control" id="city_select" v-model="searchKeyword.city">
-                <option value>All</option>
+              <select id="city_select" v-model="searchKeyword.city">
                 <option
                   v-for="(city, index) in cityList"
                   :key="`city - ${index}`"
                   :value="city"
-                >{{ city }}</option>
+                  >{{ city }}</option
+                >
               </select>
             </div>
             <div class="form-group" style="margin-right: 12px;">
@@ -32,7 +32,8 @@
                   v-for="(speciality, index) in specialityList"
                   :key="`speciality - ${index}`"
                   :value="speciality"
-                >{{ speciality }}</option>
+                  >{{ speciality }}</option
+                >
               </select>
             </div>
 
@@ -45,7 +46,10 @@
               />
               <!-- <span class="form-text">Ex : Dental or Sugar Check up etc</span> -->
             </div>
-            <button @click.prevent="onClickSerchButton" class="btn btn-primary search-btn">
+            <button
+              @click.prevent="onClickSerchButton"
+              class="btn btn-primary search-btn"
+            >
               <i class="fas fa-search"></i>
               <span>Search</span>
             </button>
@@ -58,60 +62,59 @@
 </template>
 
 <script>
-require("select2/dist/js/select2.full.js");
-import $ from "jquery";
+require('select2/dist/js/select2.full.js')
+import $ from 'jquery'
 export default {
   data() {
     return {
       searchKeyword: {
-        city: "",
-        speciality: "",
-        name: ""
+        city: '',
+        speciality: '',
+        name: ''
       }
-    };
+    }
   },
   computed: {
     cityList() {
-      return this.$store.state.webStructure.cityList;
+      return this.$store.state.webStructure.cityList
     },
     specialityList() {
-      return this.$store.state.webStructure.specialityList;
+      return this.$store.state.webStructure.specialityList
     }
   },
   mounted() {
-    this.getWebStructureInfo();
-    this.initJQuery();
+    this.getWebStructureInfo()
+    this.initJQuery()
   },
   methods: {
     onClickSerchButton() {
-      this.$store.commit("updateHomeSearchKeyword", this.searchKeyword);
-      this.$router.push("/find-doctors");
+      this.searchKeyword.city = $('#city_select').val()
+      this.searchKeyword.speciality = $('#speciality_select').val()
+      this.$store.commit('updateHomeSearchKeyword', this.searchKeyword)
+      this.$router.push('/find-doctors')
     },
     async getWebStructureInfo() {
       if (this.cityList.length == 0) {
-        this.$vs.loading();
-        await this.$store.dispatch("getWebStructure");
-        this.$vs.loading.close();
+        this.$vs.loading()
+        await this.$store.dispatch('getWebStructure')
+        this.$vs.loading.close()
       }
     },
     initJQuery() {
-      $("#city_select").select2({
-        placeholder: "Select a city",
-        width: "100%",
-        containerCssClass: "form-control",
-        containerCss: { "padding-top": "0px" }
-      });
+      $('#city_select').select2({
+        placeholder: 'Select a city',
+        width: '100%',
+        containerCssClass: 'form-control'
+      })
 
-      $("#speciality_select").select2({
-        placeholder: "Select a speciality",
-        width: "100%",
-        containerCssClass: "form-control",
-        containerCss: { "padding-top": "0px" }
-      });
+      $('#speciality_select').select2({
+        placeholder: 'Select a speciality',
+        width: '100%',
+        containerCssClass: 'form-control'
+      })
     }
   }
-};
+}
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

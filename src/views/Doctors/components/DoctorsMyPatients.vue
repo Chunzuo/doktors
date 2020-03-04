@@ -4,19 +4,37 @@
       <div class="row">
         <div class="col-md-3 mb-2">
           <label>Start Date:</label>
-          <datepicker class="datepicker" v-model="startDate"></datepicker>
+          <datepicker
+            class="datepicker"
+            v-model="startDate"
+            @selected="loadPatients"
+          ></datepicker>
         </div>
         <div class="col-md-3 mb-2">
           <label>End Date:</label>
-          <datepicker class="datepicker" v-model="endDate"></datepicker>
+          <datepicker
+            class="datepicker"
+            v-model="endDate"
+            @selected="loadPatients"
+          ></datepicker>
         </div>
         <div class="col-md-3 mb-2">
           <label>Patient Name:</label>
-          <input type="text" class="form-control" v-model="name" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="name"
+            v-on:keydown="onKeydownPatientName"
+          />
         </div>
         <div class="col-md-3 mb-2">
           <label>Phone number:</label>
-          <input type="text" class="form-control" v-model="phoneNumber" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="phoneNumber"
+            v-on:keydown="onKeydownPhoneNumber"
+          />
         </div>
       </div>
       <div class="row">
@@ -25,9 +43,9 @@
         </div>
 
         <div class="col text-right">
-          <button class="btn btn-danger" @click="clearSearchKeyword">
+          <!-- <button class="btn btn-danger" @click="clearSearchKeyword">
             Clear
-          </button>
+          </button>-->
         </div>
       </div>
     </div>
@@ -35,7 +53,7 @@
     <div class="row row-grid">
       <div
         class="col-md-6 col-lg-4 col-xl-3"
-        v-for="(patient, idx) in filteredPatients"
+        v-for="(patient, idx) in patients"
         :key="idx"
       >
         <div class="card widget-profile pat-widget-profile">
@@ -174,7 +192,7 @@ export default {
     }
   },
   mounted() {
-    this.loadPatients()
+    // this.loadPatients()
     jQuery('.datepicker input').addClass('form-control')
   },
   methods: {
@@ -202,7 +220,15 @@ export default {
       patients.forEach(patient => {
         let data = patient.data()
         data['id'] = patient.id
-        this.patients.push(data)
+        if (data.name != null && data.name.includes(this.name)) {
+          this.patients.push(data)
+        }
+        if (
+          data.patientMobile != null &&
+          data.patientMobile.includes(this.phoneNumber)
+        ) {
+          this.patients.push(data)
+        }
       })
       this.$vs.loading.close()
     },
@@ -231,6 +257,16 @@ export default {
         return phoneNumber.formatInternational()
       }
       return stringNumber
+    },
+    onKeydownPatientName(event) {
+      if (event.keyCode == 13) {
+        this.loadPatients()
+      }
+    },
+    onKeydownPhoneNumber(event) {
+      if (event.keyCode == 13) {
+        this.loadPatients()
+      }
     }
   }
 }

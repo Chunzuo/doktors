@@ -1,47 +1,32 @@
 <template>
   <vs-collapse-item>
     <div slot="header">{{ convertTimestampToString(data.time) }}</div>
-    <div class="row" v-if="editable">
-      <button class="btn bg-info-light" @click="updateVisitInfo()">
-        <i class="far fa-save"></i>
-      </button>
 
-      <button class="btn bg-danger-light" @click="editable = false">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <button class="btn bg-success-light" @click="editable = true" v-else>
+    <button class="btn bg-info-light" @click="updateVisitInfo()" v-if="editable">
+      <i class="far fa-save"></i>
+    </button>
+
+    <button class="btn bg-danger-light ml-2" @click="editable = false" v-if="editable">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <button class="btn bg-success-light" @click="editable = true" v-if="!editable">
       <i class="far fa-edit"></i>
     </button>
     <button class="btn bg-primary-light ml-2" @click="print">
       <i class="fas fa-print"></i>
     </button>
     <h5>Diagnosis</h5>
-    <textarea
-      v-if="editable == true"
-      class="form-control"
-      rows="5"
-      v-model="data.diagnosis"
-    ></textarea>
+    <textarea v-if="editable == true" class="form-control" rows="5" v-model="data.diagnosis"></textarea>
     <span v-else>{{ data.diagnosis }}</span>
 
     <h5>Symptems</h5>
-    <textarea
-      v-if="editable"
-      class="form-control"
-      rows="5"
-      v-model="data.symptems"
-    ></textarea>
+    <textarea v-if="editable" class="form-control" rows="5" v-model="data.symptems"></textarea>
     <span v-else>{{ data.symptems }}</span>
 
     <div id="printMe">
       <h5>Treatment</h5>
-      <textarea
-        v-if="editable"
-        class="form-control"
-        rows="5"
-        v-model="data.treatment"
-      ></textarea>
+      <textarea v-if="editable" class="form-control" rows="5" v-model="data.treatment"></textarea>
       <span v-else>{{ data.treatment }}</span>
     </div>
 
@@ -52,16 +37,14 @@
         id="button-with-loading"
         v-if="editable"
       >
-        <span> <i class="fa fa-upload"></i> Upload File </span>
+        <span>
+          <i class="fa fa-upload"></i> Upload File
+        </span>
         <input type="file" class="upload" @change="uploadFile" />
       </div>
     </div>
     <div class="row">
-      <div
-        class="col-md-4 col-sm-12"
-        v-for="(file, index) in data.files"
-        :key="`file - ${index}`"
-      >
+      <div class="col-md-4 col-sm-12" v-for="(file, index) in data.files" :key="`file - ${index}`">
         <img
           :src="getFileUrl(file)"
           alt="visit file"

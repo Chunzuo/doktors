@@ -121,7 +121,7 @@
             <div class="form-group">
               <label>Langitude</label>
               <input
-                type="number"
+                type="text"
                 class="form-control"
                 v-model="doctorProfile.mapCenter.lng"
               />

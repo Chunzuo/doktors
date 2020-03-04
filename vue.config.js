@@ -2,6 +2,9 @@ module.exports = {
   transpileDependencies: [],
 
   pwa: {
-    name: "Doktors"
+    name: 'Doktors'
+  },
+  configureWebpack: {
+    devtool: 'source-map'
   }
-};
+}
