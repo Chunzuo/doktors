@@ -2,29 +2,8 @@
   <section class="section section-specialities">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-4">
-          <div class="section-header">
-            <h2>Welcome to Doktors</h2>
-            <!-- <p>Lorem Ipsum is simply dummy text</p> -->
-          </div>
-          <div class="about-content">
-            <p>
-              This App is for improving doctors experience. It facilitates the
-              task of keeping the history of the patients, recording their
-              medications and appointments. This app can bring doctors talents
-              to the right patients as they can search for the right one near
-              the area.
-            </p>
-            <!-- <p>web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes</p>
-            <a href="javascript:;">Read More..</a>-->
-          </div>
-        </div>
-        <div class="col-lg-8">
-          <slick
-            :options="slickOptions"
-            class="doctor-slider slider"
-            v-if="adsList.length > 0"
-          >
+        <div class="col-lg-12">
+          <slick :options="slickOptions" class="doctor-slider slider" v-if="adsList.length > 0">
             <div
               class="profile-widget"
               v-for="(ads, index) in adsList"
@@ -41,10 +20,7 @@
                   />
                 </a>
               </div>
-              <div
-                class="pro-content"
-                style="height: 120px; min-height: 120px;"
-              >
+              <div class="pro-content" style="height: 120px; min-height: 120px;">
                 <h3 class="title">
                   <a :href="ads.link">{{ ads.title }}</a>
                   <!-- <i class="fas fa-check-circle verified"></i> -->

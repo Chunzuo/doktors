@@ -3,11 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-5 features-img">
-          <img
-            src="@/assets/img/features/feature.png"
-            class="img-fluid"
-            alt="Feature"
-          />
+          <img src="@/assets/img/features/feature.png" class="img-fluid" alt="Feature" />
         </div>
         <div class="col-md-7">
           <div class="section-header">
@@ -75,22 +71,22 @@ export default {
         },
         {
           image: '../assets/img/features/feature-04.jpg',
-          text: 'Labs(Biochemistry)',
+          text: 'Labs',
           keyword: 'labs'
         },
         {
           image: '../assets/img/features/feature-05.jpg',
-          text: 'X-Ray(Radiology)',
+          text: 'X-Ray',
           keyword: 'xray'
         },
         {
           image: '../assets/img/features/feature-06.jpg',
-          text: 'Cosmetics(Plastic Surgery, and facial plastic surgery)',
+          text: 'Cosmetics',
           keyword: 'cosmetics'
         },
         {
           image: '../assets/img/features/feature-04.jpg',
-          text: 'Sonar(Sonography)',
+          text: 'Sonar',
           keyword: 'sonar'
         }
       ]

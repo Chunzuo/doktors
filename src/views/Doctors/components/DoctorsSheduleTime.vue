@@ -161,7 +161,6 @@ export default {
 
       const profileData = profile.data()
       this.openingHours = profileData.openingHours
-      console.log(this.openingHours)
 
       this.$vs.loading.close()
     },

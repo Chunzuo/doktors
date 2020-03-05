@@ -12,28 +12,23 @@
         <div class="search-box">
           <form>
             <div class="form-group search-location">
-              <select id="city_select" v-model="searchKeyword.city">
+              <select id="city_select">
+                <option value>All</option>
                 <option
                   v-for="(city, index) in cityList"
                   :key="`city - ${index}`"
                   :value="city"
-                  >{{ city }}</option
-                >
+                >{{ city }}</option>
               </select>
             </div>
             <div class="form-group" style="margin-right: 12px;">
-              <select
-                class="form-control"
-                id="speciality_select"
-                v-model="searchKeyword.speciality"
-              >
+              <select class="form-control" id="speciality_select">
                 <option value>All</option>
                 <option
                   v-for="(speciality, index) in specialityList"
                   :key="`speciality - ${index}`"
                   :value="speciality"
-                  >{{ speciality }}</option
-                >
+                >{{ speciality }}</option>
               </select>
             </div>
 
@@ -46,10 +41,7 @@
               />
               <!-- <span class="form-text">Ex : Dental or Sugar Check up etc</span> -->
             </div>
-            <button
-              @click.prevent="onClickSerchButton"
-              class="btn btn-primary search-btn"
-            >
+            <button @click.prevent="onClickSerchButton" class="btn btn-primary search-btn">
               <i class="fas fa-search"></i>
               <span>Search</span>
             </button>
