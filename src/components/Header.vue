@@ -110,6 +110,15 @@
             <router-link to="/patient-dashboard">Dashboard</router-link>
           </li>
 
+          <li
+            v-if="isDepartment"
+            :class="{ active: selectedItem == 'UserProfile' }"
+          >
+            <router-link :to="`/edit-userprofile/${user.id}`"
+              >Profile</router-link
+            >
+          </li>
+
           <li v-if="loginStatus">
             <a
               class="nav-link header-login"
@@ -200,6 +209,14 @@ export default {
     },
     sidebarItem() {
       return this.$store.state.doctor.sidebarItem
+    },
+    isDepartment() {
+      return (
+        this.role != '' &&
+        this.role != null &&
+        this.user.role != 'doctor' &&
+        this.user.role != 'patient'
+      )
     }
   },
   methods: {

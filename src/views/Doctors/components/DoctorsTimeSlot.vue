@@ -187,7 +187,7 @@ export default {
         enableSeconds: false,
         noCalendar: true
       },
-      newSlots: [{ startTime: null, endTime: null }],
+      newSlots: [],
       timeSlots: null,
       day: '',
       slotArray: [
@@ -243,6 +243,7 @@ export default {
       this.day = day
       this.showModal = true
       this.modalType = 0
+      this.newSlots = []
     },
     async getDoctorProfile() {
       if (!this.userInfo.id) {

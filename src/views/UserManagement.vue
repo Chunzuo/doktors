@@ -31,24 +31,30 @@
                       v-model="keyword.phone"
                     />
                   </div>
+
                   <div class="col-4">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Search role"
-                      v-model="keyword.role"
-                    />
+                    <select class="form-control select" v-model="keyword.role">
+                      <option value="">All Role</option>
+                      <option
+                        v-for="(role, index) in roleOptions"
+                        :key="`role - ${index}`"
+                        :value="role.value"
+                        >{{ role.value }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col text-right">
+                    <button class="btn btn-info" @click="getSearchResult">
+                      Search
+                    </button>
                   </div>
                 </div>
 
                 <div class="card card-table mb-0">
                   <div class="card-body">
-                    <vs-table
-                      search
-                      pagination
-                      max-items="10"
-                      :data="filteredList"
-                    >
+                    <vs-table pagination max-items="10" :data="filteredList">
                       <template slot="header">
                         <h3 class="p-3">Users</h3>
                       </template>
@@ -78,7 +84,7 @@
                             <a
                               href="javascript:void(0);"
                               class="btn btn-sm bg-success-light mr-2"
-                              @click="openEditDialog(user)"
+                              @click="editUser(user)"
                               v-if="user.role != 'patient'"
                             >
                               <i class="far fa-edit"></i> Edit
@@ -167,7 +173,8 @@ export default {
         name: '',
         phone: '',
         role: ''
-      }
+      },
+      filteredList: []
     }
   },
   mounted() {
@@ -185,6 +192,7 @@ export default {
           this.userList.push(data)
         }
       })
+
       this.$vs.loading.close()
     },
     getRoleBackground(role) {
@@ -249,20 +257,13 @@ export default {
       })
       this.getUserList()
     },
-    openEditDialog(user) {
-      this.newUser = user
-      this.showModal = true
-      this.dialogMode = 1
-    },
     openAddDialog() {
       this.showModal = true
       this.dialogMode = 0
       this.newUser = {}
-    }
-  },
-  computed: {
-    filteredList() {
-      return this.userList.filter(user => {
+    },
+    getSearchResult() {
+      this.filteredList = this.userList.filter(user => {
         if (
           user.name.includes(this.keyword.name) &&
           user.phone.includes(this.keyword.phone) &&
@@ -271,6 +272,15 @@ export default {
           return user
         }
       })
+    },
+    editUser(user) {
+      if (user.role != 'patient') {
+        this.$router.push(`/edit-userprofile/${user.id}`)
+      } else {
+        this.newUser = user
+        this.showModal = true
+        this.dialogMode = 1
+      }
     }
   }
 }

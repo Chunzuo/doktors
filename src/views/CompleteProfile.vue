@@ -120,7 +120,7 @@ export default {
     async signup() {
       this.$vs.loading()
       const newUser = await db.collection('Users').add(this.user)
-      if (this.user.role == 'doctor') {
+      if (this.user.role != 'patient') {
         await this.addDoctor(newUser.id)
       }
 
@@ -164,7 +164,8 @@ export default {
         historyElements: historyElements,
         name: this.user.name,
         phone: this.user.phone,
-        expireDate: expireDate
+        expireDate: expireDate,
+        role: this.user.role
       }
       await db
         .collection('Doctors')

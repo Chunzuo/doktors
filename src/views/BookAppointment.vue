@@ -46,7 +46,7 @@
                   <div class="day-slot">
                     <ul>
                       <li class="left-arrow">
-                        <a href>
+                        <a href="javascript:void(0);" @click="getPastweek()">
                           <i class="fa fa-chevron-left"></i>
                         </a>
                       </li>
@@ -63,7 +63,7 @@
                         </span>
                       </li>
                       <li class="right-arrow">
-                        <a href>
+                        <a href="javascript:void(0);" @click="getNextWeek()">
                           <i class="fa fa-chevron-right"></i>
                         </a>
                       </li>
@@ -94,10 +94,10 @@
                           href="#"
                           v-for="(data, idx) in slot"
                           :key="`time-${idx}`"
-                          @click="makeAppointment(data.time, index)"
+                          @click="makeAppointment(data, index)"
                           v-else
                         >
-                          <span>{{ formatTime(data.time) }}</span>
+                          <span>{{ formatTime(data) }}</span>
                         </a>
                       </li>
                     </ul>
@@ -164,7 +164,7 @@ export default {
     async loadDoctorInfo() {
       this.$vs.loading()
       const ref = await db
-        .collection('Doctors')
+        .collection('DoctorProfiles')
         .doc(this.doctorId)
         .get()
       this.doctor = ref.data()
@@ -241,35 +241,18 @@ export default {
       this.weekDates = weekDates
 
       const { timeSlots } = this.doctor
-
-      weekDates.forEach(weekDate => {
-        let weekInfo = []
-        timeSlots.forEach(slot => {
-          const slotDate = slot.date.toDate()
-          if (
-            weekDate.getFullYear() == slotDate.getFullYear() &&
-            weekDate.getMonth() == slotDate.getMonth() &&
-            weekDate.getDate() == slotDate.getDate()
-          ) {
-            weekInfo = slot.slots
-          }
-        })
-        this.weekSlots.push(weekInfo)
+      const strDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+      strDays.forEach(day => {
+        this.weekSlots.push(timeSlots[day])
       })
     },
-    formatTime(time) {
-      const hour = time.split(':')[0]
-      const minute = time.split(':')[1]
-      if (hour == 12) {
-        return time + ' PM'
-      }
-      if (hour > 12) {
-        return hour - 12 + ':' + minute + ' PM'
-      } else {
-        return time + ' AM'
-      }
+    formatTime(slot) {
+      const { startTime, endTime } = slot
+      return startTime + ' -  ' + endTime
     },
-    async makeAppointment(time, index) {
+    async makeAppointment(slot, index) {
+      const { startTime, endTime } = slot
+
       if (!this.userInfo.id) {
         this.$vs.notify({
           text: 'Login before make an appointment',
@@ -281,15 +264,35 @@ export default {
         doctorId: this.doctorId,
         patientId: this.userInfo.id,
         date: this.weekDates[index],
-        time: time,
+        time: startTime + ' - ' + endTime,
         status: 0
       }
       this.apptDate = this.weekDates[index]
-      this.apptTime = time
+      this.apptTime = startTime + ' - ' + endTime
       this.$vs.loading()
       await db.collection('Appointments').add(apptData)
       this.success = true
       this.$vs.loading.close()
+    },
+    getPastweek() {
+      const pastDate = this.weekDates[0].getDate() - 7
+      const curr = new Date(this.weekDates[0].setDate(pastDate))
+      const first = curr.getDate() - curr.getDay()
+      let weekDates = []
+      for (let i = 0; i < 7; i++) {
+        weekDates.push(new Date(curr.setDate(first + i)))
+      }
+      this.weekDates = weekDates
+    },
+    getNextWeek() {
+      const nextDate = this.weekDates[0].getDate() + 7
+      const curr = new Date(this.weekDates[0].setDate(nextDate))
+      const first = curr.getDate() - curr.getDay()
+      let weekDates = []
+      for (let i = 0; i < 7; i++) {
+        weekDates.push(new Date(curr.setDate(first + i)))
+      }
+      this.weekDates = weekDates
     }
   },
   computed: {

@@ -4,48 +4,40 @@
       <div class="row">
         <div class="col-md-3 mb-2">
           <label>Start Date:</label>
-          <datepicker
-            class="datepicker"
-            v-model="startDate"
-            @selected="loadPatients"
-          ></datepicker>
+          <datepicker class="datepicker" v-model="startDate"></datepicker>
         </div>
         <div class="col-md-3 mb-2">
           <label>End Date:</label>
-          <datepicker
-            class="datepicker"
-            v-model="endDate"
-            @selected="loadPatients"
-          ></datepicker>
+          <datepicker class="datepicker" v-model="endDate"></datepicker>
         </div>
         <div class="col-md-3 mb-2">
           <label>Patient Name:</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="name"
-            v-on:keydown="onKeydownPatientName"
-          />
+          <input type="text" class="form-control" v-model="name" />
         </div>
         <div class="col-md-3 mb-2">
           <label>Phone number:</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="phoneNumber"
-            v-on:keydown="onKeydownPhoneNumber"
-          />
+          <input type="text" class="form-control" v-model="phoneNumber" />
         </div>
       </div>
       <div class="row">
-        <div class="col">
-          <!-- <button class="btn btn-info" >Add patient</button> -->
+        <!-- <div class="col">
+          <a class="add-new-btn" @click="$router.push('/doctors-addpatient')">
+            Add patient
+          </a>
+        </div> -->
+        <div class="col text-left">
+          <a
+            href="javascript:;"
+            class="add-new-btn"
+            @click="$router.push('/doctors-addpatient')"
+            >Add patient</a
+          >
         </div>
 
         <div class="col text-right">
-          <!-- <button class="btn btn-danger" @click="clearSearchKeyword">
-            Clear
-          </button>-->
+          <button class="btn btn-danger" @click="loadPatients">
+            Search
+          </button>
         </div>
       </div>
     </div>
@@ -110,14 +102,14 @@
       size="large"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
-    ></vs-button>-->
-    <button
+    ></vs-button> -->
+    <!-- <button
       class="btn btn-rounded btn-info"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
     >
       <i class="fa fa-plus"></i>
-    </button>
+    </button> -->
   </div>
 </template>
 
@@ -136,47 +128,6 @@ export default {
     userInfo() {
       return this.$store.state.user.user
     },
-    filteredPatients() {
-      return this.patients.filter(patient => {
-        const accessDate = patient.accessTime.toDate()
-
-        if (this.startDate != null) {
-          if (this.endDate != null) {
-            if (accessDate >= this.startDate && accessDate <= this.endDate) {
-              return patient
-            }
-          } else {
-            if (accessDate >= this.startDate) {
-              return patient
-            }
-          }
-        }
-
-        if (this.endDate != null && accessDate <= this.endDate) {
-          return patient
-        }
-
-        if (this.name != '' && patient.name.includes(this.name)) {
-          return patient
-        }
-
-        if (
-          this.phoneNumber != '' &&
-          patient.patientMobile.includes(this.phoneNumber)
-        ) {
-          return patient
-        }
-
-        if (
-          this.startDate == null &&
-          this.endDate == null &&
-          this.name == '' &&
-          this.phoneNumber == ''
-        ) {
-          return patient
-        }
-      })
-    },
     isDoctor() {
       return this.userInfo.role == 'dcotor'
     }
@@ -191,11 +142,6 @@ export default {
       endDate: null,
       name: '',
       phoneNumber: ''
-    }
-  },
-  watch: {
-    userInfo() {
-      this.loadPatients()
     }
   },
   mounted() {
@@ -226,14 +172,43 @@ export default {
       this.patients = []
       patients.forEach(patient => {
         let data = patient.data()
+        const accessDate = data.accessTime.toDate()
         data['id'] = patient.id
-        if (data.name != null && data.name.includes(this.name)) {
-          this.patients.push(data)
-        } else if (
-          data.patientMobile != null &&
-          data.patientMobile.includes(this.phoneNumber)
-        ) {
-          this.patients.push(data)
+
+        if (this.startDate != null) {
+          if (this.endDate != null) {
+            if (
+              accessDate >= this.startDate &&
+              accessDate <= this.endDate &&
+              data.name.includes(this.name) &&
+              data.patientMobile.includes(this.phoneNumber)
+            ) {
+              this.patients.push(data)
+            }
+          } else {
+            if (
+              accessDate >= this.startDate &&
+              data.name.includes(this.name) &&
+              data.patientMobile.includes(this.phoneNumber)
+            ) {
+              this.patients.push(data)
+            }
+          }
+        } else if (this.endDate != null) {
+          if (
+            accessDate <= this.endDate &&
+            data.name.includes(this.name) &&
+            data.patientMobile.includes(this.phoneNumber)
+          ) {
+            this.patients.push(data)
+          }
+        } else {
+          if (
+            data.name.includes(this.name) &&
+            data.patientMobile.includes(this.phoneNumber)
+          ) {
+            this.patients.push(data)
+          }
         }
       })
       this.$vs.loading.close()

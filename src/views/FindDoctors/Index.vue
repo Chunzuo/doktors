@@ -60,7 +60,7 @@
                   </div>
                   <div class="btn-search">
                     <div class="row">
-                      <div class="col-md-6 mt-2">
+                      <div class="col mt-2">
                         <button
                           type="button"
                           class="btn btn-block"
@@ -69,7 +69,7 @@
                           Search
                         </button>
                       </div>
-                      <div class="col-md-6 mt-2">
+                      <!-- <div class="col-md-6 mt-2">
                         <button
                           type="button"
                           class="btn btn-block"
@@ -78,7 +78,7 @@
                         >
                           Reset
                         </button>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>

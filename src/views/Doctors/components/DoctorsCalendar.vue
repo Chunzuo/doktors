@@ -171,25 +171,21 @@ export default {
       }
       this.$vs.loading()
       const ref = await db
-        .collection('Doctors')
-        .doc(this.userInfo.id)
+        .collection('Appointments')
+        .where('doctorId', '==', this.userInfo.id)
         .get()
-      const { timeSlots } = ref.data()
-      this.doctorSlot = timeSlots ? timeSlots : []
-      this.events = []
-      if (timeSlots) {
-        timeSlots.forEach(item => {
-          const date = this.convertTimestampToString(item.date)
+      ref.forEach(appointment => {
+        let data = appointment.data()
 
-          item.slots.forEach(slot => {
-            const date1 = new Date(date + ' ' + slot.time)
+        const date = this.convertTimestampToString(data.date)
+        const startTime = data.time.split('-')[0]
 
-            this.events.push({
-              start: moment(date1)
-            })
-          })
+        const startDate = new Date(date + ' ' + startTime)
+
+        this.events.push({
+          start: moment(startDate)
         })
-      }
+      })
 
       this.$vs.loading.close()
     },
