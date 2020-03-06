@@ -84,6 +84,15 @@
               <span>Appointments</span>
             </router-link>
           </li>
+          <li
+            :class="{ active: sidebarItem == 'Schedule Timeslot' }"
+            v-if="!isAssistant"
+          >
+            <router-link to="/doctors-timeslot">
+              <i class="fas fa-clock"></i>
+              <span>Schedule Timeslot</span>
+            </router-link>
+          </li>
           <li>
             <a href="javascript:;" @click="logout">
               <i class="fas fa-sign-out-alt"></i>

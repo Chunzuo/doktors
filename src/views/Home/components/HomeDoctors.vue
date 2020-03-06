@@ -3,7 +3,11 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-12">
-          <slick :options="slickOptions" class="doctor-slider slider" v-if="adsList.length > 0">
+          <slick
+            :options="slickOptions"
+            class="doctor-slider slider"
+            v-if="adsList.length > 0"
+          >
             <div
               class="profile-widget"
               v-for="(ads, index) in adsList"
@@ -20,7 +24,10 @@
                   />
                 </a>
               </div>
-              <div class="pro-content" style="height: 120px; min-height: 120px;">
+              <div
+                class="pro-content"
+                style="height: 120px; min-height: 120px;"
+              >
                 <h3 class="title">
                   <a :href="ads.link">{{ ads.title }}</a>
                   <!-- <i class="fas fa-check-circle verified"></i> -->

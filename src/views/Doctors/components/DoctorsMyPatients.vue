@@ -4,11 +4,19 @@
       <div class="row">
         <div class="col-md-3 mb-2">
           <label>Start Date:</label>
-          <datepicker class="datepicker" v-model="startDate" @selected="loadPatients"></datepicker>
+          <datepicker
+            class="datepicker"
+            v-model="startDate"
+            @selected="loadPatients"
+          ></datepicker>
         </div>
         <div class="col-md-3 mb-2">
           <label>End Date:</label>
-          <datepicker class="datepicker" v-model="endDate" @selected="loadPatients"></datepicker>
+          <datepicker
+            class="datepicker"
+            v-model="endDate"
+            @selected="loadPatients"
+          ></datepicker>
         </div>
         <div class="col-md-3 mb-2">
           <label>Patient Name:</label>
@@ -43,17 +51,29 @@
     </div>
 
     <div class="row row-grid">
-      <div class="col-md-6 col-lg-4 col-xl-3" v-for="(patient, idx) in patients" :key="idx">
+      <div
+        class="col-md-6 col-lg-4 col-xl-3"
+        v-for="(patient, idx) in patients"
+        :key="idx"
+      >
         <div class="card widget-profile pat-widget-profile">
           <div class="card-body">
             <div class="pro-widget-content">
               <div class="profile-info-widget">
-                <router-link :to="getPatientDetailLink(patient.id)" class="booking-doc-img">
-                  <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
+                <router-link
+                  :to="getPatientDetailLink(patient.id)"
+                  class="booking-doc-img"
+                >
+                  <img
+                    src="@/assets/img/patients/patient-default.png"
+                    alt="User Image"
+                  />
                 </router-link>
                 <div class="profile-det-info">
                   <h3>
-                    <router-link :to="getPatientDetailLink(patient.id)">{{ patient.name }}</router-link>
+                    <router-link :to="getPatientDetailLink(patient.id)">{{
+                      patient.name
+                    }}</router-link>
                     <!-- <a href="patient-profile.html">{{patient.name}}</a> -->
                   </h3>
 

@@ -3,7 +3,11 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-5 features-img">
-          <img src="@/assets/img/features/feature.png" class="img-fluid" alt="Feature" />
+          <img
+            src="@/assets/img/features/feature.png"
+            class="img-fluid"
+            alt="Feature"
+          />
         </div>
         <div class="col-md-7">
           <div class="section-header">

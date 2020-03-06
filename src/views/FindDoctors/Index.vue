@@ -3,7 +3,10 @@
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar" sticky-container>
+          <div
+            class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar"
+            sticky-container
+          >
             <div v-sticky="true" sticky-offset="stickyOffset">
               <!-- Search Filter -->
               <div class="card search-filter">
@@ -33,26 +36,38 @@
                           v-for="(speciality, index) in specialityList"
                           :key="`speciality - ${index}`"
                           :value="speciality"
-                        >{{ speciality }}</option>
+                          >{{ speciality }}</option
+                        >
                       </select>
                     </div>
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
-                      <select class="form-control" v-model="keywordCity" id="city_select">
+                      <select
+                        class="form-control"
+                        v-model="keywordCity"
+                        id="city_select"
+                      >
                         <option value>All</option>
                         <option
                           v-for="(city, index) in cityList"
                           :key="`city - ${index}`"
                           :value="city"
-                        >{{ city }}</option>
+                          >{{ city }}</option
+                        >
                       </select>
                     </div>
                   </div>
                   <div class="btn-search">
                     <div class="row">
                       <div class="col-md-6 mt-2">
-                        <button type="button" class="btn btn-block" @click="getDoctors(0)">Search</button>
+                        <button
+                          type="button"
+                          class="btn btn-block"
+                          @click="getDoctors(0)"
+                        >
+                          Search
+                        </button>
                       </div>
                       <div class="col-md-6 mt-2">
                         <button
@@ -60,7 +75,9 @@
                           class="btn btn-block"
                           style="background-color: #fe0d28; border-color: #fe0d28"
                           @click="resetKeyword"
-                        >Reset</button>
+                        >
+                          Reset
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -72,7 +89,11 @@
 
           <div class="col-md-12 col-lg-8 col-xl-9">
             <div class="row">
-              <div class="col-md-3" v-for="(doctor, index) in doctors" :key="`doctor - ${index}`">
+              <div
+                class="col-md-3"
+                v-for="(doctor, index) in doctors"
+                :key="`doctor - ${index}`"
+              >
                 <div class="profile-widget" style="min-height: 350px;">
                   <div class="doc-img" style="text-align: center;">
                     <router-link :to="`/doctor-detail/${doctor.id}`">
@@ -87,7 +108,9 @@
                   </div>
                   <div class="pro-content">
                     <h3 class="title">
-                      <router-link :to="`/doctor-detail/${doctor.id}`">Dr. {{ doctor.name }}</router-link>
+                      <router-link :to="`/doctor-detail/${doctor.id}`"
+                        >Dr. {{ doctor.name }}</router-link
+                      >
                     </h3>
                     <p class="speciality">{{ doctor.speciality }}</p>
                     <ul class="available-info">
@@ -101,13 +124,15 @@
                         <router-link
                           :to="`/doctor-detail/${doctor.id}`"
                           class="btn view-btn"
-                        >View Profile</router-link>
+                          >View Profile</router-link
+                        >
                       </div>
                       <div class="col-12">
                         <router-link
                           :to="`/book-appointment/${doctor.id}`"
                           class="btn view-btn"
-                        >Appointment</router-link>
+                          >Appointment</router-link
+                        >
                       </div>
                     </div>
                   </div>
@@ -120,7 +145,8 @@
                 class="btn btn-primary btn-sm"
                 href="javascript:void(0);"
                 @click="getDoctors(1)"
-              >Load More</a>
+                >Load More</a
+              >
             </div>
           </div>
         </div>
@@ -172,7 +198,6 @@ export default {
   async mounted() {
     if (this.keyword) {
       this.keywordCity = this.keyword.city
-      console.log(this.keyword)
       this.keywordSpeciality = this.keyword.speciality
       this.keywordName = this.keyword.name
     }
