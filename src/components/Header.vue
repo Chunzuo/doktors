@@ -10,7 +10,7 @@
           </span>
         </a>
         <router-link to="/" class="navbar-brand logo">
-          <img src="@/assets/img/logo.png" class="img-fluid" alt="Logo" />
+          <img src="@/assets/img/logo_new.png" class="img-fluid" alt="Logo" />
         </router-link>
       </div>
       <div class="main-menu-wrapper">

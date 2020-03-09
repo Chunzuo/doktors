@@ -26,6 +26,7 @@
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
+                      <label for="">Speciality:</label>
                       <select
                         class="form-control"
                         v-model="keywordSpeciality"
@@ -43,6 +44,7 @@
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
+                      <label for="">City:</label>
                       <select
                         class="form-control"
                         v-model="keywordCity"
@@ -55,6 +57,19 @@
                           :value="city"
                           >{{ city }}</option
                         >
+                      </select>
+                    </div>
+                  </div>
+                  <div class="filter-widget search-box">
+                    <div class="form-group">
+                      <label for="">Role:</label>
+                      <select class="form-control" v-model="keywordRole">
+                        <option value>All</option>
+                        <option value="hospital">Hospital</option>
+                        <option value="pharmacy">Pharmacy</option>
+                        <option value="xray">X-Ray</option>
+                        <option value="cosmetics">Cosmetics</option>
+                        <option value="sonar">Sonar</option>
                       </select>
                     </div>
                   </div>
@@ -169,6 +184,7 @@ export default {
       keywordCity: '',
       keywordSpeciality: '',
       keywordName: '',
+      keywordRole: '',
       slickOptions: {
         dots: false,
         autoplay: false,
@@ -200,6 +216,7 @@ export default {
       this.keywordCity = this.keyword.city
       this.keywordSpeciality = this.keyword.speciality
       this.keywordName = this.keyword.name
+      this.keywordRole = this.keyword.role
     }
     this.getDoctors(0)
     if (this.specialityList.length == 0) {
@@ -220,6 +237,9 @@ export default {
       }
       if (this.keywordSpeciality != '' && this.keywordSpeciality != null) {
         ref = ref.where('speciality', '==', this.keywordSpeciality)
+      }
+      if (this.keywordRole != '' && this.keywordRole != null) {
+        ref = ref.where('role', '==', this.keywordRole)
       }
 
       const doctors =
@@ -253,12 +273,6 @@ export default {
       })
 
       this.$vs.loading.close()
-    },
-    resetKeyword() {
-      this.keywordName = ''
-      this.keywordCity = ''
-      this.keywordSpeciality = ''
-      this.getDoctors(0)
     },
     initJquery() {
       // $("#city_select").select2({

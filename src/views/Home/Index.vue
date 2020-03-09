@@ -28,6 +28,7 @@ export default {
   },
   created() {
     this.$store.commit('updateSelectItem', 'Home')
+    this.loadWebStructureInfo()
   },
   computed: {
     userInfo() {
@@ -38,6 +39,13 @@ export default {
         this.userInfo.role == 'userManager' ||
         this.userInfo.role == 'adsManager'
       )
+    }
+  },
+  methods: {
+    async loadWebStructureInfo() {
+      this.$vs.loading()
+      await this.$store.dispatch('getWebStructure')
+      this.$vs.loading.close()
     }
   }
 }

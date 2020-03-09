@@ -503,7 +503,7 @@ export default {
         .doc(this.id)
         .get()
       this.doctor = doctorInfo.data()
-      console.log(this.doctor)
+
       if (this.doctor.educations) {
         this.educations = this.doctor.educations
       }

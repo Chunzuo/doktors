@@ -99,10 +99,13 @@ export default {
   methods: {
     searchFeature(feature) {
       const keyword = {
-        role: feature
+        role: feature,
+        city: '',
+        speciality: '',
+        name: ''
       }
       this.$store.commit('updateHomeSearchKeyword', keyword)
-      this.$router.push('/find-role')
+      this.$router.push('/find-doctors')
     }
   }
 }

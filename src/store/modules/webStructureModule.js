@@ -43,7 +43,7 @@ export default {
       })
 
       data['doctorSpeciality'].forEach(item => {
-        specialityList.push(item.text)
+        specialityList.push(item)
       })
 
       commit('updateCityList', cityList)

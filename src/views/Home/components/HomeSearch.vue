@@ -67,7 +67,8 @@ export default {
       searchKeyword: {
         city: '',
         speciality: '',
-        name: ''
+        name: '',
+        role: ''
       }
     }
   },
@@ -80,7 +81,6 @@ export default {
     }
   },
   mounted() {
-    this.getWebStructureInfo()
     this.initJQuery()
   },
   methods: {
@@ -89,13 +89,6 @@ export default {
       this.searchKeyword.speciality = $('#speciality_select').val()
       this.$store.commit('updateHomeSearchKeyword', this.searchKeyword)
       this.$router.push('/find-doctors')
-    },
-    async getWebStructureInfo() {
-      if (this.cityList.length == 0) {
-        this.$vs.loading()
-        await this.$store.dispatch('getWebStructure')
-        this.$vs.loading.close()
-      }
     },
     initJQuery() {
       $('#city_select').select2({

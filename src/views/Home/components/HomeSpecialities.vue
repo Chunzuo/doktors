@@ -11,12 +11,21 @@
       <div class="row justify-content-center">
         <div class="col-md-9">
           <!-- Slider -->
-          <slick class="specialities-slider slider" :options="slickOptions">
+          <slick
+            class="specialities-slider slider"
+            :options="slickOptions"
+            v-if="specialityList.length > 0"
+          >
             <!-- Slider Item -->
-            <div class="speicality-item text-center">
+            <div
+              class="speicality-item text-center"
+              v-for="(speciality, index) in specialityList"
+              :key="`speciality-${index}`"
+              @click="gotoSearchResult(speciality)"
+            >
               <div class="speicality-img">
                 <img
-                  src="@/assets/img/specialities/specialities-01.png"
+                  :src="getImagePath(speciality)"
                   class="img-fluid"
                   alt="Speciality"
                 />
@@ -24,71 +33,7 @@
                   <i class="fa fa-circle" aria-hidden="true"></i>
                 </span>
               </div>
-              <p>Urology</p>
-            </div>
-            <!-- /Slider Item -->
-
-            <!-- Slider Item -->
-            <div class="speicality-item text-center">
-              <div class="speicality-img">
-                <img
-                  src="@/assets/img/specialities/specialities-02.png"
-                  class="img-fluid"
-                  alt="Speciality"
-                />
-                <span>
-                  <i class="fa fa-circle" aria-hidden="true"></i>
-                </span>
-              </div>
-              <p>Neurology</p>
-            </div>
-            <!-- /Slider Item -->
-
-            <!-- Slider Item -->
-            <div class="speicality-item text-center">
-              <div class="speicality-img">
-                <img
-                  src="@/assets/img/specialities/specialities-03.png"
-                  class="img-fluid"
-                  alt="Speciality"
-                />
-                <span>
-                  <i class="fa fa-circle" aria-hidden="true"></i>
-                </span>
-              </div>
-              <p>Orthopedic</p>
-            </div>
-            <!-- /Slider Item -->
-
-            <!-- Slider Item -->
-            <div class="speicality-item text-center">
-              <div class="speicality-img">
-                <img
-                  src="@/assets/img/specialities/specialities-04.png"
-                  class="img-fluid"
-                  alt="Speciality"
-                />
-                <span>
-                  <i class="fa fa-circle" aria-hidden="true"></i>
-                </span>
-              </div>
-              <p>Cardiologist</p>
-            </div>
-            <!-- /Slider Item -->
-
-            <!-- Slider Item -->
-            <div class="speicality-item text-center">
-              <div class="speicality-img">
-                <img
-                  src="@/assets/img/specialities/specialities-05.png"
-                  class="img-fluid"
-                  alt="Speciality"
-                />
-                <span>
-                  <i class="fa fa-circle" aria-hidden="true"></i>
-                </span>
-              </div>
-              <p>Dentist</p>
+              <p>{{ speciality }}</p>
             </div>
             <!-- /Slider Item -->
           </slick>
@@ -116,8 +61,39 @@ export default {
         nextArrow: false
       }
     }
+  },
+  computed: {
+    specialityList() {
+      return this.$store.state.webStructure.specialityList
+    }
+  },
+  mounted() {},
+  methods: {
+    getImagePath(name) {
+      var images = require.context(
+        '../../../assets/img/specialities/',
+        false,
+        /\.png$/
+      )
+      return images('./' + name.toLowerCase() + '.png')
+    },
+    gotoSearchResult(item) {
+      const keyword = {
+        speciality: item,
+        city: '',
+        name: '',
+        role: ''
+      }
+
+      this.$store.commit('updateHomeSearchKeyword', keyword)
+      this.$router.push('/find-doctors')
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.speicality-item {
+  cursor: pointer;
+}
+</style>

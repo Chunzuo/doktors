@@ -24,7 +24,6 @@ Vue.use(VueGoogleMaps, {
 require('./assets/css/iconfont.css')
 
 import './filter'
-import './registerServiceWorker'
 
 import FullCalendar from 'vue-full-calendar'
 import 'fullcalendar/dist/fullcalendar.min.css'
