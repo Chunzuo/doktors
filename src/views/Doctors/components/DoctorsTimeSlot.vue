@@ -308,4 +308,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.modal-body {
+  max-height: 500px;
+  overflow: auto;
+}
+</style>
