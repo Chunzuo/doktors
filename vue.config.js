@@ -2,10 +2,11 @@ module.exports = {
   transpileDependencies: [],
 
   pwa: {
-    name: 'Doktors',
+    themeColor: '#17a2b8',
+    msTileColor: '#000000',
     iconPaths: {
-      favicon32: 'icon.png'
-   }
+      msTileImage: 'img/icons/mstile-150x150.png'
+    }
   },
   configureWebpack: {
     devtool: 'source-map'

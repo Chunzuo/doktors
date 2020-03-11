@@ -39,6 +39,8 @@ Vue.config.errorHandler = function() {}
 // Print
 import VueHtmlToPaper from 'vue-html-to-paper'
 
+import './registerServiceWorker'
+
 const options = {
   name: '_blank',
   specs: ['fullscreen=yes', 'titlebar=yes', 'scrollbars=yes'],
