@@ -4,9 +4,8 @@
 
     <home-doctors></home-doctors>
 
-    <home-specialities></home-specialities>
-
     <home-features></home-features>
+    <home-specialities></home-specialities>
   </div>
 </template>
 

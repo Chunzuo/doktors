@@ -1,17 +1,17 @@
 <template>
-  <section class="section section-features" id="features">
+  <section class="section section-doctor">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-5 features-img">
           <img
-            src="@/assets/img/features/feature.png"
+            src="@/assets/img/login-banner.png"
             class="img-fluid"
             alt="Feature"
           />
         </div>
         <div class="col-md-7">
           <div class="section-header">
-            <h2 class="mt-2">Availabe Features in this platform</h2>
+            <h2 class="mt-2">Find Services</h2>
             <!-- <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p> -->
           </div>
           <slick :options="slickOptions" class="features-slider slider">
@@ -41,21 +41,24 @@ export default {
     return {
       slickOptions: {
         dots: true,
-        infinite: true,
-        centerMode: true,
-        slidesToShow: 3,
-        speed: 500,
+        autoplay: true,
+        infinite: false,
         variableWidth: true,
         arrows: false,
-        autoplay: false,
+        slidesToShow: 5,
+        slidesToScroll: 5,
         responsive: [
           {
-            breakpoint: 992,
+            breakpoint: 600,
             settings: {
-              slidesToShow: 1
+              dots: false,
+              arrows: true,
+              slidesToShow: 1,
+              slidesToScroll: 1
             }
           }
-        ]
+        ],
+        centerMode: true
       },
       features: [
         {
@@ -114,5 +117,8 @@ export default {
 <style lang="scss" scoped>
 .feature-item {
   cursor: pointer;
+}
+.section-doctor {
+  padding: 40px 0px;
 }
 </style>

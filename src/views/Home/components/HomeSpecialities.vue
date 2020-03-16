@@ -1,8 +1,8 @@
 <template>
-  <section class="section section-doctor">
+  <section class="section section-features" id="features">
     <div class="container-fluid">
       <div class="section-header text-center">
-        <h2>Specialities</h2>
+        <h2>Find a Specialist</h2>
         <!-- <h2>Clinic and Specialities</h2> -->
         <!-- <p
           class="sub-title"
@@ -54,11 +54,23 @@ export default {
     return {
       slickOptions: {
         dots: true,
-        autoplay: false,
+        autoplay: true,
         infinite: true,
         variableWidth: true,
-        prevArrow: false,
-        nextArrow: false
+        arrows: false,
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        responsive: [
+          {
+            breakpoint: 600,
+            settings: {
+              dots: false,
+              arrows: true,
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          }
+        ]
       }
     }
   },
@@ -95,5 +107,8 @@ export default {
 <style lang="scss" scoped>
 .speicality-item {
   cursor: pointer;
+}
+.section-features {
+  padding: 40px 0px;
 }
 </style>

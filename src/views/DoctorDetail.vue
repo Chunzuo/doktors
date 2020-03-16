@@ -3,17 +3,23 @@
     <div class="content">
       <div class="container">
         <div class="card">
-          <div class="card-body top-card">
+          <div
+            class="card-body top-card"
+            :style="{ backgroundImage: getBackgroundImage(doctor.background) }"
+          >
             <div class="doctor-widget">
               <div class="doc-info-left">
-                <div class="doctor-img">
-                  <img
-                    :src="doctor.avatar"
-                    onerror="javascript:this.src='assets/img/doctor-default.jpg'"
-                    alt="Doctor Image"
-                    style="width: 150px; height: 150px;"
-                  />
+                <div
+                  class="widget-profile pro-widget-content"
+                  style="background: transparent; border-bottom: 0px;"
+                >
+                  <div class="profile-info-widget">
+                    <a href="#" class="booking-doc-img">
+                      <img :src="getAvatar(doctor.avatar)" alt="Doctor Image" />
+                    </a>
+                  </div>
                 </div>
+
                 <div class="doc-info-cont">
                   <h4 class="doc-name">Dr. {{ doctor.name }}</h4>
                   <p class="doc-speciality">{{ doctor.speciality }}</p>
@@ -109,9 +115,9 @@
                               </div>
                               <div class="experience-content">
                                 <div class="timeline-content">
-                                  <a href="#/" class="name">{{
-                                    education.college
-                                  }}</a>
+                                  <a href="#/" class="name">
+                                    {{ education.college }}
+                                  </a>
                                   <div>{{ education.degree }}</div>
                                   <span class="time">{{ education.year }}</span>
                                 </div>
@@ -140,9 +146,9 @@
                                     {{ experience.designation }}
                                     {{ experience.hospital }}
                                   </a>
-                                  <span class="time">{{
-                                    experience.year
-                                  }}</span>
+                                  <span class="time">
+                                    {{ experience.year }}
+                                  </span>
                                 </div>
                               </div>
                             </li>
@@ -274,13 +280,13 @@ export default {
       doctor: {},
       doctorProfile: {},
       days: [
+        { text: 'Satureday', value: 'sat' },
+        { text: 'Sunday', value: 'sun' },
         { text: 'Monday', value: 'mon' },
         { text: 'Tuesday', value: 'tue' },
         { text: 'Wendsday', value: 'wed' },
         { text: 'Thursday', value: 'thu' },
-        { text: 'Friday', value: 'fri' },
-        { text: 'Satureday', value: 'sat' },
-        { text: 'Sunday', value: 'sun' }
+        { text: 'Friday', value: 'fri' }
       ]
     }
   },
@@ -314,6 +320,20 @@ export default {
         lat: parseFloat(mapCenter.lat),
         lng: parseFloat(mapCenter.lng)
       }
+    },
+    getBackgroundImage(image) {
+      var images = require.context('../assets/img/', false, /\.jpg$/)
+      if (image == null) {
+        return `url(${images('./banner-doctor.jpg')})`
+      }
+      return `url(${image})`
+    },
+    getAvatar(avatar) {
+      if (avatar == null) {
+        var images = require.context('../assets/img/', false, /\.jpg$/)
+        return images('./doctor-default.jpg')
+      }
+      return avatar
     }
   }
 }
@@ -321,7 +341,6 @@ export default {
 
 <style lang="scss" scoped>
 .top-card {
-  background-image: url('../assets/img/banner-doctor.jpg');
   background-size: cover;
 }
 .social-icon {
@@ -333,5 +352,13 @@ export default {
 
 i.fab {
   font-size: 24px;
+}
+
+.doc-speciality {
+  color: white;
+}
+
+.doc-location {
+  color: white;
 }
 </style>

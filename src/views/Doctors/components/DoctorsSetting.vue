@@ -124,6 +124,22 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Other</h4>
+
+        <label class="custom_check">
+          <input
+            type="checkbox"
+            name="select_specialist"
+            v-model="doctor.visitVisibility"
+          />
+          <span class="checkmark"></span>
+          Visit Visibility
+        </label>
+      </div>
+    </div>
+
     <div class="submit-section submit-btn-bottom">
       <button type="submit" class="btn btn-primary submit-btn" @click="save">
         Save Changes

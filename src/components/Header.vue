@@ -24,7 +24,17 @@
         </div>
         <ul class="main-nav">
           <li :class="{ active: selectedItem == 'Home' }">
-            <router-link to="/">Home</router-link>
+            <router-link to="/">
+              <i v-if="isMobile" class="fas fa-home"></i>Home
+            </router-link>
+          </li>
+          <li
+            v-if="isPatient"
+            :class="{ active: selectedItem == 'PatientDashboard' }"
+          >
+            <router-link to="/patient-dashboard">
+              <i v-if="isMobile" class="fab fa-houzz"></i>My Records
+            </router-link>
           </li>
           <li
             :class="{ active: selectedItem == 'MyPatients' }"
@@ -83,40 +93,43 @@
           </li>
 
           <li :class="{ active: selectedItem == 'Settings' }" v-if="isDoctor">
-            <router-link to="/doctors-setting">Settings</router-link>
+            <router-link to="/doctors-setting">
+              <i v-if="isMobile" class="fas fa-cog"></i>Settings
+            </router-link>
           </li>
           <li :class="{ active: selectedItem == 'Help' }">
-            <router-link to="/help">Help</router-link>
+            <router-link to="/help">
+              <i v-if="isMobile" class="fas fa-question"></i>Help
+            </router-link>
           </li>
           <li :class="{ active: selectedItem == 'About' }">
-            <router-link to="/about">About</router-link>
+            <router-link to="/about">
+              <i v-if="isMobile" class="fas fa-info"></i>About
+            </router-link>
           </li>
           <li
             v-if="isUserManager"
             :class="{ active: selectedItem == 'UserManagement' }"
           >
-            <router-link to="/user-management">User Management</router-link>
+            <router-link to="/user-management">
+              <i v-if="isMobile" class="fas fa-users"></i>User Management
+            </router-link>
           </li>
           <li
             v-if="isAdsManager"
             :class="{ active: selectedItem == 'AdsManagement' }"
           >
-            <router-link to="/ads-management">Ads Management</router-link>
+            <router-link to="/ads-management">
+              <i v-if="isMobile" class="fas fa-ad"></i>Ads Management
+            </router-link>
           </li>
-          <li
-            v-if="isPatient"
-            :class="{ active: selectedItem == 'PatientDashboard' }"
-          >
-            <router-link to="/patient-dashboard">Dashboard</router-link>
-          </li>
-
           <li
             v-if="isDepartment"
             :class="{ active: selectedItem == 'UserProfile' }"
           >
-            <router-link :to="`/edit-userprofile/${user.id}`"
-              >Profile</router-link
-            >
+            <router-link :to="`/edit-userprofile/${user.id}`">
+              <i v-if="isMobile" class="fas fa-user"></i>Profile
+            </router-link>
           </li>
 
           <li v-if="loginStatus">
@@ -149,11 +162,7 @@
                 <h6>{{ userName }}</h6>
               </div>
               <span class="user-img ml-2">
-                <img
-                  class="rounded-circle"
-                  src="@/assets/img/doctors/doctor-default.jpg"
-                  width="31"
-                />
+                <img class="rounded-circle" :src="avatar" width="31" />
               </span>
             </div>
           </a>
@@ -168,6 +177,7 @@
 <script>
 import firebase from 'firebase'
 import $ from 'jquery'
+import { db } from '@/firebase'
 export default {
   mounted() {
     this.initSubmenuEvent()
@@ -259,6 +269,34 @@ export default {
           }
         })
       }, 100)
+    },
+    async loadDoctorAvatar() {
+      const doctorInfo = await db
+        .collection('Doctors')
+        .doc(this.user.id)
+        .get()
+      const doctor = doctorInfo.data()
+      if (doctor.avatar) {
+        this.avatar = doctor.avatar
+      } else {
+        var images = require.context('../assets/img/', false, /\.jpg$/)
+        this.avatar = images('./doctor-default.jpg')
+      }
+    }
+  },
+  watch: {
+    user() {
+      if (this.user.role == 'doctor') {
+        this.loadDoctorAvatar()
+      } else {
+        var images = require.context('../assets/img/', false, /\.jpg$/)
+        this.avatar = images('./doctor-default.jpg')
+      }
+    }
+  },
+  data() {
+    return {
+      avatar: ''
     }
   }
 }

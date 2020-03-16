@@ -24,8 +24,8 @@
           <a class="add-new-btn" @click="$router.push('/doctors-addpatient')">
             Add patient
           </a>
-        </div> -->
-        <div class="col text-left">
+        </div>-->
+        <div class="col text-left" v-if="isValid">
           <a
             href="javascript:;"
             class="add-new-btn"
@@ -35,9 +35,7 @@
         </div>
 
         <div class="col text-right">
-          <button class="btn btn-danger" @click="loadPatients">
-            Search
-          </button>
+          <button class="btn btn-danger" @click="loadPatients">Search</button>
         </div>
       </div>
     </div>
@@ -63,9 +61,9 @@
                 </router-link>
                 <div class="profile-det-info">
                   <h3>
-                    <router-link :to="getPatientDetailLink(patient.id)">{{
-                      patient.name
-                    }}</router-link>
+                    <router-link :to="getPatientDetailLink(patient.id)">
+                      {{ patient.name }}
+                    </router-link>
                     <!-- <a href="patient-profile.html">{{patient.name}}</a> -->
                   </h3>
 
@@ -102,14 +100,14 @@
       size="large"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
-    ></vs-button> -->
+    ></vs-button>-->
     <!-- <button
       class="btn btn-rounded btn-info"
       style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;"
       @click="$router.push('/doctors-addpatient')"
     >
       <i class="fa fa-plus"></i>
-    </button> -->
+    </button>-->
   </div>
 </template>
 
@@ -141,11 +139,13 @@ export default {
       startDate: null,
       endDate: null,
       name: '',
-      phoneNumber: ''
+      phoneNumber: '',
+      isValid: false
     }
   },
   mounted() {
     // this.loadPatients()
+    this.checkExpireDate()
     jQuery('.datepicker input').addClass('form-control')
   },
   methods: {
@@ -172,6 +172,7 @@ export default {
       this.patients = []
       patients.forEach(patient => {
         let data = patient.data()
+
         const accessDate = data.accessTime.toDate()
         data['id'] = patient.id
 
@@ -248,6 +249,23 @@ export default {
       if (event.keyCode == 13) {
         this.loadPatients()
       }
+    },
+    async checkExpireDate() {
+      this.$vs.loading()
+      const doctorRef = await db
+        .collection('Doctors')
+        .doc(this.userInfo.id)
+        .get()
+
+      const { expireDate } = doctorRef.data()
+
+      const today = new Date()
+      if (today < expireDate.toDate()) {
+        this.isValid = true
+      } else {
+        this.isValid = false
+      }
+      this.$vs.loading.close()
     }
   }
 }

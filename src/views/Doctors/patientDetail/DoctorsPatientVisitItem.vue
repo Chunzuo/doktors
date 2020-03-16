@@ -25,9 +25,30 @@
     >
       <i class="far fa-edit"></i>
     </button>
-    <button class="btn bg-primary-light ml-2" @click="print">
-      <i class="fas fa-print"></i>
-    </button>
+
+    <div class="form-group mt-2">
+      <label class="custom_check" v-if="editable == true">
+        <input
+          type="checkbox"
+          name="select_specialist"
+          v-model="data.visibility"
+        />
+        <span class="checkmark"></span>
+        Visibility
+      </label>
+      <div v-else>
+        <label for>Visibility:</label>
+        <span
+          class="ml-2"
+          style="font-size: 18px;"
+          :class="getVisibility(data.visibility)"
+          >{{ getVisibility(data.visibility) }}</span
+        >
+      </div>
+    </div>
+
+    <hr />
+
     <h5>Diagnosis</h5>
     <textarea
       v-if="editable == true"
@@ -36,6 +57,8 @@
       v-model="data.diagnosis"
     ></textarea>
     <span v-else>{{ data.diagnosis }}</span>
+
+    <hr />
 
     <h5>Symptems</h5>
     <textarea
@@ -46,8 +69,15 @@
     ></textarea>
     <span v-else>{{ data.symptems }}</span>
 
-    <div id="printMe">
-      <h5>Treatment</h5>
+    <hr />
+
+    <div class="mb-2" style="display: flex;">
+      <h5>Message to labs sonar and x-ray</h5>
+      <button class="btn bg-primary-light ml-2" @click="print">
+        <i class="fas fa-print"></i>
+      </button>
+    </div>
+    <div :id="`printMe${visitIndex}`">
       <textarea
         v-if="editable"
         class="form-control"
@@ -57,7 +87,15 @@
       <span v-else>{{ data.treatment }}</span>
     </div>
 
-    <h5>Files</h5>
+    <hr />
+
+    <div style="display: flex;" class="mb-2">
+      <h5>Treatments</h5>
+      <button class="btn bg-primary-light ml-2" @click="printTreatment">
+        <i class="fas fa-print"></i>
+      </button>
+    </div>
+
     <div class="upload-img">
       <div
         class="change-photo-btn vs-con-loading__container mb-2"
@@ -68,7 +106,7 @@
         <input type="file" class="upload" @change="uploadFile" />
       </div>
     </div>
-    <div class="row">
+    <div class="row" :id="`printTreatment${visitIndex}`">
       <div
         class="col-md-4 col-sm-12"
         v-for="(file, index) in data.files"
@@ -166,7 +204,13 @@ export default {
       window.open(url)
     },
     print() {
-      this.$htmlToPaper('printMe')
+      this.$htmlToPaper(`printMe${this.visitIndex}`)
+    },
+    getVisibility(visibility) {
+      return visibility == true ? 'Visible' : 'Invisible'
+    },
+    printTreatment() {
+      this.$htmlToPaper(`printTreatment${this.visitIndex}`)
     }
   },
   data() {
@@ -191,8 +235,16 @@ export default {
         }
       )
     }
-  }
+  },
+  mounted() {}
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.Invisible {
+  color: red;
+}
+.Visible {
+  color: #09dca4;
+}
+</style>

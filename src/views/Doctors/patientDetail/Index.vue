@@ -88,10 +88,9 @@
                     >
                       {{ history.title }}
                       <div v-if="editable">
-                        <input
+                        <textarea
                           v-model="patientInfo.history[history.id]"
                           class="w-full mb-4 form-control"
-                          type="text"
                           v-if="history.type == 'text'"
                         />
                         <input
@@ -144,9 +143,9 @@
                             )
                           }}
                         </span>
-                        <span v-else>
-                          {{ patientInfo.history[history.id] }}
-                        </span>
+                        <span v-else>{{
+                          patientInfo.history[history.id]
+                        }}</span>
                       </span>
                     </li>
                   </ul>
@@ -160,7 +159,15 @@
               <div class="card-body pt-0">
                 <div class="tab-content">
                   <div>
-                    <div class="text-right" v-if="isDoctor">
+                    <div
+                      class="alert alert-danger alert-dismissible fade show"
+                      role="alert"
+                      v-if="!isValid"
+                    >
+                      You can not add visits because it has been
+                      <strong>expired</strong>.
+                    </div>
+                    <div class="text-right" v-if="isDoctor && isValid">
                       <a
                         href="javascript:;"
                         class="add-new-btn"
@@ -199,27 +206,37 @@
       >
         <div class="modal-body">
           <div class="form-group">
-            <label>Diagnosis</label>
             <textarea
               class="form-control"
+              placeholder="Diagnosis"
               v-model="visitInfo.diagnosis"
             ></textarea>
           </div>
           <div class="form-group">
-            <label>Symptems</label>
             <textarea
               class="form-control"
+              placeholder="Symptems"
               v-model="visitInfo.symptems"
             ></textarea>
           </div>
           <div class="form-group">
-            <label>Treatment</label>
             <textarea
               class="form-control"
+              placeholder="Message to Labs, Sonar or X-Ray"
               v-model="visitInfo.treatment"
             ></textarea>
           </div>
+          <label class="custom_check">
+            <input
+              type="checkbox"
+              name="select_specialist"
+              v-model="visitInfo.visibility"
+            />
+            <span class="checkmark"></span>
+            Visibility
+          </label>
           <div class="form-group">
+            <label for>Treatment</label>
             <div class="upload-img">
               <div
                 class="change-photo-btn vs-con-loading__container"
@@ -260,6 +277,7 @@ export default {
   mounted() {
     this.loadPatientInfo()
     this.getDoctorInfo()
+    this.historyCollapseStatus = !this.isMobile
   },
   methods: {
     async loadPatientInfo() {
@@ -273,7 +291,7 @@ export default {
       this.patientInfo = patientInfo.data()
       const { visits } = this.patientInfo
       visits.sort((a, b) => {
-        return a.time < b.time
+        return b.time.toDate() - a.time.toDate()
       })
       this.patientInfo.visits = visits
 
@@ -344,6 +362,9 @@ export default {
       }
 
       this.doctor = doctorInfo.data()
+      if (this.doctor.visitVisibility != null) {
+        this.visitInfo.visibility = this.doctor.visitVisibility
+      }
       this.$vs.loading.close()
     },
     uploadFile(e) {
@@ -412,6 +433,17 @@ export default {
     },
     formattedDate(timestamp) {
       return this.convertTimestampToString(timestamp)
+    },
+    isMobile() {
+      return this.$store.getters.isMobile
+    },
+    isValid() {
+      const today = new Date()
+      const { expireDate } = this.doctor
+      if (today < expireDate.toDate()) {
+        return true
+      }
+      return false
     }
   },
   watch: {

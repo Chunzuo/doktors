@@ -3,15 +3,12 @@
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div
-            class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar"
-            sticky-container
-          >
+          <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar" sticky-container>
             <div v-sticky="true" sticky-offset="stickyOffset">
               <!-- Search Filter -->
               <div class="card search-filter">
                 <div class="card-header">
-                  <h4 class="card-title mb-0">Search Filter</h4>
+                  <h4 class="card-title mb-0">Search</h4>
                 </div>
                 <div class="card-body">
                   <div class="filter-widget">
@@ -21,50 +18,48 @@
                         class="form-control datetimepicker"
                         placeholder="Doctor's Name"
                         v-model="keywordName"
+                        v-on:keyup.13="getDoctors(0)"
                       />
                     </div>
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
-                      <label for="">Speciality:</label>
                       <select
                         class="form-control"
                         v-model="keywordSpeciality"
                         id="speciality_select"
+                        @change="getDoctors(0)"
                       >
-                        <option value>All</option>
+                        <option value>All Specialities</option>
                         <option
                           v-for="(speciality, index) in specialityList"
                           :key="`speciality - ${index}`"
                           :value="speciality"
-                          >{{ speciality }}</option
-                        >
+                        >{{ speciality }}</option>
                       </select>
                     </div>
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
-                      <label for="">City:</label>
                       <select
                         class="form-control"
                         v-model="keywordCity"
                         id="city_select"
+                        @change="getDoctors(0)"
                       >
-                        <option value>All</option>
+                        <option value>All Cities</option>
                         <option
                           v-for="(city, index) in cityList"
                           :key="`city - ${index}`"
                           :value="city"
-                          >{{ city }}</option
-                        >
+                        >{{ city }}</option>
                       </select>
                     </div>
                   </div>
                   <div class="filter-widget search-box">
                     <div class="form-group">
-                      <label for="">Role:</label>
-                      <select class="form-control" v-model="keywordRole">
-                        <option value>All</option>
+                      <select class="form-control" v-model="keywordRole" @change="getDoctors(0)">
+                        <option value>All Services</option>
                         <option value="hospital">Hospital</option>
                         <option value="pharmacy">Pharmacy</option>
                         <option value="xray">X-Ray</option>
@@ -76,13 +71,7 @@
                   <div class="btn-search">
                     <div class="row">
                       <div class="col mt-2">
-                        <button
-                          type="button"
-                          class="btn btn-block"
-                          @click="getDoctors(0)"
-                        >
-                          Search
-                        </button>
+                        <button type="button" class="btn btn-block" @click="getDoctors(0)">Search</button>
                       </div>
                       <!-- <div class="col-md-6 mt-2">
                         <button
@@ -93,7 +82,7 @@
                         >
                           Reset
                         </button>
-                      </div> -->
+                      </div>-->
                     </div>
                   </div>
                 </div>
@@ -104,51 +93,57 @@
 
           <div class="col-md-12 col-lg-8 col-xl-9">
             <div class="row">
-              <div
-                class="col-md-3"
-                v-for="(doctor, index) in doctors"
-                :key="`doctor - ${index}`"
-              >
-                <div class="profile-widget" style="min-height: 350px;">
+              <div class="col-md-3" v-for="(doctor, index) in doctors" :key="`doctor - ${index}`">
+                <div class="profile-widget" style="min-height: 300px;">
                   <div class="doc-img" style="text-align: center;">
                     <router-link :to="`/doctor-detail/${doctor.id}`">
                       <img
-                        :src="doctor.avatar"
-                        onerror="this.src='assets/img/doctor-default.jpg'"
+                        :src="getDoctorAvatar(doctor.avatar)"
                         class="img-fluid"
                         alt="Doctor Image"
-                        style="height: 150px; min-height: 150px; max-width: 150px;"
+                        style="height: 150px; min-height: 150px; width: 100%;"
                       />
                     </router-link>
                   </div>
                   <div class="pro-content">
                     <h3 class="title">
-                      <router-link :to="`/doctor-detail/${doctor.id}`"
-                        >Dr. {{ doctor.name }}</router-link
-                      >
+                      <router-link :to="`/doctor-detail/${doctor.id}`">Dr. {{ doctor.name }}</router-link>
                     </h3>
                     <p class="speciality">{{ doctor.speciality }}</p>
-                    <ul class="available-info">
+                    <!-- <ul class="available-info">
                       <li>
                         <i class="fas fa-map-marker-alt"></i>
                         {{ doctor.location }}
                       </li>
-                    </ul>
+                    </ul>-->
                     <div class="row row-sm justify-content-center">
-                      <div class="col-12 mb-2">
+                      <div class="col text-center">
+                        <router-link :to="`/doctor-detail/${doctor.id}`">
+                          <i class="far fa-eye"></i>
+                        </router-link>
+                      </div>
+                      <div class="col text-center">
+                        <router-link :to="`/book-appointment/${doctor.id}`">
+                          <i class="fas fa-calendar-check"></i>
+                        </router-link>
+                      </div>
+                      <div class="col text-center">
+                        <a href="javascript:void(0)" @click="openMap(doctor.id)">
+                          <i class="fas fa-map-marker-alt"></i>
+                        </a>
+                      </div>
+                      <!-- <div class="col-12 mb-2">
                         <router-link
                           :to="`/doctor-detail/${doctor.id}`"
                           class="btn view-btn"
-                          >View Profile</router-link
-                        >
+                        >View Profile</router-link>
                       </div>
                       <div class="col-12">
                         <router-link
                           :to="`/book-appointment/${doctor.id}`"
                           class="btn view-btn"
-                          >Appointment</router-link
-                        >
-                      </div>
+                        >Appointment</router-link>
+                      </div>-->
                     </div>
                   </div>
                 </div>
@@ -160,8 +155,7 @@
                 class="btn btn-primary btn-sm"
                 href="javascript:void(0);"
                 @click="getDoctors(1)"
-                >Load More</a
-              >
+              >Load More</a>
             </div>
           </div>
         </div>
@@ -264,7 +258,9 @@ export default {
         data['id'] = doctor.id
 
         if (this.keywordName != '') {
-          if (data.name.includes(this.keywordName)) {
+          if (
+            data.name.toLowerCase().includes(this.keywordName.toLowerCase())
+          ) {
             this.doctors.push(data)
           }
         } else {
@@ -294,6 +290,27 @@ export default {
         data['id'] = doc.id
         this.adsList.push(data)
       })
+    },
+    getDoctorAvatar(avatar) {
+      if (avatar) {
+        return avatar
+      }
+      var images = require.context('../../assets/img/', false, /\.jpg$/)
+      return images('./doctor-default.jpg')
+    },
+    async openMap(doctorId) {
+      this.$vs.loading()
+      const ref = await db
+        .collection('DoctorProfiles')
+        .doc(doctorId)
+        .get()
+      const { mapCenter } = ref.data()
+      this.$vs.loading.close()
+      const url =
+        'https://www.google.com.sa/maps/search/' +
+        `${mapCenter.lat},${mapCenter.lng}` +
+        '?hl=en'
+      window.open(url, '_blank')
     }
   },
   components: {},

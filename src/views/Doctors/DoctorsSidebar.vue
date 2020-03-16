@@ -3,7 +3,7 @@
     <div class="widget-profile pro-widget-content">
       <div class="profile-info-widget">
         <a href="#" class="booking-doc-img">
-          <img src="@/assets/img/doctors/doctor-default.jpg" alt="User Image" />
+          <img :src="avatar" alt="Doctor Image" />
         </a>
         <div class="profile-det-info">
           <h3>{{ userName }}</h3>
@@ -107,7 +107,13 @@
 
 <script>
 import firebase from 'firebase'
+import { db } from '@/firebase'
 export default {
+  data() {
+    return {
+      avatar: ''
+    }
+  },
   computed: {
     sidebarItem() {
       return this.$store.state.doctor.sidebarItem
@@ -125,7 +131,9 @@ export default {
       return this.userInfo.name
     }
   },
-  mounted() {},
+  mounted() {
+    this.loadDoctorAvatar()
+  },
   methods: {
     logout() {
       firebase
@@ -134,6 +142,19 @@ export default {
         .then(() => {})
       localStorage.removeItem('role')
       this.$router.push('/')
+    },
+    async loadDoctorAvatar() {
+      const doctorInfo = await db
+        .collection('Doctors')
+        .doc(this.userInfo.id)
+        .get()
+      const doctor = doctorInfo.data()
+      if (doctor.avatar) {
+        this.avatar = doctor.avatar
+      } else {
+        var images = require.context('../../assets/img/', false, /\.jpg$/)
+        this.avatar = images('./doctor-default.jpg')
+      }
     }
   }
 }

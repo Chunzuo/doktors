@@ -8,7 +8,7 @@
             <div class="row align-items-center justify-content-center">
               <div class="col-md-7 col-lg-6 login-left">
                 <img
-                  src="@/assets/img/login-banner.png"
+                  src="@/assets/img/features/feature.png"
                   class="img-fluid"
                   alt="Doccure Login"
                 />

@@ -182,9 +182,11 @@ export default {
 
         const startDate = new Date(date + ' ' + startTime)
 
-        this.events.push({
-          start: moment(startDate)
-        })
+        if (data.status == 1) {
+          this.events.push({
+            start: moment(startDate)
+          })
+        }
       })
 
       this.$vs.loading.close()

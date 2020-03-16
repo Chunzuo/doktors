@@ -22,7 +22,7 @@
                 >
               </select>
             </div>
-            <div class="form-group" style="margin-right: 12px;">
+            <div class="form-group search-speciality">
               <select class="form-control" id="speciality_select">
                 <option value>All</option>
                 <option
@@ -107,4 +107,20 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow {
+  top: 7px;
+}
+
+.search-speciality {
+  margin-right: 12px;
+}
+
+@media only screen and (max-width: 575.98px) {
+  .search-speciality {
+    margin-right: 0px;
+  }
+}
+</style>

@@ -55,9 +55,9 @@
                               </td>
                               <td>
                                 {{ getFormatDay(appt.date) }}
-                                <span class="d-block text-info">
-                                  {{ formatTime(appt.time) }}
-                                </span>
+                                <span class="d-block text-info">{{
+                                  formatTime(appt.time)
+                                }}</span>
                               </td>
                               <td>
                                 <span
@@ -83,6 +83,7 @@
                         <table class="table table-hover table-center mb-0">
                           <thead>
                             <tr>
+                              <th>Doctor</th>
                               <th>Date</th>
                               <th>Treatment</th>
                               <th>Files</th>
@@ -93,17 +94,36 @@
                               v-for="(treatment, index) in treatments"
                               :key="`treatment - ${index}`"
                             >
-                              <td>{{ getFormatDay(treatment.date) }}</td>
-                              <td>{{ treatment.treatment }}</td>
                               <td>
-                                <a
-                                  v-for="(file, index) in treatment.files"
-                                  :key="`file${index}`"
-                                  :href="file"
-                                  target="_blank"
-                                  class="ml-2"
-                                  ><i class="fas fa-file"></i
-                                ></a>
+                                <router-link
+                                  :to="`/doctor-detail/${treatment.doctorId}`"
+                                  >{{ treatment.doctorName }}</router-link
+                                >
+                              </td>
+                              <td>{{ getFormatDay(treatment.date) }}</td>
+                              <td>
+                                <span v-if="treatment.visibility == true">{{
+                                  treatment.treatment
+                                }}</span>
+                                <span class="text-danger" v-else
+                                  >Invisible</span
+                                >
+                              </td>
+                              <td>
+                                <div v-if="treatment.visibility == true">
+                                  <a
+                                    v-for="(file, index) in treatment.files"
+                                    :key="`file${index}`"
+                                    :href="file"
+                                    target="_blank"
+                                    class="ml-2"
+                                  >
+                                    <i class="fas fa-file"></i>
+                                  </a>
+                                </div>
+                                <span class="text-danger" v-else
+                                  >Invisible</span
+                                >
                               </td>
                             </tr>
                           </tbody>
@@ -144,7 +164,7 @@ export default {
 
       const appts = await db
         .collection('Appointments')
-        .where('patientId', '==', this.userInfo.id)
+        .where('patientPhone', '==', this.userInfo.phone)
         .get()
       this.appointments = []
       appts.forEach(async appt => {
@@ -221,15 +241,28 @@ export default {
         .where('patientMobile', '==', this.userInfo.phone)
         .get()
       this.treatments = []
-      histories.forEach(history => {
-        const { visits } = history.data()
+      histories.forEach(async history => {
+        const { visits, doctorUid } = history.data()
+        // Get doctor name
+        const doctorInfo = await db
+          .collection('Doctors')
+          .doc(doctorUid)
+          .get()
+        const { name } = doctorInfo.data()
 
         visits.forEach(visit => {
           this.treatments.push({
             date: visit.time,
             treatment: visit.treatment,
-            files: visit.files
+            files: visit.files,
+            doctorName: name,
+            doctorId: doctorUid,
+            visibility: visit['visibility']
           })
+        })
+
+        this.treatments.sort((a, b) => {
+          return a.time < b.time
         })
       })
     }

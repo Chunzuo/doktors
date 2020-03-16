@@ -31,6 +31,34 @@
             </div>
           </div>
 
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="change-avatar">
+                <div class="profile-img">
+                  <img :src="doctor.background" alt="Background Image" />
+                </div>
+                <div class="upload-img">
+                  <div
+                    class="change-photo-btn vs-con-loading__container"
+                    id="background-button-with-loading"
+                  >
+                    <span>
+                      <i class="fa fa-upload"></i> Upload Background
+                    </span>
+                    <input
+                      type="file"
+                      class="upload"
+                      @change="uploadBackground"
+                    />
+                  </div>
+                  <small class="form-text text-muted"
+                    >Allowed JPG, GIF or PNG. Max size of 2MB</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="col-md-6">
             <div class="form-group">
               <label>Name</label>
@@ -420,6 +448,23 @@ export default {
         }
       )
     },
+    taskUploadBackground: function() {
+      this.taskUploadBackground.on(
+        'state_changed',
+        () => {},
+        null,
+        () => {
+          this.taskUploadBackground.snapshot.ref
+            .getDownloadURL()
+            .then(downloadURL => {
+              this.doctor.background = downloadURL
+              this.$vs.loading.close(
+                '#background-button-with-loading > .con-vs-loading'
+              )
+            })
+        }
+      )
+    },
     taskUploadCert: function() {
       this.taskUploadCert.on(
         'state_changed',
@@ -443,6 +488,7 @@ export default {
       doctor: {},
       doctorProfile: {},
       taskUploadAvatar: null,
+      taskUploadBackground: null,
       taskUploadCert: null,
       educations: [
         {
@@ -530,6 +576,24 @@ export default {
         scale: 0.45
       })
       this.taskUploadAvatar = storage.ref(`images/${fileName}`).put(file)
+    },
+    uploadBackground(e) {
+      const fileList = e.target.files || e.dataTransfer.files
+      const file = fileList[0]
+      const today = new Date()
+      const fileName =
+        file.name +
+        '-' +
+        today.getHours() +
+        today.getMinutes() +
+        today.getSeconds()
+      this.$vs.loading({
+        background: this.backgroundLoading,
+        color: this.colorLoading,
+        container: '#background-button-with-loading',
+        scale: 0.45
+      })
+      this.taskUploadBackground = storage.ref(`images/${fileName}`).put(file)
     },
     async updateProfile() {
       this.$vs.loading()

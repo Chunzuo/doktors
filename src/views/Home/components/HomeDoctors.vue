@@ -56,7 +56,11 @@ export default {
         autoplay: false,
         infinite: true,
         variableWidth: true,
-        adaptiveHeight: true
+        adaptiveHeight: true,
+        prevArrow:
+          '<button type="button" class="slick-prev" style="top: 80%">Previous</button>',
+        nextArrow:
+          '<button type="button" class="slick-next" style="top: 80%">Next</button>'
       },
       adsList: []
     }
@@ -78,4 +82,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.section-specialities {
+  padding: 10px 0px;
+}
+
+.slick-prev,
+.slick-next {
+  top: 80%;
+}
+</style>

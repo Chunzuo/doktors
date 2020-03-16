@@ -17,9 +17,9 @@
                 </router-link>
                 <div class="booking-info">
                   <h4>
-                    <router-link :to="`/doctor-detail/${doctor.id}`">
-                      {{ doctor.name }}
-                    </router-link>
+                    <router-link :to="`/doctor-detail/${doctor.id}`">{{
+                      doctor.name
+                    }}</router-link>
                   </h4>
 
                   <p class="text-muted mb-0">
@@ -57,9 +57,9 @@
                         <span>{{ getShortFormatDate(date) }}</span>
                         <span class="slot-date">
                           {{ getShortFormatDay(date) }}
-                          <small class="slot-year">
-                            {{ getYearOfDate(date) }}
-                          </small>
+                          <small class="slot-year">{{
+                            getYearOfDate(date)
+                          }}</small>
                         </span>
                       </li>
                       <li class="right-arrow">
@@ -154,7 +154,8 @@ export default {
       weekSlots: [],
       success: false,
       apptDate: null,
-      apptTime: null
+      apptTime: null,
+      doctorProfile: null
     }
   },
   mounted() {
@@ -164,10 +165,18 @@ export default {
     async loadDoctorInfo() {
       this.$vs.loading()
       const ref = await db
-        .collection('DoctorProfiles')
+        .collection('Doctors')
         .doc(this.doctorId)
         .get()
       this.doctor = ref.data()
+      this.doctor['id'] = ref.id
+
+      const profileRef = await db
+        .collection('DoctorProfiles')
+        .doc(this.doctorId)
+        .get()
+      this.doctorProfile = profileRef.data()
+
       this.$vs.loading.close()
       this.weeklyInfo()
     },
@@ -240,11 +249,14 @@ export default {
       }
       this.weekDates = weekDates
 
-      const { timeSlots } = this.doctor
-      const strDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-      strDays.forEach(day => {
-        this.weekSlots.push(timeSlots[day])
-      })
+      const { timeSlots } = this.doctorProfile
+
+      if (timeSlots != null) {
+        const strDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+        strDays.forEach(day => {
+          this.weekSlots.push(timeSlots[day])
+        })
+      }
     },
     formatTime(slot) {
       const { startTime, endTime } = slot
@@ -260,9 +272,11 @@ export default {
         })
         return
       }
+
       const apptData = {
         doctorId: this.doctorId,
-        patientId: this.userInfo.id,
+        patientName: this.userInfo.name,
+        patientPhone: this.userInfo.phone,
         date: this.weekDates[index],
         time: startTime + ' - ' + endTime,
         status: 0
