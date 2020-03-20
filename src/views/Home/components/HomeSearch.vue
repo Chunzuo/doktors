@@ -18,8 +18,7 @@
                   v-for="(city, index) in cityList"
                   :key="`city - ${index}`"
                   :value="city"
-                  >{{ city }}</option
-                >
+                >{{ city }}</option>
               </select>
             </div>
             <div class="form-group search-speciality">
@@ -29,8 +28,7 @@
                   v-for="(speciality, index) in specialityList"
                   :key="`speciality - ${index}`"
                   :value="speciality"
-                  >{{ speciality }}</option
-                >
+                >{{ speciality }}</option>
               </select>
             </div>
 
@@ -43,10 +41,7 @@
               />
               <!-- <span class="form-text">Ex : Dental or Sugar Check up etc</span> -->
             </div>
-            <button
-              @click.prevent="onClickSerchButton"
-              class="btn btn-primary search-btn"
-            >
+            <button @click.prevent="onClickSerchButton" class="btn btn-primary search-btn">
               <i class="fas fa-search"></i>
               <span>Search</span>
             </button>
@@ -122,5 +117,9 @@ export default {
   .search-speciality {
     margin-right: 0px;
   }
+}
+
+.search-speciality {
+  width: 240px;
 }
 </style>

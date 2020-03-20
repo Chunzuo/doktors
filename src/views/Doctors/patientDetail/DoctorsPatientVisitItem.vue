@@ -2,39 +2,23 @@
   <vs-collapse-item>
     <div slot="header">{{ convertTimestampToString(data.time) }}</div>
 
-    <button
-      class="btn bg-info-light"
-      @click="updateVisitInfo()"
-      v-if="editable"
-    >
+    <button class="btn bg-info-light" @click="updateVisitInfo()" v-if="editable">
       <i class="far fa-save"></i>
     </button>
 
-    <button
-      class="btn bg-danger-light ml-2"
-      @click="editable = false"
-      v-if="editable"
-    >
+    <button class="btn bg-danger-light ml-2" @click="editable = false" v-if="editable">
       <i class="fas fa-times"></i>
     </button>
 
-    <button
-      class="btn bg-success-light"
-      @click="editable = true"
-      v-if="!editable"
-    >
+    <button class="btn bg-success-light" @click="editable = true" v-if="!editable">
       <i class="far fa-edit"></i>
     </button>
 
     <div class="form-group mt-2">
       <label class="custom_check" v-if="editable == true">
-        <input
-          type="checkbox"
-          name="select_specialist"
-          v-model="data.visibility"
-        />
+        <input type="checkbox" name="select_specialist" v-model="data.visibility" />
         <span class="checkmark"></span>
-        Visibility
+        Visible to the patient
       </label>
       <div v-else>
         <label for>Visibility:</label>
@@ -42,31 +26,20 @@
           class="ml-2"
           style="font-size: 18px;"
           :class="getVisibility(data.visibility)"
-          >{{ getVisibility(data.visibility) }}</span
-        >
+        >{{ getVisibility(data.visibility) }}</span>
       </div>
     </div>
 
     <hr />
 
     <h5>Diagnosis</h5>
-    <textarea
-      v-if="editable == true"
-      class="form-control"
-      rows="5"
-      v-model="data.diagnosis"
-    ></textarea>
+    <textarea v-if="editable == true" class="form-control" rows="5" v-model="data.diagnosis"></textarea>
     <span v-else>{{ data.diagnosis }}</span>
 
     <hr />
 
     <h5>Symptems</h5>
-    <textarea
-      v-if="editable"
-      class="form-control"
-      rows="5"
-      v-model="data.symptems"
-    ></textarea>
+    <textarea v-if="editable" class="form-control" rows="5" v-model="data.symptems"></textarea>
     <span v-else>{{ data.symptems }}</span>
 
     <hr />
@@ -78,13 +51,8 @@
       </button>
     </div>
     <div :id="`printMe${visitIndex}`">
-      <textarea
-        v-if="editable"
-        class="form-control"
-        rows="5"
-        v-model="data.treatment"
-      ></textarea>
-      <span v-else>{{ data.treatment }}</span>
+      <textarea v-if="editable" class="form-control" rows="5" v-model="data.message"></textarea>
+      <span v-else>{{ data.message }}</span>
     </div>
 
     <hr />
@@ -102,30 +70,36 @@
         id="button-with-loading"
         v-if="editable"
       >
-        <span> <i class="fa fa-upload"></i> Upload File </span>
+        <span>
+          <i class="fa fa-upload"></i> Upload File
+        </span>
         <input type="file" class="upload" @change="uploadFile" />
       </div>
     </div>
-    <div class="row" :id="`printTreatment${visitIndex}`">
-      <div
-        class="col-md-4 col-sm-12"
-        v-for="(file, index) in data.files"
-        :key="`file - ${index}`"
-      >
-        <img
-          :src="getFileUrl(file)"
-          alt="visit file"
-          style="cursor: pointer; width: 100%"
-          @click="downloadFile(file)"
-        />
-        <a
-          href="javascript:void(0);"
-          class="btn btn-icon btn-danger btn-sm"
-          @click="removeFile(index)"
-          v-if="editable"
+    <div :id="`printTreatment${visitIndex}`">
+      <textarea v-if="editable" class="form-control" rows="5" v-model="data.treatment"></textarea>
+      <span v-else>{{ data.treatment }}</span>
+      <div class="row mt-2">
+        <div
+          class="col-md-4 col-sm-12"
+          v-for="(file, index) in data.files"
+          :key="`file - ${index}`"
         >
-          <i class="far fa-trash-alt"></i>
-        </a>
+          <img
+            :src="getFileUrl(file)"
+            alt="visit file"
+            style="cursor: pointer; width: 100%"
+            @click="downloadFile(file)"
+          />
+          <a
+            href="javascript:void(0);"
+            class="btn btn-icon btn-danger btn-sm"
+            @click="removeFile(index)"
+            v-if="editable"
+          >
+            <i class="far fa-trash-alt"></i>
+          </a>
+        </div>
       </div>
     </div>
   </vs-collapse-item>
@@ -189,7 +163,22 @@ export default {
         today.getMinutes() +
         today.getSeconds()
       this.$vs.loading()
-      this.taskUploadFile = storage.ref(`images/${fileName}`).put(file)
+      const taskUploadFile = storage.ref(`images/${fileName}`).put(file)
+
+      const vm = this
+      taskUploadFile.on(
+        'state_changed',
+        function() {},
+        null,
+        function() {
+          taskUploadFile.snapshot.ref
+            .getDownloadURL()
+            .then(function(downloadURL) {
+              vm.data.files.push(downloadURL)
+              vm.$vs.loading.close()
+            })
+        }
+      )
     },
     removeFile(index) {
       let newFiles = []
@@ -215,25 +204,7 @@ export default {
   },
   data() {
     return {
-      editable: false,
-      taskUploadFile: null
-    }
-  },
-  watch: {
-    taskUploadFile: function() {
-      this.taskUploadFile.on(
-        'state_changed',
-        function() {},
-        null,
-        function() {
-          this.taskUploadFile.snapshot.ref
-            .getDownloadURL()
-            .then(function(downloadURL) {
-              this.data.files.push(downloadURL)
-              this.$vs.loading.close()
-            })
-        }
-      )
+      editable: false
     }
   },
   mounted() {}

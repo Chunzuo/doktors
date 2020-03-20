@@ -262,7 +262,7 @@ export default {
         })
 
         this.treatments.sort((a, b) => {
-          return a.time < b.time
+          return b.date.toDate() - a.date.toDate()
         })
       })
     }

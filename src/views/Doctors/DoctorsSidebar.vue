@@ -30,64 +30,43 @@
               <span>My Patients</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Schedule Timings' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Schedule Timings' }" v-if="!isAssistant">
             <router-link to="/doctors-scheduletime">
               <i class="fas fa-hourglass-start"></i>
               <span>Schedule Timings</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Profile Settings' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Profile Settings' }" v-if="!isAssistant">
             <router-link to="/doctors-profile">
               <i class="fas fa-user-cog"></i>
               <span>Profile Settings</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Social Media' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Social Media' }" v-if="!isAssistant">
             <router-link to="/doctors-social">
               <i class="fas fa-share-alt"></i>
               <span>Social Media</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Calendar' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Calendar' }" v-if="!isAssistant">
             <router-link to="/doctors-calendar">
               <i class="fas fa-calendar"></i>
               <span>Calendar</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Settings' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Settings' }" v-if="!isAssistant">
             <router-link to="/doctors-setting">
               <i class="fas fa-cog"></i>
               <span>Settings</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Appointment' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Appointment' }" v-if="!isAssistant">
             <router-link to="/doctors-appointment">
               <i class="fas fa-calendar-check"></i>
               <span>Appointments</span>
             </router-link>
           </li>
-          <li
-            :class="{ active: sidebarItem == 'Schedule Timeslot' }"
-            v-if="!isAssistant"
-          >
+          <li :class="{ active: sidebarItem == 'Schedule Timeslot' }" v-if="!isAssistant">
             <router-link to="/doctors-timeslot">
               <i class="fas fa-clock"></i>
               <span>Schedule Timeslot</span>
@@ -131,6 +110,11 @@ export default {
       return this.userInfo.name
     }
   },
+  watch: {
+    userInfo() {
+      this.loadDoctorAvatar()
+    }
+  },
   mounted() {
     this.loadDoctorAvatar()
   },
@@ -144,6 +128,9 @@ export default {
       this.$router.push('/')
     },
     async loadDoctorAvatar() {
+      if (!this.userInfo.id) {
+        return
+      }
       const doctorInfo = await db
         .collection('Doctors')
         .doc(this.userInfo.id)

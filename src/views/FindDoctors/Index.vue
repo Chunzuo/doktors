@@ -22,7 +22,7 @@
                       />
                     </div>
                   </div>
-                  <div class="filter-widget search-box">
+                  <div class="filter-widget">
                     <div class="form-group">
                       <select
                         class="form-control"
@@ -39,7 +39,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="filter-widget search-box">
+                  <div class="filter-widget">
                     <div class="form-group">
                       <select
                         class="form-control"
@@ -56,7 +56,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="filter-widget search-box">
+                  <div class="filter-widget">
                     <div class="form-group">
                       <select class="form-control" v-model="keywordRole" @change="getDoctors(0)">
                         <option value>All Services</option>
@@ -101,7 +101,7 @@
                         :src="getDoctorAvatar(doctor.avatar)"
                         class="img-fluid"
                         alt="Doctor Image"
-                        style="height: 150px; min-height: 150px; width: 100%;"
+                        style="height: 150px; min-height: 150px; width: 100%; object-fit: cover;"
                       />
                     </router-link>
                   </div>
@@ -118,18 +118,33 @@
                     </ul>-->
                     <div class="row row-sm justify-content-center">
                       <div class="col text-center">
-                        <router-link :to="`/doctor-detail/${doctor.id}`">
-                          <i class="far fa-eye"></i>
+                        <router-link
+                          :to="`/doctor-detail/${doctor.id}`"
+                          data-toggle="tooltip"
+                          title="View profile"
+                        >
+                          <!-- <i class="far fa-eye"></i> -->
+
+                          <img style="width: 30px;" src="@/assets/img/profile-doctor-item.png" alt />
                         </router-link>
                       </div>
                       <div class="col text-center">
-                        <router-link :to="`/book-appointment/${doctor.id}`">
-                          <i class="fas fa-calendar-check"></i>
+                        <router-link
+                          :to="`/book-appointment/${doctor.id}`"
+                          data-toggle="tooltip"
+                          title="Appointment"
+                        >
+                          <i style="font-size: 24px;" class="fas fa-calendar-check"></i>
                         </router-link>
                       </div>
                       <div class="col text-center">
-                        <a href="javascript:void(0)" @click="openMap(doctor.id)">
-                          <i class="fas fa-map-marker-alt"></i>
+                        <a
+                          href="javascript:void(0)"
+                          @click="openMap(doctor.id)"
+                          data-toggle="tooltip"
+                          title="Show on the map"
+                        >
+                          <i style="font-size: 24px;" class="fas fa-map-marker-alt"></i>
                         </a>
                       </div>
                       <!-- <div class="col-12 mb-2">
@@ -149,14 +164,14 @@
                 </div>
               </div>
             </div>
-
-            <div class="load-more text-center" v-if="lastVisible">
+            <!-- <div class="load-more text-center" v-if="lastVisible">
               <a
                 class="btn btn-primary btn-sm"
                 href="javascript:void(0);"
                 @click="getDoctors(1)"
-              >Load More</a>
-            </div>
+                >Load More</a
+              >
+            </div>-->
           </div>
         </div>
       </div>

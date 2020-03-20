@@ -30,8 +30,7 @@
             href="javascript:;"
             class="add-new-btn"
             @click="$router.push('/doctors-addpatient')"
-            >Add patient</a
-          >
+          >Add patient</a>
         </div>
 
         <div class="col text-right">
@@ -41,29 +40,17 @@
     </div>
 
     <div class="row row-grid">
-      <div
-        class="col-md-6 col-lg-4 col-xl-3"
-        v-for="(patient, idx) in patients"
-        :key="idx"
-      >
+      <div class="col-md-6 col-lg-4 col-xl-3" v-for="(patient, idx) in pagePatients" :key="idx">
         <div class="card widget-profile pat-widget-profile">
           <div class="card-body">
             <div class="pro-widget-content">
               <div class="profile-info-widget">
-                <router-link
-                  :to="getPatientDetailLink(patient.id)"
-                  class="booking-doc-img"
-                >
-                  <img
-                    src="@/assets/img/patients/patient-default.png"
-                    alt="User Image"
-                  />
+                <router-link :to="getPatientDetailLink(patient.id)" class="booking-doc-img">
+                  <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
                 </router-link>
                 <div class="profile-det-info">
                   <h3>
-                    <router-link :to="getPatientDetailLink(patient.id)">
-                      {{ patient.name }}
-                    </router-link>
+                    <router-link :to="getPatientDetailLink(patient.id)">{{ patient.name }}</router-link>
                     <!-- <a href="patient-profile.html">{{patient.name}}</a> -->
                   </h3>
 
@@ -90,6 +77,35 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div style="display: flex; justify-content: center;" v-if="patients.length > 0">
+      <ul class="pagination">
+        <li class="page-item" :class="{'disabled': currentPage == 1}" @click="moveToPrevPage">
+          <a class="page-link" href="javascript:void(0);" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li
+          class="page-item"
+          :class="{'active': index == currentPage-1}"
+          v-for="(page, index) in pageCount"
+          :key="`page-${index}`"
+        >
+          <a class="page-link" href="javascript:void(0);" @click="currentPage = index+1">{{page}}</a>
+        </li>
+        <li
+          class="page-item"
+          :class="{'disabled': currentPage == pageCount}"
+          @click="moveToNextPage"
+        >
+          <a class="page-link" href="javascript:void(0);" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
     </div>
     <!-- <fab position="bottom-right" bg-color="#4C77B2" @click="$router.push('/doctors-addpatient')"></fab> -->
     <!-- <vs-button
@@ -128,6 +144,19 @@ export default {
     },
     isDoctor() {
       return this.userInfo.role == 'dcotor'
+    },
+    pageCount() {
+      return Math.ceil(this.patients.length / this.countPerPage)
+    },
+    pagePatients() {
+      const start = (this.currentPage - 1) * this.countPerPage
+      const end = this.currentPage * this.countPerPage
+      return this.patients.slice(start, end)
+    }
+  },
+  watch: {
+    userInfo() {
+      this.checkExpireDate()
     }
   },
   components: {
@@ -140,11 +169,12 @@ export default {
       endDate: null,
       name: '',
       phoneNumber: '',
-      isValid: false
+      isValid: false,
+      currentPage: 1,
+      countPerPage: 12
     }
   },
   mounted() {
-    // this.loadPatients()
     this.checkExpireDate()
     jQuery('.datepicker input').addClass('form-control')
   },
@@ -164,10 +194,7 @@ export default {
           .collection('History')
           .where('doctorUid', '==', this.userInfo.doctorId)
       }
-      const patients = await patientRef
-        .orderBy('accessTime', 'desc')
-        .limit(10)
-        .get()
+      const patients = await patientRef.orderBy('accessTime', 'desc').get()
 
       this.patients = []
       patients.forEach(patient => {
@@ -212,6 +239,7 @@ export default {
           }
         }
       })
+
       this.$vs.loading.close()
     },
     getLastVisit(accessTime) {
@@ -251,21 +279,35 @@ export default {
       }
     },
     async checkExpireDate() {
-      this.$vs.loading()
-      const doctorRef = await db
-        .collection('Doctors')
-        .doc(this.userInfo.id)
-        .get()
+      if (this.userInfo.id) {
+        this.$vs.loading()
+        const doctorRef = await db
+          .collection('Doctors')
+          .doc(this.userInfo.id)
+          .get()
 
-      const { expireDate } = doctorRef.data()
+        const { expireDate } = doctorRef.data()
 
-      const today = new Date()
-      if (today < expireDate.toDate()) {
-        this.isValid = true
-      } else {
-        this.isValid = false
+        const today = new Date()
+        if (today < expireDate.toDate()) {
+          this.isValid = true
+        } else {
+          this.isValid = false
+        }
+        this.$vs.loading.close()
       }
-      this.$vs.loading.close()
+    },
+    moveToPrevPage() {
+      if (this.currentPage == 1) {
+        return
+      }
+      this.currentPage -= 1
+    },
+    moveToNextPage() {
+      if (this.currentPage == this.pageCount) {
+        return
+      }
+      this.currentPage += 1
     }
   }
 }

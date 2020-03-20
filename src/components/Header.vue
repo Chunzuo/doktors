@@ -28,10 +28,7 @@
               <i v-if="isMobile" class="fas fa-home"></i>Home
             </router-link>
           </li>
-          <li
-            v-if="isPatient"
-            :class="{ active: selectedItem == 'PatientDashboard' }"
-          >
+          <li v-if="isPatient" :class="{ active: selectedItem == 'PatientDashboard' }">
             <router-link to="/patient-dashboard">
               <i v-if="isMobile" class="fab fa-houzz"></i>My Records
             </router-link>
@@ -107,26 +104,17 @@
               <i v-if="isMobile" class="fas fa-info"></i>About
             </router-link>
           </li>
-          <li
-            v-if="isUserManager"
-            :class="{ active: selectedItem == 'UserManagement' }"
-          >
+          <li v-if="isUserManager" :class="{ active: selectedItem == 'UserManagement' }">
             <router-link to="/user-management">
               <i v-if="isMobile" class="fas fa-users"></i>User Management
             </router-link>
           </li>
-          <li
-            v-if="isAdsManager"
-            :class="{ active: selectedItem == 'AdsManagement' }"
-          >
+          <li v-if="isAdsManager" :class="{ active: selectedItem == 'AdsManagement' }">
             <router-link to="/ads-management">
               <i v-if="isMobile" class="fas fa-ad"></i>Ads Management
             </router-link>
           </li>
-          <li
-            v-if="isDepartment"
-            :class="{ active: selectedItem == 'UserProfile' }"
-          >
+          <li v-if="isDepartment" :class="{ active: selectedItem == 'UserProfile' }">
             <router-link :to="`/edit-userprofile/${user.id}`">
               <i v-if="isMobile" class="fas fa-user"></i>Profile
             </router-link>
@@ -138,29 +126,22 @@
               style="color: red;"
               href="javascript:;"
               @click="logout"
-              >Logout</a
-            >
+            >Logout</a>
           </li>
         </ul>
       </div>
       <ul class="nav header-navbar-rht">
         <li class="nav-item" v-if="!loginStatus">
-          <router-link class="nav-link header-login" to="/login"
-            >Login / Signup</router-link
-          >
+          <router-link class="nav-link header-login" to="/login">Login / Signup</router-link>
         </li>
 
         <!-- User Menu -->
         <li class="nav-item" v-else>
-          <a
-            href="javascript:;"
-            @click.prevent="gotoProfileSetting"
-            class="nav-link"
-          >
+          <a href="javascript:;" @click.prevent="gotoProfileSetting" class="nav-link">
             <div class="row" style="align-items:center">
-              <div class="ml-2">
-                <h6>{{ userName }}</h6>
-              </div>
+              <!-- <div class="ml-2"> -->
+              <h6 class="mb-0">{{ userName }}</h6>
+              <!-- </div> -->
               <span class="user-img ml-2">
                 <img class="rounded-circle" :src="avatar" width="31" />
               </span>
@@ -241,7 +222,7 @@ export default {
     },
     gotoProfileSetting() {
       if (this.user.role == 'doctor') {
-        this.$router.push('/doctors-profile')
+        this.$router.push(`/doctor-detail/${this.user.id}`)
       }
     },
     initSubmenuEvent() {
