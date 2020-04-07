@@ -12,11 +12,16 @@
         </div>
         <div class="col-md-3 mb-2">
           <label>Patient Name:</label>
-          <input type="text" class="form-control" v-model="name" />
+          <input type="text" class="form-control" v-model="name" v-on:keyup.13="loadPatients" />
         </div>
         <div class="col-md-3 mb-2">
           <label>Phone number:</label>
-          <input type="text" class="form-control" v-model="phoneNumber" />
+          <input
+            type="text"
+            class="form-control"
+            v-model="phoneNumber"
+            v-on:keyup.13="loadPatients"
+          />
         </div>
       </div>
       <div class="row">
@@ -25,7 +30,7 @@
             Add patient
           </a>
         </div>-->
-        <div class="col text-left" v-if="isValid">
+        <div class="col-md-6 text-left" v-if="isValid">
           <a
             href="javascript:;"
             class="add-new-btn"
@@ -33,8 +38,9 @@
           >Add patient</a>
         </div>
 
-        <div class="col text-right">
-          <button class="btn btn-danger" @click="loadPatients">Search</button>
+        <div class="col-md-6 text-right">
+          <button class="btn btn-danger mr-2" @click="clearFilter">Clear</button>
+          <button class="btn btn-info" @click="loadPatients">Search</button>
         </div>
       </div>
     </div>
@@ -50,7 +56,11 @@
                 </router-link>
                 <div class="profile-det-info">
                   <h3>
-                    <router-link :to="getPatientDetailLink(patient.id)">{{ patient.name }}</router-link>
+                    <router-link :to="getPatientDetailLink(patient.id)">
+                      {{
+                      patient.name
+                      }}
+                    </router-link>
                     <!-- <a href="patient-profile.html">{{patient.name}}</a> -->
                   </h3>
 
@@ -81,7 +91,7 @@
 
     <div style="display: flex; justify-content: center;" v-if="patients.length > 0">
       <ul class="pagination">
-        <li class="page-item" :class="{'disabled': currentPage == 1}" @click="moveToPrevPage">
+        <li class="page-item" :class="{ disabled: currentPage == 1 }" @click="moveToPrevPage">
           <a class="page-link" href="javascript:void(0);" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
             <span class="sr-only">Previous</span>
@@ -89,15 +99,19 @@
         </li>
         <li
           class="page-item"
-          :class="{'active': index == currentPage-1}"
+          :class="{ active: index == currentPage - 1 }"
           v-for="(page, index) in pageCount"
           :key="`page-${index}`"
         >
-          <a class="page-link" href="javascript:void(0);" @click="currentPage = index+1">{{page}}</a>
+          <a
+            class="page-link"
+            href="javascript:void(0);"
+            @click="currentPage = index + 1"
+          >{{ page }}</a>
         </li>
         <li
           class="page-item"
-          :class="{'disabled': currentPage == pageCount}"
+          :class="{ disabled: currentPage == pageCount }"
           @click="moveToNextPage"
         >
           <a class="page-link" href="javascript:void(0);" aria-label="Next">
@@ -208,7 +222,7 @@ export default {
             if (
               accessDate >= this.startDate &&
               accessDate <= this.endDate &&
-              data.name.includes(this.name) &&
+              data.name.toLowerCase().includes(this.name.toLowerCase()) &&
               data.patientMobile.includes(this.phoneNumber)
             ) {
               this.patients.push(data)
@@ -216,7 +230,7 @@ export default {
           } else {
             if (
               accessDate >= this.startDate &&
-              data.name.includes(this.name) &&
+              data.name.toLowerCase().includes(this.name.toLowerCase()) &&
               data.patientMobile.includes(this.phoneNumber)
             ) {
               this.patients.push(data)
@@ -225,14 +239,14 @@ export default {
         } else if (this.endDate != null) {
           if (
             accessDate <= this.endDate &&
-            data.name.includes(this.name) &&
+            data.name.toLowerCase().includes(this.name.toLowerCase()) &&
             data.patientMobile.includes(this.phoneNumber)
           ) {
             this.patients.push(data)
           }
         } else {
           if (
-            data.name.includes(this.name) &&
+            data.name.toLowerCase().includes(this.name.toLowerCase()) &&
             data.patientMobile.includes(this.phoneNumber)
           ) {
             this.patients.push(data)
@@ -281,9 +295,13 @@ export default {
     async checkExpireDate() {
       if (this.userInfo.id) {
         this.$vs.loading()
+        let doctorId = this.userInfo.id
+        if (this.userInfo.role == 'assistant') {
+          doctorId = this.userInfo.doctorId
+        }
         const doctorRef = await db
           .collection('Doctors')
-          .doc(this.userInfo.id)
+          .doc(doctorId)
           .get()
 
         const { expireDate } = doctorRef.data()
@@ -308,6 +326,12 @@ export default {
         return
       }
       this.currentPage += 1
+    },
+    clearFilter() {
+      this.startDate = null
+      this.endDate = null
+      this.name = ''
+      this.phoneNumber = ''
     }
   }
 }

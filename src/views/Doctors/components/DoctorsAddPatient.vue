@@ -52,10 +52,9 @@
                   :key="`element - ${index}`"
                 >
                   <label>{{ element.title }}</label>
-                  <input
+                  <textarea
                     v-model="detailInfo[element.id]"
                     class="w-full mb-4 form-control"
-                    type="text"
                     v-if="element.type == 'text'"
                   />
                   <input

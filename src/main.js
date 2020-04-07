@@ -39,6 +39,9 @@ Vue.config.errorHandler = function() {}
 // Print
 import VueHtmlToPaper from 'vue-html-to-paper'
 
+import './registerServiceWorker'
+import i18n from './i18n'
+
 const options = {
   name: '_blank',
   specs: ['fullscreen=yes', 'titlebar=yes', 'scrollbars=yes'],
@@ -53,5 +56,6 @@ Vue.use(VueHtmlToPaper, options)
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

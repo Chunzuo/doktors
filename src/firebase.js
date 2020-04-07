@@ -15,9 +15,14 @@ var config = {
 
 firebase.initializeApp(config)
 
+
+firebase.firestore().settings({
+  cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+})
+
 const dbt = firebase.firestore()
 
-dbt.enablePersistence().catch(function(err) {
+dbt.enablePersistence().catch(function (err) {
   if (err.code === 'failed-precondition') {
     // window.alert('You can not open more than one instance of Doctors application')
     // window.close()
@@ -26,6 +31,7 @@ dbt.enablePersistence().catch(function(err) {
     window.close()
   }
 })
+
 
 export const db = dbt
 

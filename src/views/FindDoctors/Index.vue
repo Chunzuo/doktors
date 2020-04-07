@@ -8,7 +8,7 @@
               <!-- Search Filter -->
               <div class="card search-filter">
                 <div class="card-header">
-                  <h4 class="card-title mb-0">Search</h4>
+                  <h4 class="card-title mb-0">{{$tc('search')}}</h4>
                 </div>
                 <div class="card-body">
                   <div class="filter-widget">
@@ -16,7 +16,7 @@
                       <input
                         type="text"
                         class="form-control datetimepicker"
-                        placeholder="Doctor's Name"
+                        :placeholder="$tc('doctor_name')"
                         v-model="keywordName"
                         v-on:keyup.13="getDoctors(0)"
                       />
@@ -30,7 +30,7 @@
                         id="speciality_select"
                         @change="getDoctors(0)"
                       >
-                        <option value>All Specialities</option>
+                        <option value>{{$tc('all_speciality')}}</option>
                         <option
                           v-for="(speciality, index) in specialityList"
                           :key="`speciality - ${index}`"
@@ -47,7 +47,7 @@
                         id="city_select"
                         @change="getDoctors(0)"
                       >
-                        <option value>All Cities</option>
+                        <option value>{{$tc('all_city')}}</option>
                         <option
                           v-for="(city, index) in cityList"
                           :key="`city - ${index}`"
@@ -59,7 +59,7 @@
                   <div class="filter-widget">
                     <div class="form-group">
                       <select class="form-control" v-model="keywordRole" @change="getDoctors(0)">
-                        <option value>All Services</option>
+                        <option value>{{$tc('all_service')}}</option>
                         <option value="hospital">Hospital</option>
                         <option value="pharmacy">Pharmacy</option>
                         <option value="xray">X-Ray</option>
@@ -71,7 +71,11 @@
                   <div class="btn-search">
                     <div class="row">
                       <div class="col mt-2">
-                        <button type="button" class="btn btn-block" @click="getDoctors(0)">Search</button>
+                        <button
+                          type="button"
+                          class="btn btn-block"
+                          @click="getDoctors(0)"
+                        >{{$tc('search')}}</button>
                       </div>
                       <!-- <div class="col-md-6 mt-2">
                         <button
@@ -93,7 +97,11 @@
 
           <div class="col-md-12 col-lg-8 col-xl-9">
             <div class="row">
-              <div class="col-md-3" v-for="(doctor, index) in doctors" :key="`doctor - ${index}`">
+              <div
+                class="col-md-4 col-xl-3"
+                v-for="(doctor, index) in doctors"
+                :key="`doctor - ${index}`"
+              >
                 <div class="profile-widget" style="min-height: 300px;">
                   <div class="doc-img" style="text-align: center;">
                     <router-link :to="`/doctor-detail/${doctor.id}`">
@@ -101,7 +109,7 @@
                         :src="getDoctorAvatar(doctor.avatar)"
                         class="img-fluid"
                         alt="Doctor Image"
-                        style="height: 150px; min-height: 150px; width: 100%; object-fit: cover;"
+                        style="height: 250px; min-height: 250px; width: 100%"
                       />
                     </router-link>
                   </div>

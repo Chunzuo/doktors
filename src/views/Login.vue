@@ -7,18 +7,11 @@
           <div class="account-content">
             <div class="row align-items-center justify-content-center">
               <div class="col-md-7 col-lg-6 login-left">
-                <img
-                  src="@/assets/img/features/feature.png"
-                  class="img-fluid"
-                  alt="Doccure Login"
-                />
+                <img src="@/assets/img/features/feature.png" class="img-fluid" alt="Doccure Login" />
               </div>
               <div class="col-md-12 col-lg-6 login-right">
                 <div class="login-header">
-                  <h3>
-                    Login
-                    <span>Doktors</span>
-                  </h3>
+                  <h3>{{$tc('login_title')}}</h3>
                 </div>
                 <div id="firebaseui-auth-container"></div>
               </div>

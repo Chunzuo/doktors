@@ -155,7 +155,7 @@
           <div class="row">
             <div class="col-md-6 col-lg-6">
               <div class="copyright-text">
-                <p class="mb-0">&copy; 2020 Doktors. All rights reserved.</p>
+                <p class="mb-0">{{$tc('copyright')}}</p>
               </div>
             </div>
             <div class="col-md-6 col-lg-6">
@@ -163,10 +163,10 @@
               <div class="copyright-menu">
                 <ul class="policy-menu">
                   <li>
-                    <router-link to="/help">Terms and Conditions</router-link>
+                    <router-link to="/help">{{$tc('terms')}}</router-link>
                   </li>
                   <li>
-                    <router-link to="/help">Policy</router-link>
+                    <router-link to="/help">{{$tc('policy')}}</router-link>
                   </li>
                 </ul>
               </div>

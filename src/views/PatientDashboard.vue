@@ -13,13 +13,14 @@
                       class="nav-link active"
                       href="#pat_appointments"
                       data-toggle="tab"
-                      >Appointments</a
-                    >
+                    >{{$tc('appointment')}}</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#pat_treatments" data-toggle="tab"
-                      >Treatments</a
-                    >
+                    <a
+                      class="nav-link"
+                      href="#pat_treatments"
+                      data-toggle="tab"
+                    >{{$tc('treatment')}}</a>
                   </li>
                 </ul>
               </nav>
@@ -35,36 +36,33 @@
                         <table class="table table-hover table-center mb-0">
                           <thead>
                             <tr>
-                              <th>Doctor</th>
-                              <th>Appt Date</th>
-                              <th>Status</th>
+                              <th>{{$tc('doctor')}}</th>
+                              <th>{{$tc('appt_date')}}</th>
+                              <th>{{$tc('status')}}</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr
-                              v-for="(appt, index) in appointments"
-                              :key="`appt - ${index}`"
-                            >
+                            <tr v-for="(appt, index) in appointments" :key="`appt - ${index}`">
                               <td>
                                 <h2 class="table-avatar">
                                   <router-link
                                     :to="`/doctor-detail/${appt.doctorId}`"
-                                    >{{ appt.doctorName }}</router-link
-                                  >
+                                  >{{ appt.doctorName }}</router-link>
                                 </h2>
                               </td>
                               <td>
                                 {{ getFormatDay(appt.date) }}
-                                <span class="d-block text-info">{{
+                                <span class="d-block text-info">
+                                  {{
                                   formatTime(appt.time)
-                                }}</span>
+                                  }}
+                                </span>
                               </td>
                               <td>
                                 <span
                                   class="badge badge-pill"
                                   :class="getStatusColor(appt.status)"
-                                  >{{ getStatusLabel(appt.status) }}</span
-                                >
+                                >{{ getStatusLabel(appt.status) }}</span>
                               </td>
                             </tr>
                           </tbody>
@@ -83,10 +81,10 @@
                         <table class="table table-hover table-center mb-0">
                           <thead>
                             <tr>
-                              <th>Doctor</th>
-                              <th>Date</th>
-                              <th>Treatment</th>
-                              <th>Files</th>
+                              <th>{{$tc('doctor')}}</th>
+                              <th>{{$tc('date')}}</th>
+                              <th>{{$tc('treatment')}}</th>
+                              <th>{{$tc('file')}}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -97,17 +95,16 @@
                               <td>
                                 <router-link
                                   :to="`/doctor-detail/${treatment.doctorId}`"
-                                  >{{ treatment.doctorName }}</router-link
-                                >
+                                >{{ treatment.doctorName }}</router-link>
                               </td>
                               <td>{{ getFormatDay(treatment.date) }}</td>
                               <td>
-                                <span v-if="treatment.visibility == true">{{
+                                <span v-if="treatment.visibility == true">
+                                  {{
                                   treatment.treatment
-                                }}</span>
-                                <span class="text-danger" v-else
-                                  >Invisible</span
-                                >
+                                  }}
+                                </span>
+                                <span class="text-danger" v-else>Invisible</span>
                               </td>
                               <td>
                                 <div v-if="treatment.visibility == true">
@@ -121,9 +118,7 @@
                                     <i class="fas fa-file"></i>
                                   </a>
                                 </div>
-                                <span class="text-danger" v-else
-                                  >Invisible</span
-                                >
+                                <span class="text-danger" v-else>Invisible</span>
                               </td>
                             </tr>
                           </tbody>

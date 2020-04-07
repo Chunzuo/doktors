@@ -2,7 +2,7 @@
   <section class="section section-features" id="features">
     <div class="container-fluid">
       <div class="section-header text-center">
-        <h2>Find a Specialist</h2>
+        <h2>{{$tc('find_speciality')}}</h2>
         <!-- <h2>Clinic and Specialities</h2> -->
         <!-- <p
           class="sub-title"
@@ -24,11 +24,7 @@
               @click="gotoSearchResult(speciality)"
             >
               <div class="speicality-img">
-                <img
-                  :src="getImagePath(speciality)"
-                  class="img-fluid"
-                  alt="Speciality"
-                />
+                <img :src="getImagePath(speciality)" class="img-fluid" alt="Speciality" />
                 <span>
                   <i class="fa fa-circle" aria-hidden="true"></i>
                 </span>
@@ -70,7 +66,8 @@ export default {
               slidesToScroll: 1
             }
           }
-        ]
+        ],
+        rtl: false
       }
     }
   },
@@ -79,7 +76,11 @@ export default {
       return this.$store.state.webStructure.specialityList
     }
   },
-  mounted() {},
+  mounted() {
+    const language = localStorage.getItem('language') || 'en'
+    this.slickOptions['rtl'] = language == 'en' ? false : true
+    this.slickOptions.responsive[0]['arrows'] = language == 'en'
+  },
   methods: {
     getImagePath(name) {
       var images = require.context(
@@ -112,3 +113,4 @@ export default {
   padding: 40px 0px;
 }
 </style>
+ 

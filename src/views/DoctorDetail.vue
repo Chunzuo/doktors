@@ -33,31 +33,19 @@
 
                   <div style="display: flex;">
                     <div v-if="doctorProfile.facebook">
-                      <a
-                        class="social-icon"
-                        :href="doctorProfile.facebook"
-                        target="_blank"
-                      >
+                      <a class="social-icon" :href="doctorProfile.facebook" target="_blank">
                         <i class="fab fa-facebook-f"></i>
                       </a>
                     </div>
 
                     <div v-if="doctorProfile.twitter">
-                      <a
-                        :href="doctorProfile.twitter"
-                        target="_blank"
-                        class="social-icon ml-2"
-                      >
+                      <a :href="doctorProfile.twitter" target="_blank" class="social-icon ml-2">
                         <i class="fab fa-twitter"></i>
                       </a>
                     </div>
 
                     <div v-if="doctorProfile.instagram">
-                      <a
-                        :href="doctorProfile.instagram"
-                        target="_blank"
-                        class="social-icon ml-2"
-                      >
+                      <a :href="doctorProfile.instagram" target="_blank" class="social-icon ml-2">
                         <i class="fab fa-instagram"></i>
                       </a>
                     </div>
@@ -70,8 +58,7 @@
                   <router-link
                     :to="`/book-appointment/${doctor.id}`"
                     class="apt-btn"
-                    >Book Appointment</router-link
-                  >
+                  >{{$tc('book_appointment')}}</router-link>
                 </div>
               </div>
             </div>
@@ -95,7 +82,7 @@
                               :src="doctor.avatar"
                             />
                           </div>-->
-                          <h4 class="widget-title mt-2 ml-2">About Me</h4>
+                          <h4 class="widget-title mt-2 ml-2">{{$tc('about_me')}}</h4>
                         </div>
                         <p class="mt-2">{{ doctorProfile.bio }}</p>
                       </div>
@@ -103,7 +90,7 @@
 
                       <!-- Education Details -->
                       <div class="widget education-widget">
-                        <h4 class="widget-title">Education</h4>
+                        <h4 class="widget-title">{{$tc('education')}}</h4>
                         <div class="experience-box">
                           <ul class="experience-list" v-if="doctor.educations">
                             <li
@@ -115,9 +102,7 @@
                               </div>
                               <div class="experience-content">
                                 <div class="timeline-content">
-                                  <a href="#/" class="name">
-                                    {{ education.college }}
-                                  </a>
+                                  <a href="#/" class="name">{{ education.college }}</a>
                                   <div>{{ education.degree }}</div>
                                   <span class="time">{{ education.year }}</span>
                                 </div>
@@ -130,7 +115,7 @@
 
                       <!-- Experience Details -->
                       <div class="widget experience-widget">
-                        <h4 class="widget-title">Work & Experience</h4>
+                        <h4 class="widget-title">{{$tc('work_experience')}}</h4>
                         <div class="experience-box">
                           <ul class="experience-list" v-if="doctor.experiences">
                             <li
@@ -146,9 +131,7 @@
                                     {{ experience.designation }}
                                     {{ experience.hospital }}
                                   </a>
-                                  <span class="time">
-                                    {{ experience.year }}
-                                  </span>
+                                  <span class="time">{{ experience.year }}</span>
                                 </div>
                               </div>
                             </li>
@@ -159,7 +142,7 @@
 
                       <!-- Awards Details -->
                       <div class="widget awards-widget">
-                        <h4 class="widget-title">Awards</h4>
+                        <h4 class="widget-title">{{$tc('awards')}}</h4>
                         <div class="experience-box">
                           <div class="row">
                             <div
@@ -180,28 +163,24 @@
 
                       <!-- Services List -->
                       <div class="service-list">
-                        <h4>Services</h4>
+                        <h4>{{$tc('services')}}</h4>
                         <ul class="clearfix" v-if="doctor.services">
                           <li
                             v-for="(service, index) in doctor.services"
                             :key="`service - ${index}`"
-                          >
-                            {{ service }}
-                          </li>
+                          >{{ service }}</li>
                         </ul>
                       </div>
                       <!-- /Services List -->
 
                       <!-- Specializations List -->
                       <div class="service-list">
-                        <h4>Specializations</h4>
+                        <h4>{{$tc('specialization')}}</h4>
                         <ul class="clearfix" v-if="doctor.specializations">
                           <li
                             v-for="(spec, index) in doctor.specializations"
                             :key="`spec - ${index}`"
-                          >
-                            {{ spec }}
-                          </li>
+                          >{{ spec }}</li>
                         </ul>
                       </div>
                       <!-- /Specializations List -->
@@ -213,7 +192,7 @@
           </div>
           <div class="col-md-4">
             <div class="widget business-widget" style="background: white;">
-              <h4 class="widget-title">Business Hours</h4>
+              <h4 class="widget-title">{{$tc('business_hours')}}</h4>
               <hr />
               <div class="widget-content">
                 <div class="listing-hours" v-if="doctorProfile.openingHours">
@@ -230,10 +209,7 @@
                   >
                     <div class="day">{{ day.text }}</div>
                     <div class="time-items">
-                      <span
-                        class="time"
-                        v-if="doctorProfile.openingHours[day.value].closed"
-                      >
+                      <span class="time" v-if="doctorProfile.openingHours[day.value].closed">
                         <span class="badge bg-danger-light">Closed</span>
                       </span>
                       <span class="time" v-else>
@@ -247,7 +223,7 @@
             </div>
 
             <div class="widget business-widget mt-2">
-              <h4 class="widget-title">Locations</h4>
+              <h4 class="widget-title">{{$tc('location')}}</h4>
               <p class="doc-location">
                 <i class="fas fa-map-marker-alt"></i>
                 {{ doctor.location }}
@@ -258,10 +234,7 @@
                 style="width: 100%; height: 300px"
                 v-if="doctorProfile.mapCenter"
               >
-                <gmap-marker
-                  :position="getMapCenter(doctorProfile.mapCenter)"
-                  :clickable="true"
-                ></gmap-marker>
+                <gmap-marker :position="getMapCenter(doctorProfile.mapCenter)" :clickable="true"></gmap-marker>
               </gmap-map>
             </div>
           </div>
@@ -280,13 +253,13 @@ export default {
       doctor: {},
       doctorProfile: {},
       days: [
-        { text: 'Satureday', value: 'sat' },
-        { text: 'Sunday', value: 'sun' },
-        { text: 'Monday', value: 'mon' },
-        { text: 'Tuesday', value: 'tue' },
-        { text: 'Wendsday', value: 'wed' },
-        { text: 'Thursday', value: 'thu' },
-        { text: 'Friday', value: 'fri' }
+        { text: this.$tc('saturday'), value: 'sat' },
+        { text: this.$tc('sunday'), value: 'sun' },
+        { text: this.$tc('monday'), value: 'mon' },
+        { text: this.$tc('tuesday'), value: 'tue' },
+        { text: this.$tc('wednesday'), value: 'wed' },
+        { text: this.$tc('thursday'), value: 'thu' },
+        { text: this.$tc('friday'), value: 'fri' }
       ]
     }
   },

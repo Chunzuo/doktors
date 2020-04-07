@@ -34,7 +34,7 @@
 
                   <div class="col-4">
                     <select class="form-control select" v-model="keyword.role">
-                      <option value="">All Role</option>
+                      <option value>All Role</option>
                       <option
                         v-for="(role, index) in roleOptions"
                         :key="`role - ${index}`"
@@ -84,10 +84,17 @@
                             <a
                               href="javascript:void(0);"
                               class="btn btn-sm bg-success-light mr-2"
-                              @click="editUser(user)"
+                              @click="editUserProfile(user)"
                               v-if="user.role != 'patient'"
                             >
-                              <i class="far fa-edit"></i> Edit
+                              <i class="fas fa-user-edit"></i> Edit Profile
+                            </a>
+                            <a
+                              href="javascript:void(0);"
+                              class="btn btn-sm bg-info-light mr-2"
+                              @click="openEditRoleDialog(user)"
+                            >
+                              <i class="far fa-edit"></i> Edit Role
                             </a>
                             <a
                               href="javascript:void(0);"
@@ -137,6 +144,27 @@
           </div>
         </div>
       </vs-prompt>
+
+      <vs-prompt
+        :active.sync="showEditModal"
+        @cancel="showEditModal = false"
+        @accept="updateRole"
+        title="Edit User Role"
+      >
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Role</label>
+            <select class="form-control select" v-model="editUser.role">
+              <option
+                v-for="(role, index) in roleOptions"
+                :key="`role - ${index}`"
+                :value="role.value"
+                >{{ role.value }}</option
+              >
+            </select>
+          </div>
+        </div>
+      </vs-prompt>
     </div>
   </div>
 </template>
@@ -165,7 +193,11 @@ export default {
         { label: 'Doctor', value: 'doctor' },
         { label: 'Lab', value: 'lab' },
         { label: 'Pharmacy', value: 'pharmacy' },
-        { label: 'Hospital', value: 'hospital' }
+        { label: 'Hospital', value: 'hospital' },
+        { label: 'Patient', value: 'patient' },
+        { label: 'X-Ray', value: 'xray' },
+        { label: 'Cosmetics', value: 'cosmetics' },
+        { label: 'Sonar', value: 'sonar' }
       ],
       userIdToDelete: '',
       dialogMode: 0, // 0: Add, 1: Edit
@@ -174,7 +206,9 @@ export default {
         phone: '',
         role: ''
       },
-      filteredList: []
+      filteredList: [],
+      editUser: {},
+      showEditModal: false
     }
   },
   mounted() {
@@ -273,7 +307,7 @@ export default {
         }
       })
     },
-    editUser(user) {
+    editUserProfile(user) {
       if (user.role != 'patient') {
         this.$router.push(`/edit-userprofile/${user.id}`)
       } else {
@@ -281,6 +315,18 @@ export default {
         this.showModal = true
         this.dialogMode = 1
       }
+    },
+    openEditRoleDialog(user) {
+      this.editUser = user
+      this.showEditModal = true
+    },
+    async updateRole() {
+      this.$vs.loading()
+      await db
+        .collection('Users')
+        .doc(this.editUser.id)
+        .update(this.editUser)
+      this.$vs.loading.close()
     }
   }
 }

@@ -3,7 +3,9 @@
     <div class="content">
       <div class="container-fluid" v-if="patientInfo">
         <div class="row">
-          <div class="col-12 col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft">
+          <div
+            class="col-12 col-md-5 col-lg-4 col-xl-3 theiaStickySidebar dct-dashbd-lft"
+          >
             <div class="card widget-profile pat-widget-profile">
               <div class="card-body">
                 <div class="pro-widget-content">
@@ -22,7 +24,10 @@
 
                   <div class="profile-info-widget">
                     <a href="#" class="booking-doc-img">
-                      <img src="@/assets/img/patients/patient-default.png" alt="User Image" />
+                      <img
+                        src="@/assets/img/patients/patient-default.png"
+                        alt="User Image"
+                      />
                     </a>
                     <div class="profile-det-info">
                       <input
@@ -40,18 +45,28 @@
                         </h5>
                         <div class="row">
                           <div class="col" v-if="!editable">
-                            <button class="btn bg-success-light" @click="switchToEditMode">
+                            <button
+                              class="btn bg-success-light"
+                              @click="switchToEditMode"
+                            >
                               <i class="far fa-edit"></i>
                               Edit
                             </button>
                           </div>
                           <div class="col" v-if="editable">
-                            <button class="btn bg-info-light" @click="saveHistory">
+                            <button
+                              class="btn bg-info-light"
+                              @click="saveHistory"
+                            >
                               <i class="far fa-save"></i>
                               Save
                             </button>
                           </div>
-                          <div class="col" v-if="editable" @click="editable = false">
+                          <div
+                            class="col"
+                            v-if="editable"
+                            @click="editable = false"
+                          >
                             <button class="btn bg-danger-light">
                               <i class="far"></i>
                               Cancel
@@ -62,9 +77,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="patient-info" v-if="patientInfo.history && historyCollapseStatus">
+                <div
+                  class="patient-info"
+                  v-if="patientInfo.history && historyCollapseStatus"
+                >
                   <ul>
-                    <li v-for="(history, index) in historyElements" :key="`history-${index}`">
+                    <li
+                      v-for="(history, index) in historyElements"
+                      :key="`history-${index}`"
+                    >
                       {{ history.title }}
                       <div v-if="editable">
                         <textarea
@@ -95,7 +116,9 @@
                             v-for="(value, index1) in history.values"
                             :key="`value - ${index1}`"
                           >
-                            <div class="custom-control custom-radio custom-control-inline">
+                            <div
+                              class="custom-control custom-radio custom-control-inline"
+                            >
                               <input
                                 type="radio"
                                 :id="`radio${index}${index1}`"
@@ -106,7 +129,8 @@
                               <label
                                 class="custom-control-label"
                                 :for="`radio${index}${index1}`"
-                              >{{ value }}</label>
+                                >{{ value }}</label
+                              >
                             </div>
                           </div>
                         </div>
@@ -114,15 +138,13 @@
                       <span v-else>
                         <span v-if="history.type == 'date'">
                           {{
-                          convertTimestampToString(
-                          patientInfo.history[history.id]
-                          )
+                            convertTimestampToString(
+                              patientInfo.history[history.id]
+                            )
                           }}
                         </span>
                         <span v-else>
-                          {{
-                          patientInfo.history[history.id]
-                          }}
+                          {{ patientInfo.history[history.id] }}
                         </span>
                       </span>
                     </li>
@@ -150,7 +172,8 @@
                         href="javascript:;"
                         class="add-new-btn"
                         @click="showAddModal = true"
-                      >Add Visit</a>
+                        >Add Visit</a
+                      >
                     </div>
                     <div class="card card-table mb-0">
                       <div class="card-body">
@@ -183,30 +206,50 @@
       >
         <div class="modal-body">
           <div class="form-group">
-            <textarea class="form-control" placeholder="Diagnosis" v-model="visitInfo.diagnosis"></textarea>
+            <textarea
+              class="form-control"
+              placeholder="Diagnosis"
+              v-model="visitInfo.diagnosis"
+            ></textarea>
           </div>
           <div class="form-group">
-            <textarea class="form-control" placeholder="Symptems" v-model="visitInfo.symptems"></textarea>
+            <textarea
+              class="form-control"
+              placeholder="Symptems"
+              v-model="visitInfo.symptems"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              placeholder="Treatment"
+              v-model="visitInfo.treatment"
+            ></textarea>
           </div>
           <div class="form-group">
             <textarea
               class="form-control"
               placeholder="Message to Labs, Sonar or X-Ray"
-              v-model="visitInfo.treatment"
+              v-model="visitInfo.message"
             ></textarea>
           </div>
           <label class="custom_check">
-            <input type="checkbox" name="select_specialist" v-model="visitInfo.visibility" />
+            <input
+              type="checkbox"
+              name="select_specialist"
+              v-model="visitInfo.visibility"
+            />
             <span class="checkmark"></span>
-            Visibility
+            Visible to the patient
           </label>
           <div class="form-group">
             <label for>Treatment</label>
             <div class="upload-img">
-              <div class="change-photo-btn vs-con-loading__container" id="button-with-loading">
-                <span>
-                  <i class="fa fa-upload"></i> Upload File
-                </span>
+              <div
+                class="change-photo-btn vs-con-loading__container"
+                id="button-with-loading"
+              >
+                <span> <i class="fa fa-upload"></i> Upload File </span>
                 <input type="file" class="upload" @change="uploadFile" />
               </div>
             </div>

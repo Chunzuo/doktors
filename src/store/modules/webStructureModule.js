@@ -19,11 +19,9 @@ export default {
   },
   actions: {
     async getWebStructure({ commit }) {
-      const webStructure = await db.collection('WebStructure').get()
-      let data = {}
-      webStructure.forEach(item => {
-        data = item.data()
-      })
+      const webStructure = await db.collection('WebStructure').doc('en').get()
+
+      let data = webStructure.data()
 
       let cityList = []
       let specialityList = []

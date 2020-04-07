@@ -17,6 +17,9 @@
             </div>
             <div class="row">
               <div class="col text-right">
+                <button class="btn btn-danger mr-2" @click="clearFilter">
+                  Clear
+                </button>
                 <button class="btn btn-info" @click="filterAppointments">
                   Filter
                 </button>
@@ -48,7 +51,14 @@
                         v-for="(appt, index) in filteredAppointments"
                         :key="`apt-${index}`"
                       >
-                        <td>{{ appt.patientName }}</td>
+                        <td>
+                          <a
+                            href="javascript:void(0);"
+                            class="btn btn-link"
+                            @click="gotoPatientDetail(appt.patientName)"
+                            >{{ appt.patientName }}</a
+                          >
+                        </td>
                         <td>{{ appt.patientPhone }}</td>
                         <td>
                           {{ getFormatDay(appt.date) }}
@@ -99,15 +109,20 @@
     >
       <div class="modal-body">
         <div class="form-group">
-          <label for>Patient:</label>
-          <select class="form-control" id="patient_select">
-            <option
-              v-for="(patient, index) in patients"
-              :key="`patient - ${index}`"
-              :value="`${patient.name}:${patient.patientMobile}`"
-              >{{ patient.name }}</option
-            >
-          </select>
+          <label for>Patient Name</label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="newAppointment.patientName"
+          />
+        </div>
+        <div class="form-group">
+          <label for>Patient Phone number:</label>
+          <the-mask
+            class="form-control"
+            v-model="newAppointment.patientPhone"
+            mask="+(964) ###-####-###"
+          ></the-mask>
         </div>
         <div class="form-group">
           <label for>Appoinetment Date:</label>
@@ -288,14 +303,14 @@ export default {
       this.filteredAppointments = tempArray
     },
     async addAppointment() {
-      const patientInfo = jQuery('#patient_select').val()
-      const patientName = patientInfo.split(':')[0]
-      const patientPhone = patientInfo.split(':')[1]
+      // const patientInfo = jQuery('#patient_select').val()
+      // const patientName = patientInfo.split(':')[0]
+      // const patientPhone = patientInfo.split(':')[1]
 
       const apptData = {
         doctorId: this.userInfo.id,
-        patientName: patientName,
-        patientPhone: patientPhone,
+        patientName: this.newAppointment.patientName,
+        patientPhone: `+964${this.newAppointment.patientPhone}`,
         date: this.newAppointment.date,
         time:
           this.newAppointment.startTime + ' - ' + this.newAppointment.endTime,
@@ -311,23 +326,48 @@ export default {
       this.getAppointment()
     },
     async openDialog() {
-      this.$vs.loading()
+      // this.$vs.loading()
 
-      const patients = await db
-        .collection('History')
-        .where('doctorUid', '==', this.userInfo.id)
-        .get()
-      this.patients = []
-      patients.forEach(patient => {
-        let data = patient.data()
-        data['id'] = patient.id
-        this.patients.push(data)
-      })
-      this.$vs.loading.close()
+      // const patients = await db
+      //   .collection('History')
+      //   .where('doctorUid', '==', this.userInfo.id)
+      //   .get()
+      // this.patients = []
+      // patients.forEach(patient => {
+      //   let data = patient.data()
+      //   data['id'] = patient.id
+      //   this.patients.push(data)
+      // })
+      // this.$vs.loading.close()
       this.showDialog = true
       setTimeout(() => {
         jQuery('#new_apt_datepicker').addClass('form-control')
       }, 100)
+    },
+    async gotoPatientDetail(patientName) {
+      this.$vs.loading()
+      const ref = await db
+        .collection('History')
+        .where('name', '==', patientName)
+        .get()
+      this.$vs.loading.close()
+
+      let historyId = ''
+      ref.forEach(item => {
+        historyId = item.id
+      })
+      if (historyId != '') {
+        this.$router.push(`/doctors-patient-detail/${historyId}`)
+      } else {
+        this.$vs.notify({
+          color: 'danger',
+          text: 'No patient history'
+        })
+      }
+    },
+    clearFilter() {
+      this.aptDate = null
+      this.phoneNumber = ''
     }
   },
   data() {

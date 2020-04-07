@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="banner-wrapper">
         <div class="banner-header text-center">
-          <h1>Search Doctor</h1>
+          <h1>{{$tc('search_doctor')}}</h1>
           <!-- <h1>Search Doctor, Make an Appointment</h1> -->
           <!-- <p>Discover the best doctors, clinic & hospital the city nearest to you.</p> -->
         </div>
@@ -21,7 +21,7 @@
                 >{{ city }}</option>
               </select>
             </div>
-            <div class="form-group search-speciality">
+            <div class="form-group search-speciality" :class="language == 'en' ? 'ltl' : 'rtl'">
               <select class="form-control" id="speciality_select">
                 <option value>All</option>
                 <option
@@ -36,14 +36,14 @@
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search Doctor's name"
+                :placeholder="$tc('search_doctor_name')"
                 v-model="searchKeyword.name"
               />
               <!-- <span class="form-text">Ex : Dental or Sugar Check up etc</span> -->
             </div>
             <button @click.prevent="onClickSerchButton" class="btn btn-primary search-btn">
               <i class="fas fa-search"></i>
-              <span>Search</span>
+              <span>{{$tc('search')}}</span>
             </button>
           </form>
         </div>
@@ -64,7 +64,8 @@ export default {
         speciality: '',
         name: '',
         role: ''
-      }
+      },
+      language: 'en'
     }
   },
   computed: {
@@ -77,6 +78,7 @@ export default {
   },
   mounted() {
     this.initJQuery()
+    this.language = localStorage.getItem('language') || 'en'
   },
   methods: {
     onClickSerchButton() {
@@ -87,13 +89,13 @@ export default {
     },
     initJQuery() {
       $('#city_select').select2({
-        placeholder: 'Select a city',
+        placeholder: this.$tc('select_city'),
         width: '100%',
         containerCssClass: 'form-control'
       })
 
       $('#speciality_select').select2({
-        placeholder: 'Select a speciality',
+        placeholder: this.$tc('select_speciality'),
         width: '100%',
         containerCssClass: 'form-control'
       })
@@ -110,16 +112,21 @@ export default {
 }
 
 .search-speciality {
+  width: 240px;
+}
+
+.search-speciality.ltl {
   margin-right: 12px;
+}
+.search-speciality.rtl {
+  margin-left: 12px;
 }
 
 @media only screen and (max-width: 575.98px) {
   .search-speciality {
     margin-right: 0px;
+    margin-left: 0px !important;
+    width: 100% !important;
   }
-}
-
-.search-speciality {
-  width: 240px;
 }
 </style>

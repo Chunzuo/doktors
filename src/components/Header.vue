@@ -25,12 +25,14 @@
         <ul class="main-nav">
           <li :class="{ active: selectedItem == 'Home' }">
             <router-link to="/">
-              <i v-if="isMobile" class="fas fa-home"></i>Home
+              <i v-if="isMobile" class="fas fa-home"></i>
+              {{$tc('home')}}
             </router-link>
           </li>
           <li v-if="isPatient" :class="{ active: selectedItem == 'PatientDashboard' }">
             <router-link to="/patient-dashboard">
-              <i v-if="isMobile" class="fab fa-houzz"></i>My Records
+              <i v-if="isMobile" class="fab fa-houzz"></i>
+              {{$tc('my_records')}}
             </router-link>
           </li>
           <li
@@ -96,12 +98,14 @@
           </li>
           <li :class="{ active: selectedItem == 'Help' }">
             <router-link to="/help">
-              <i v-if="isMobile" class="fas fa-question"></i>Help
+              <i v-if="isMobile" class="fas fa-question"></i>
+              {{$tc('help')}}
             </router-link>
           </li>
           <li :class="{ active: selectedItem == 'About' }">
             <router-link to="/about">
-              <i v-if="isMobile" class="fas fa-info"></i>About
+              <i v-if="isMobile" class="fas fa-info"></i>
+              {{$tc('about')}}
             </router-link>
           </li>
           <li v-if="isUserManager" :class="{ active: selectedItem == 'UserManagement' }">
@@ -120,6 +124,21 @@
             </router-link>
           </li>
 
+          <li class="nav-item" v-if="isMobile && !isDoctor">
+            <select class="form-control" @change="updateLanguage" v-model="language">
+              <option value="en">English</option>
+              <option value="ku">کوردی</option>
+              <option value="ar">العربية</option>
+            </select>
+          </li>
+
+          <li class="nav-item" v-if="!loginStatus && isMobile">
+            <router-link
+              class="nav-link header-login"
+              to="/login"
+            >{{$tc('login')}} / {{$tc('signup')}}</router-link>
+          </li>
+
           <li v-if="loginStatus">
             <a
               class="nav-link header-login"
@@ -131,8 +150,16 @@
         </ul>
       </div>
       <ul class="nav header-navbar-rht">
+        <select class="mr-2" @change="updateLanguage" v-model="language" v-if="!isDoctor">
+          <option value="en">English</option>
+          <option value="ku">کوردی</option>
+          <option value="ar">العربية</option>
+        </select>
         <li class="nav-item" v-if="!loginStatus">
-          <router-link class="nav-link header-login" to="/login">Login / Signup</router-link>
+          <router-link
+            class="nav-link header-login"
+            to="/login"
+          >{{$tc('login')}} / {{$tc('signup')}}</router-link>
         </li>
 
         <!-- User Menu -->
@@ -162,6 +189,7 @@ import { db } from '@/firebase'
 export default {
   mounted() {
     this.initSubmenuEvent()
+    this.language = localStorage.getItem('language') || 'en'
   },
   computed: {
     selectedItem() {
@@ -263,6 +291,10 @@ export default {
         var images = require.context('../assets/img/', false, /\.jpg$/)
         this.avatar = images('./doctor-default.jpg')
       }
+    },
+    updateLanguage() {
+      localStorage.setItem('language', this.language)
+      location.reload()
     }
   },
   watch: {
@@ -277,7 +309,8 @@ export default {
   },
   data() {
     return {
-      avatar: ''
+      avatar: '',
+      language: 'en'
     }
   }
 }

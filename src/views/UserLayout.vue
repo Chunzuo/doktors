@@ -75,6 +75,7 @@ export default {
             localStorage.setItem('role', userData.role)
             localStorage.setItem('userId', userInfo.id)
             if (userData.role == 'doctor') {
+              localStorage.setItem('language', 'en')
               this.$router.push('/doctors-mypatients').catch(() => {})
             } else {
               this.$router.push('/').catch(() => {})

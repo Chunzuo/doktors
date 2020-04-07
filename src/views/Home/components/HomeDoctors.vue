@@ -3,11 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-12">
-          <slick
-            :options="slickOptions"
-            class="doctor-slider slider"
-            v-if="adsList.length > 0"
-          >
+          <slick :options="slickOptions" class="doctor-slider slider" v-if="adsList.length > 0">
             <div
               class="profile-widget"
               v-for="(ads, index) in adsList"
@@ -24,10 +20,7 @@
                   />
                 </a>
               </div>
-              <div
-                class="pro-content"
-                style="height: 120px; min-height: 120px;"
-              >
+              <div class="pro-content" style="height: 120px; min-height: 120px;">
                 <h3 class="title">
                   <a :href="ads.link">{{ ads.title }}</a>
                   <!-- <i class="fas fa-check-circle verified"></i> -->
@@ -60,13 +53,18 @@ export default {
         prevArrow:
           '<button type="button" class="slick-prev" style="top: 80%">Previous</button>',
         nextArrow:
-          '<button type="button" class="slick-next" style="top: 80%">Next</button>'
+          '<button type="button" class="slick-next" style="top: 80%">Next</button>',
+        rtl: false,
+        arrows: true
       },
       adsList: []
     }
   },
   mounted() {
     this.getAdsList()
+    const language = localStorage.getItem('language') || 'en'
+    this.slickOptions['rtl'] = language == 'en' ? false : true
+    this.slickOptions['arrows'] = language == 'en'
   },
   methods: {
     async getAdsList() {

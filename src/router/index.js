@@ -146,6 +146,11 @@ const routes = [
         component: () => import('../views/EditUserProfile.vue')
       }
     ]
+  },
+  {
+    path: '/index.html',
+    component: () => import('../views/UserLayout.vue'),
+    alias: '/'
   }
 ]
 
