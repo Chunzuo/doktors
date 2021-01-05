@@ -12,7 +12,7 @@
     "@vue/cli-plugin-pwa": "^4.2.3",
     "@vue/eslint-config-prettier": "^6.0.0",
     "aos": "^3.0.0-beta.6",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "core-js": "^3.4.4",
     "expose-loader": "^0.7.5",
     "firebase": "^7.7.0",
